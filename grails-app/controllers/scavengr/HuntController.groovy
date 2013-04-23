@@ -151,18 +151,21 @@ class HuntController {
     def inviteAdmin() {
         def huntInstance = Hunt.get(params.myHunt.id)
         def newAdmin = User.findByLogin(params.login)
+        def currentUser = User.findByLogin(auth.user())
         if(!newAdmin){
             flash.message = 'User not found with name ' + params.login
             redirect action: 'show', params:['key':huntInstance.key]
             return
         }
-        if (newAdmin == User.findByLogin(auth.user())){
+        if (newAdmin == currentUser){
             flash.message = 'You already have administrative powers!'
             redirect action: 'show', params:['key':huntInstance.key]
             return
         }
         if (!huntInstance.myAdmins.find {admin -> admin == newAdmin}){
             newAdmin.addToMyAdministratedHunts(huntInstance)
+            NotifierService.sendNotification(currentUser, newAdmin,
+                "You Are Now an Admin", "You have been made administrator of the hunt \"$huntInstance.title\"")
             newAdmin.save()
             flash.message = 'Admin added: ' + newAdmin.login
             redirect action: 'show', params:['key':huntInstance.key]
@@ -186,6 +189,8 @@ class HuntController {
             return
         }
         huntInstance.removeFromMyAdmins(admin)
+        NotifierService.sendNotification(userInstance, admin,
+            "No Longer Admin", "You are no longer an administrator of the hunt \"$huntInstance.title\"")
         flash.message = admin.login + ' is no longer an admin'
         redirect action: 'show', params:['key':huntInstance.key]
         

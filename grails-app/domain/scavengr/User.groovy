@@ -7,8 +7,8 @@ class User {
     String password
     String email
     int status = AuthenticationService.STATUS_NEW
-    static hasMany = [myHunts:Hunt, myAdministratedHunts:Hunt, myCreatedHunts:Hunt, myPhotos:Photo, bannedFrom:Hunt] //, myParticipants:Participant]
-    static mappedBy = [myHunts:'myUsers', myAdministratedHunts:'myAdmins', myCreatedHunts:'myCreator', bannedFrom:'bannedUsers']
+    static hasMany = [myHunts:Hunt, myAdministratedHunts:Hunt, myCreatedHunts:Hunt, myPhotos:Photo, bannedFrom:Hunt, recieved:Notification, sent:Notification] //, myParticipants:Participant]
+    static mappedBy = [myHunts:'myUsers', myAdministratedHunts:'myAdmins', myCreatedHunts:'myCreator', bannedFrom:'bannedUsers', recieved:'recipient', sent:'sender']
     static mapping = {
         myPhotos cascade: 'all-delete-orphan'
     }

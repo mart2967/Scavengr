@@ -11,6 +11,16 @@ class NotifierService {
     boolean transactional = false
     def mailService
     def link
+    def authenticationService
+    
+    def sendNotification(sender, recipient, subject, message){
+//        def sender = User.findByLogin(auth.user())
+//        def recipient = User.findByLogin(params.login)
+//        def subject = params.subject
+//        def message = params.message
+        def notificationInstance = new Notification(subject:subject, sender:sender, recipient:recipient, message:message)
+        recipient.addToRecieved(notificationInstance)
+    }
     
     def sendPasswordReset(email, newPassword) {
         mailService.sendMail {

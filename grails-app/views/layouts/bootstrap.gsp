@@ -47,19 +47,28 @@
 					<div class="nav-collapse">
 						<ul class="nav">							
 							
-							<li<%= request.forwardURI == "${createLink(uri: '/hunt/list')}" ? ' class="active"' : '' %>><g:link controller="hunt">Public Hunts</g:link></li>
+							
 <%--							<g:if env="development">--%>
 <%--							<li<%= request.forwardURI == "${createLink(uri: '/photo/list')}" ? ' class="active"' : '' %>><g:link controller="photo">List of Photos</g:link></li>--%>
 <%--							<li<%= request.forwardURI == "${createLink(uri: '/prompt/list')}" ? ' class="active"' : '' %>><g:link controller="prompt">List of Prompts</g:link></li>--%>
 <%--							<li<%= request.forwardURI == "${createLink(uri: '/user/list')}" ? ' class="active"' : '' %>><g:link controller="user">List of Users</g:link></li>--%>
 <%--							</g:if>--%>
 							<auth:ifLoggedIn>
+								<li<%= request.forwardURI == "${createLink(uri: '/hunt/list')}" ? ' class="active"' : '' %>><g:link controller="hunt">Public Hunts</g:link></li>
 								<li><g:link controller="hunt" action="create">Create A Hunt</g:link></li>
 							</auth:ifLoggedIn>
 							
 						</ul>
 						<ul class="nav pull-right">
 							<auth:ifLoggedIn>
+								<li><g:if test="${loggedInUser?.recieved}">
+								<g:render template="/shared/notifications"/>
+								<a id="mail" data-toggle="popover" data-placement="bottom">
+								<span class="badge badge-success">
+								<i class="icon-envelope"></i>
+								${loggedInUser?.recieved?.size()}
+								</span></a>
+								</g:if></li> 
 								<li><g:link controller="user" action="myProfile">Hello, <auth:user id="username"/></g:link></li>
 								<li><auth:logoutLink success="[controller:index, action:'index']" error="[controller:'index', action:'index']">Log out</auth:logoutLink></li>
 							</auth:ifLoggedIn>
