@@ -56,7 +56,25 @@
 
 
 		<div class="span9">
-
+			<g:if test="${isCreatorOrAdmin}" >
+					<g:form>
+						<g:hiddenField name="id" value="${huntInstance?.id}" />
+						<div class="pull-right">
+							
+							<g:link class="btn" action="edit" id="${huntInstance?.id}" style="margin-top:10px;">
+								<i class="icon-pencil"></i>
+								Edit Hunt
+							</g:link>
+							<g:if test="${userInstance == huntInstance.myCreator}" >
+							<br />
+							<button class="btn btn-danger" type="submit" name="_action_delete" style="margin-top:10px;">
+								<i class="icon-trash icon-white"></i>
+								Delete Hunt
+							</button>
+							</g:if>
+						</div>
+					</g:form>
+				</g:if>
 			<div class="page-header">
 				<h1>
 					<g:fieldValue bean="${huntInstance}" field="title" />
@@ -65,7 +83,8 @@
 				<h4>
 					<g:fieldValue bean="${huntInstance}" field="description" />
 				</h4>
-
+				
+				
 			</div>
 			
 			<g:if test="${flash.message}">
@@ -120,16 +139,6 @@
 				</div>
 			</g:each>
 			
-
-
-
-
-
-
-
-
-
-
 		</div>
 		<div class="span3">
 			<div class="well">
@@ -215,7 +224,7 @@
 								<i class="icon-user"> </i>
 								${admin?.login}
 							</g:link>
-							<g:if test="${isCreatorOrAdmin}" >
+							<g:if test="${userInstance == huntInstance?.myCreator}" >
 								<g:link class="pull-right" style="text-decoration:none;" action="removeAdmin" params="['login':admin?.login, 'myHunt.id':huntInstance?.id]"><i class="icon-remove"></i></g:link>
 							</g:if>
 							</dd>
@@ -274,7 +283,7 @@
 								Download Photos
 							</button>
 							</div>
-							<g:if test="${huntInstance.endDate > now}">
+							<g:if test="${huntInstance.endDate > currentDate}">
 								<div class="control-group">
 								<button type="submit" class="btn btn-warning" name="_action_closeHunt">
 									<i class="icon-stop"></i>
@@ -286,22 +295,7 @@
 					</g:if>
 				</ul>
 
-				<g:if test="${isCreatorOrAdmin}" >
-					<g:form>
-						<g:hiddenField name="id" value="${huntInstance?.id}" />
-						<div class="form-actions">
-							
-							<g:link class="btn" action="edit" id="${huntInstance?.id}">
-								<i class="icon-pencil"></i>
-								<g:message code="default.button.edit.label" default="Edit" />
-							</g:link>
-							<button class="btn btn-danger" type="submit" name="_action_delete">
-								<i class="icon-trash icon-white"></i>
-								<g:message code="default.button.delete.label" default="Delete" />
-							</button>
-						</div>
-					</g:form>
-				</g:if>
+				
 
 			</div>
 		</div>

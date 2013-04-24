@@ -57,81 +57,19 @@
 	    });
 	  });
 </script>
-<%-- for carousel fading--%>
-<style>
-      
-      .carousel {
-        
-        overflow: hidden;
-      }
-      .carousel .item {
-        -webkit-transition: opacity 1s;
-        -moz-transition: opacity 1s;
-        -ms-transition: opacity 1s;
-        -o-transition: opacity 1s;
-        transition: opacity 1s;
-      }
-      .carousel .active.left, .carousel .active.right {
-        left:0;
-        opacity:0;
-        z-index:2;
-      }
-      .carousel .next, .carousel .prev {
-        left:0;
-        opacity:1;
-        z-index:1;
-      }
-    </style>
+
 </head>
 
 <body>
-<div class="container">
-<div class="jumbotron masthead" style="position:absolute; z-index:2;">
+
+<div class="jumbotron masthead" >
 	<div class="container">
-		<h1 style="opacity: .8;">Scavengr</h1>
+		<h1>Scavengr</h1>
 		<p>Fun, goal-oriented photo hunts for educators, explorers, and aspiring photographers.</p>
 	</div>
 </div>
 
-
-<div id="myCarousel" class="carousel container slide">
-			
-					<!-- Carousel items -->
-					<div class="carousel-inner">
-						<div class="active item">
-							<img
-								style="border-radius:6px;"
-								src="http://webdesigntutsplus.s3.amazonaws.com/tuts/342_bootstrap_carousel/Carousel-Files-COMPLETE/img/antennae.jpg"
-								alt="">
-<%--							<div style="border-radius:0px 0px 6px 6px;" class="carousel-caption">--%>
-<%--								<p>The Antennae Galaxies</p>--%>
-<%--							</div>--%>
-						</div>
-						
-						<div class="item">
-							<img
-								style="border-radius:6px;"
-								src="http://webdesigntutsplus.s3.amazonaws.com/tuts/342_bootstrap_carousel/Carousel-Files-COMPLETE/img/carina.jpg"
-								alt="">
-<%--							<div style="border-radius:0px 0px 6px 6px;" class="carousel-caption">--%>
-<%--								<p>Carina Nebula: The Caterpillar</p>--%>
-<%--							</div>--%>
-						</div>
-						<div class="item">
-							<img
-								style="border-radius:6px;"
-								src="http://webdesigntutsplus.s3.amazonaws.com/tuts/342_bootstrap_carousel/Carousel-Files-COMPLETE/img/echo.jpg"
-								alt="">
-<%--							<div style="border-radius:0px 0px 6px 6px;" class="carousel-caption">--%>
-<%--								<p>Light Echo From Star V838 Monocerotis</p>--%>
-<%--							</div>--%>
-						</div>
-					</div>
-					<!-- Carousel nav -->
-<%--					<a class="carousel-control left" href="#myCarousel"--%>
-<%--						data-slide="prev">&lsaquo;</a> <a class="carousel-control right"--%>
-<%--						href="#myCarousel" data-slide="next">&rsaquo;</a>--%>
-				</div>
+<div class="container">
 
 	<div class="row-fluid">
 

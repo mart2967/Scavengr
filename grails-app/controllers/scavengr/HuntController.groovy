@@ -3,6 +3,7 @@ package scavengr
 //import java.util.List
 
 import java.util.zip.ZipEntry
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import java.util.zip.ZipOutputStream
 import org.springframework.dao.DataIntegrityViolationException
 import org.apache.commons.validator.GenericValidator
@@ -17,7 +18,7 @@ class HuntController {
     Map codeDefaultHunt = [code: 'hunt.label', default: 'Hunt']
     Map actionList = [action: 'list']
     Map flushTrue = [flush: true]
-
+    LinkGenerator grailsLinkGenerator
     static List getPost = ['GET', 'POST']
     def NotifierService
     def authenticationService
@@ -163,9 +164,10 @@ class HuntController {
             return
         }
         if (!huntInstance.myAdmins.find {admin -> admin == newAdmin}){
+            def link = grailsLinkGenerator.link( controller: 'hunt', action: 'show', params: [key: huntInstance.key])
             newAdmin.addToMyAdministratedHunts(huntInstance)
             NotifierService.sendNotification(currentUser, newAdmin,
-                "You Are Now an Admin", "You have been made administrator of the hunt \"$huntInstance.title\"")
+                "You Are Now an Admin", "You have been made administrator of the hunt \"$huntInstance.title\"", link, "Go to Hunt")
             newAdmin.save()
             flash.message = 'Admin added: ' + newAdmin.login
             redirect action: 'show', params:['key':huntInstance.key]
@@ -217,6 +219,8 @@ class HuntController {
         }
         huntInstance.removeFromMyUsers(userToRemove)
         huntInstance.addToBannedUsers(userToRemove)
+        NotifierService.sendNotification(userInstance, userToRemove,
+            "Banned From Hunt", "You have been banned from uploading to the hunt \"$huntInstance.title\"")
         flash.message = userToRemove.login + ' and their photos have been removed from the hunt.'
         redirect action: 'show', params:['key':huntInstance.key]
     }

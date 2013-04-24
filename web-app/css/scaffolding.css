@@ -1,7 +1,9 @@
 body {
 	-webkit-text-size-adjust: none;
 }
-
+.notification-window{
+	min-width:320px;
+}
 
 
 .row-fluid ul.thumbnails li.span12 + li { margin-left : 0px;clear:left }
@@ -45,27 +47,12 @@ ul a{
 	min-width:210px;
 	max-width:250px;
 	min-height:226px;
-	  background-color: #45aeea;
-  background-image: -moz-linear-gradient(top, #54b4eb, #2fa4e7);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#54b4eb), to(#2fa4e7));
-  background-image: -webkit-linear-gradient(top, #54b4eb, #2fa4e7);
-  background-image: -o-linear-gradient(top, #54b4eb, #2fa4e7);
-  background-image: linear-gradient(to bottom, #54b4eb, #2fa4e7);
-  background-repeat: repeat-x;
-  border: 1px solid #1990d5;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff54b4eb', endColorstr='#ff2fa4e7', GradientType=0);
-    *zoom: 1;
-  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-}
-.frontpage-btn:active {
-	background-color: #1684C2;
 
-	}
+}
+.frontpage-btn h2{
+	letter-spacing:-1px
+}
+
 .frontpage-btn h2{
 	color: inherit;
 }
@@ -92,24 +79,16 @@ ul a{
 	font-size:60px;
 	opacity:1 !important;
 	top: 45px;
-	right:49px;
-	color:#45aeea;
+	right:50px;
+	color:#03407B;
 }
-.join-icon-circle:active{
-	position:absolute;
-	font-size:60px;
-	opacity:1 !important;
-	top: 45px;
-	right:49px;
-	color:#1684C2;
 
-	}
 .join-icon-globe{
 	position:absolute;
 	font-size:60px;
 	opacity:1 !important;
 	top: 45px;
-	right:49px;
+	right:50px;
 }
 .login-icon{
 	position:relative;
@@ -169,7 +148,7 @@ input, textarea{
 /*firefox*/
 @-moz-document url-prefix() {
 	.frontpage-btn h2{
-		letter-spacing:-3px
+		letter-spacing:-2px
 	}
     .create-icon-star{
 		right:90px;
@@ -195,9 +174,17 @@ input, textarea{
   color: #fff;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
-  pointer-events: none;
+  background: #1C5081; /* Old browsers */
+  background: -moz-linear-gradient(45deg,  #1C5081 0%, #033668 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#1C5081), color-stop(100%,#033668)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(45deg,  #1C5081 0%,#033668 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(45deg,  #1C5081 0%,#033668 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(45deg,  #1C5081 0%,#033668 100%); /* IE10+ */
+  background: linear-gradient(45deg,  #1C5081 0%,#033668 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1C5081', endColorstr='#033668',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
+  -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+          box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
 }
 .jumbotron h1 {
   font-size: 80px;
@@ -212,6 +199,7 @@ input, textarea{
   line-height: 1.25;
   margin-bottom: 30px;
 }
+
 
 /* Link styles (used on .masthead-links as well) */
 .jumbotron a {

@@ -13,12 +13,8 @@ class NotifierService {
     def link
     def authenticationService
     
-    def sendNotification(sender, recipient, subject, message){
-//        def sender = User.findByLogin(auth.user())
-//        def recipient = User.findByLogin(params.login)
-//        def subject = params.subject
-//        def message = params.message
-        def notificationInstance = new Notification(subject:subject, sender:sender, recipient:recipient, message:message)
+    def sendNotification(sender, recipient, subject, message, link='', action=''){
+        def notificationInstance = new Notification(subject:subject, sender:sender, recipient:recipient, message:message, link:link, action:action)
         recipient.addToRecieved(notificationInstance)
     }
     
