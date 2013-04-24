@@ -151,13 +151,13 @@
 										<g:if test="${flash.loginFormErrors}">
 											<bootstrap:alert class="alert-error">Please enter both username and password.</bootstrap:alert>
 										</g:if>
-										<g:textField data-content="You need an account to create a hunt. Please log in or sign up to begin your adventure!" data-original-title="Welcome to Scavengr!" data-placement="bottom" name="login" placeholder="Username" value="${flash.loginForm?.login?.encodeAsHTML()}"/>
-										<input type="password" name="password" placeholder="Password" />
+										<g:textField data-content="You need an account to create a hunt. Please log in or sign up to begin your adventure!" data-original-title="Welcome to Scavengr!" data-placement="bottom" name="login" id="loginUsername" placeholder="Username" value="${flash.loginForm?.login?.encodeAsHTML()}"/>
+										<input type="password" id="loginPassword" name="password" placeholder="Password" />
 									</div>
 									
 									<div class="control-group">
 										<a href="#signupModal" role="button" class="btn" data-toggle="modal">Create Account</a>
-										<g:actionSubmit value="Login" class="btn btn-success" />
+										<g:actionSubmit value="Login" id="loginButton" class="btn btn-success" />
 									</div>
 								</auth:form>
 							</div>

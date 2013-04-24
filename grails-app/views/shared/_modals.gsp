@@ -101,12 +101,12 @@ function hideLogin(){
 					<input type="text" id="signupLogin" name="login" value="${flash.signupForm?.login?.encodeAsHTML()}" required/>
 	
 					<label for="email">Email Address</label>
-					<g:textField name="email" value="${flash.signupForm?.email?.encodeAsHTML()}" required="true" />
+					<g:textField name="email" id="emailSignUp" value="${flash.signupForm?.email?.encodeAsHTML()}" required="true" />
 	
 					<label for="password">Password</label> 
-					<input type="password" name="password" required /> 
+					<input type="password" id="passwordSignup" name="password" required /> 
 					<label for="passwordConfirm">Confirm Password</label> 
-					<input type="password" name="passwordConfirm" required />
+					<input type="password" id="confirmSignup" name="passwordConfirm" required />
 	
 					<g:hiddenField name="immediate" value="true" />
 					<input type="submit" style="visibility: hidden;" />
@@ -164,7 +164,7 @@ function hideLogin(){
 
 <div id="changeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal"
+		<button type="button" class="close" id="closeButton" data-dismiss="modal"
 			aria-hidden="true">×</button>
 		<h2 id="myModalLabel">Change Password</h2>
 	</div>

@@ -19,21 +19,21 @@ class HomePage extends Page {
             
             
             //Fields for Log in
-            loginUserNameBox() {$('input', id:"loginUserBox")}
-            loginPasswordBox() {$('input', id:"loginPasswordBox")}
-            loginButton() {$('input', id:"LoginButton")}
+            loginUserNameBox() {$('input', id: "loginUsername")}
+            loginPasswordBox() {$('input', id: "loginPassword")}
+            loginButton() {$('input', id:"loginButton")}
             createAccountButton() {$("a", text: "Create Account")}
             
             //Fields for Popup Sign up
-            userNameBox() {$('input', id: 'modalLogin')}
-            emailBox() {$('input', name: 'email')}
-            passwordBox() {$('input', name: 'password')}
-            confirmPasswordBox() {$('input', name: 'passwordConfirm')}
+            userNameBox() {$('input', id: 'signupLogin')}
+            emailBox() {$('input', id:"emailSignUp")}
+            passwordBox() {$('input', id:"passwordSignup")}
+            confirmPasswordBox() {$('input', id:"confirmSignup")}
             
-            createButton() {$('button', id: "popUpCreate")}
-            closeButton() {$('a', text: "Close")}
+            createButton() {$('button', id:"submitSignup")}
+            closeButton() {$('button', text:'×')}
             
-            scavengrButton(to: HomePage) {$('a' , id:"scavengrButton")}
+            scavengrButton(to: HomePage) {$('a' , text: 'Scavengr')}
             helloButton(to: UserShowPage) {$("a", text: startsWith("Hello,")) }
             logoutButton() {$('a', text: "Log out")}
         }
