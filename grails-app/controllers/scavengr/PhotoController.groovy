@@ -38,8 +38,8 @@ class PhotoController {
                 def photoInstance = new Photo(params)
                 def huntInstance = photoInstance.myPrompt.myHunt
                 def userInstance = User.findByLogin(auth.user())
-                if(!huntInstance.isPrivate && !userInstance) {
-                    flash.message = 'You must have an account to upload to a public hunt.'
+                if(!userInstance) {
+                    flash.message = 'You must have an account to upload to a hunt. Please log in or create an account.'
                     redirect controller: 'prompt', action: 'show', id: params.myPrompt.id
                     return
                 }
