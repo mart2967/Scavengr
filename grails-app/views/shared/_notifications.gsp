@@ -7,12 +7,12 @@
 			template: '<div class="popover notification-window"><div class="arrow"></div><div class="popover-inner "><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
 		});
 		
-		
 	});
 	function hideMsg(id){
 		div = document.getElementById('notification'+id);
-		alert(div);
 		$(div).hide();
+		$('#mail').data('popover').options.content = $('#notifications').html();
+		$('#mail').popover("show")
 	}
 </script>
 <div id="dismissAll" hidden="true">
