@@ -121,5 +121,29 @@ class HomePageSpec extends GebReportingSpec{
         then:
         at HomePage
     }
+    
+    //This test doesn't currently work presumably because the keys are randomly generated. 
+    /*def "entering a key brings you to a hunt"() {
+        when:
+        to HomePage
+        enterKeyBox("r867iljxc2")
+        findHuntButton.click()
+        
+        then:
+        at ShowHuntPage
+        
+    }*/
+    
+    //This test currently does not work but should at some point. 
+    /*def "entering an incorrect key keeps you at the home page"() {
+        when:
+        to HomePage
+        enterKeyBox("incorrectkey")
+        findHuntButton.click()
+        
+        then:
+        at HomePage
+        
+    }*/
 
 }

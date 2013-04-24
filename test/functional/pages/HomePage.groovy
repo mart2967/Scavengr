@@ -12,9 +12,11 @@ class HomePage extends Page {
         }
         
         static content = {
-            
-            findHuntButton() {$("a", text: "Go!")}
+            //Join a Hunt
+            findHuntButton() {$("input", value:"Go!")}
             viewPublicHunts(to: ListOfHuntsPage) {$("a", text: "View Public Hunts")}
+            enterKeyBox() {$("input", name:"key")}
+            
             createAHunt() {$("a", text: "Create A Hunt")}
             
             

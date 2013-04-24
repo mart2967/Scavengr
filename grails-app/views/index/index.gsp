@@ -112,7 +112,7 @@
 							</div>
 							<div class="control-group">
 								<g:link controller="hunt" action="list" class="btn btn-secondary">View Public Hunts</g:link>
-								<g:actionSubmit value="Go!" class="btn btn-success" action="show" />
+								<g:actionSubmit value="Go!" class="btn btn-success" id="go" action="show" />
 							</div>
 						</g:form>
 						</div>
