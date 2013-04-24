@@ -61,13 +61,13 @@
 						</ul>
 						<ul class="nav pull-right">
 							<auth:ifLoggedIn>
-								<li><g:if test="${loggedInUser}">
+								<li>
 								<g:render template="/shared/notifications"/>
-								<g:if test="${loggedInUser?.recieved}">
+								<g:if test="${messages}">
 								<a id="mail" data-toggle="popover" data-placement="bottom">
 									<span class="badge badge-success">
 									<i class="icon-envelope"></i>
-									${loggedInUser?.recieved?.size()}
+									${messages.size()}
 									</span>
 									</a>
 								</g:if>
@@ -80,7 +80,7 @@
 									</a>
 								</g:else>
 								
-								</g:if></li> 
+								</li> 
 								<li><g:link controller="user" action="myProfile">Hello, <auth:user id="username"/></g:link></li>
 								<li><auth:logoutLink success="[controller:index, action:'index']" error="[controller:'index', action:'index']">Log out</auth:logoutLink></li>
 							</auth:ifLoggedIn>

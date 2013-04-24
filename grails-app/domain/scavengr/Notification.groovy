@@ -8,6 +8,7 @@ class Notification {
     User sender
     User recipient
     Date dateCreated
+    boolean read = false
     
     static belongsTo = [recipient:User]
     

@@ -15,7 +15,7 @@ grails.project.dependency.resolution = {
     }
     log 'error' // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
-
+    //grails.tomcat.nio = true
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
 
@@ -60,7 +60,7 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 
         build ":tomcat:$grailsVersion"
-
+        
         runtime ':database-migration:1.1'
 
         compile ':cache:1.0.0'

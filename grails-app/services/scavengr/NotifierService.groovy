@@ -8,10 +8,13 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class NotifierService {
     LinkGenerator grailsLinkGenerator
-    boolean transactional = false
+    static transactional = false
     def mailService
     def link
     def authenticationService
+    static atmosphere
+    
+
     
     def sendNotification(sender, recipient, subject, message, link='', action=''){
         def notificationInstance = new Notification(subject:subject, sender:sender, recipient:recipient, message:message, link:link, action:action)
