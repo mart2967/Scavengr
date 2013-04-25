@@ -11,7 +11,7 @@ class NotificationController {
         notificationInstance.read = true
 		def messages = Notification.findAll("from Notification as n where n.recipient=:user and n.read=:f",
 			[user:userInstance,f:false],[sort:'dateCreated', order:'desc', max:10])
-        render messages as JSON
+        render messages
     }
     
     def dismissAll(){
@@ -21,6 +21,6 @@ class NotificationController {
         messages.each{ msg ->
             msg.read = true
         }
-        render template:"/shared/notifications", model:[messages:messages]
+        render messages
     }
 }

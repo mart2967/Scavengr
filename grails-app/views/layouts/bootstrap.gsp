@@ -65,9 +65,10 @@
 								<g:render template="/shared/notifications"/>
 								<g:if test="${messages}">
 								<a id="mail" data-toggle="popover" data-placement="bottom">
-									<span class="badge badge-success">
+									<span id="message-indicator" class="badge badge-success">
 									<i class="icon-envelope"></i>
-									${messages.size()}
+									<span id="messages">${numMessages}</span>
+									
 									</span>
 									</a>
 								</g:if>
@@ -82,7 +83,7 @@
 								
 								</li> 
 								<li><g:link controller="user" action="myProfile">Hello, <auth:user id="username"/></g:link></li>
-								<li><auth:logoutLink success="[controller:index, action:'index']" error="[controller:'index', action:'index']">Log out</auth:logoutLink></li>
+								<li><auth:logoutLink success="[controller:'index', action:'index']" error="[controller:'index', action:'index']">Log out</auth:logoutLink></li>
 							</auth:ifLoggedIn>
 							<auth:ifNotLoggedIn>
 								<li><g:link fragment="loginModal" data-toggle="modal">Log In</g:link></li>
