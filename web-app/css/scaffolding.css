@@ -1,12 +1,14 @@
 body {
 	-webkit-text-size-adjust: none;
 }
-.notification-window{
+.notification-window {
 	min-width:320px;
+	
+}
+.notification-window .popover-content{
 	max-height:600px;
 	overflow:auto;
 }
-
 
 .notification{
 	padding-top:5px;

@@ -1,17 +1,10 @@
 package scavengr
 
-//import java.util.List
-
 import java.util.zip.ZipEntry
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import java.util.zip.ZipOutputStream
 import org.springframework.dao.DataIntegrityViolationException
 import org.apache.commons.validator.GenericValidator
-
-//import scavengr.Hunt
-//import scavengr.Photo
-//import scavengr.Prompt
-
 
 class HuntController {
 
@@ -142,15 +135,42 @@ class HuntController {
     }
 
     def invite() {
-        def huntInstance = Hunt.get(params.myHunt.id)
-        def email = params.email.toString()
-        NotifierService.contactHunters(huntInstance.myCreator.login, email, huntInstance.key, huntInstance.title)
-        flash.message = 'Invite sent to ' + email
+        def huntInstance = Hunt.get(params.id)
+        def user = params.user.toString()
+        if(huntInstance.emails.contains(user)){
+            flash.message = user + ' has already been invited.'
+            redirect controller: 'hunt', action: 'show', params: [key: huntInstance.key]
+            return
+        }
+        def link = grailsLinkGenerator.link( controller: 'hunt', action: 'show', params: [key: huntInstance.key])
+        if(GenericValidator.isEmail(user)){
+            def userInstance = User.findByEmail(user)
+            if(userInstance != null){
+                
+                NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
+                    "You have been invited to participate in the hunt \"$huntInstance.title\"", link, "Go to Hunt")
+            }
+            NotifierService.contactHunters(huntInstance.myCreator.login, user, huntInstance.key, huntInstance.title)
+        }else{
+            def userInstance = User.findByLogin(user)
+            if(userInstance != null){
+                NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
+                    "You have been invited to participate in the hunt \"$huntInstance.title\"", link, "Go to Hunt")
+                
+                NotifierService.contactHunters(huntInstance.myCreator.login, userInstance.email, huntInstance.key, huntInstance.title)
+            }else{
+                flash.message = 'User not found with email or username: ' + user
+                redirect controller: 'hunt', action: 'show', params: [key: huntInstance.key]
+                return
+            }
+        }
+        huntInstance.addToEmails(user)
+        flash.message = 'Invite sent to ' + user
         redirect controller: 'hunt', action: 'show', params: [key: huntInstance.key]
     }
 
     def inviteAdmin() {
-        def huntInstance = Hunt.get(params.myHunt.id)
+        def huntInstance = Hunt.get(params.id)
         def newAdmin = User.findByLogin(params.login)
         def currentUser = User.findByLogin(auth.user())
         if(!newAdmin){
@@ -167,7 +187,7 @@ class HuntController {
             def link = grailsLinkGenerator.link( controller: 'hunt', action: 'show', params: [key: huntInstance.key])
             newAdmin.addToMyAdministratedHunts(huntInstance)
             NotifierService.sendNotification(currentUser, newAdmin,
-                "You Are Now an Admin", "You have been made administrator of the hunt \"$huntInstance.title\"", link, "Go to Hunt")
+                'You Are Now an Admin', "You have been made administrator of the hunt \"$huntInstance.title\"", link, "Go to Hunt")
             newAdmin.save()
             flash.message = 'Admin added: ' + newAdmin.login
             redirect action: 'show', params:['key':huntInstance.key]
@@ -249,7 +269,7 @@ class HuntController {
             promptPhotoList.add(promptPhotoContainer)
 
         }
-        def userLoginList = User.executeQuery("select u.login from User u") 
+        def userLoginList = User.executeQuery("select u.login from User u")
         def isCreatorOrAdmin = (userInstance == huntInstance.myCreator || huntInstance.myAdmins.contains(userInstance))
         def isParticipating = huntInstance.myUsers.contains(userInstance)
         [huntInstance: huntInstance, userInstance:userInstance, promptInstanceList: promptInstanceList,

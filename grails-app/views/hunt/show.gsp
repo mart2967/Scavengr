@@ -10,7 +10,10 @@
 				source:${userLoginList}
 			}
 		);
-
+		$('#user').typeahead({
+				source:${userLoginList}
+			}
+		);
 		
 		$('#new-prompt').submit(function() {
 			if ($('#title').val() != '') {
@@ -249,6 +252,18 @@
 						</g:each>
 						</g:if>
 					</g:if>
+					<g:if test="${huntInstance?.emails}">
+						<g:if test="${isCreatorOrAdmin}" >
+							<dt>
+								<g:message code="hunt.emails.label" default="Invited Participants" />
+							</dt>
+							<g:each in="${huntInstance?.emails}" var="participant" >
+							<dd>
+								${participant}
+							</dd>
+							</g:each>
+						</g:if>
+					</g:if>
 					<g:if test="${isCreatorOrAdmin}" >
 						<li class="divider"></li>
 						<li class="nav-header">Admin Options</li>
@@ -264,15 +279,15 @@
 						
 						<dt> Add new Participants</dt>
 						<g:form name="new-participant" controller="hunt" action="invite">
-						<input type=email id="email" name="email" placeholder="Participant Email Address" />
-						<g:hiddenField name="myHunt.id" value="${huntInstance.id}"/>
+						<input type="text" id="user" data-provide="typeahead" name="user" autocomplete="off" placeholder="Email Address or Username" />
+						<g:hiddenField name="id" value="${huntInstance.id}"/>
 						<button id="new-participant-submit" type="submit" class="btn btn-primary"><i class="icon-envelope icon-white"></i>Invite</button>
 						</g:form>
 						
 						<dt> Add new Administrators</dt>
 						<g:form name="new-admin" controller="hunt" action="inviteAdmin">
 						<input type="text" data-provide="typeahead" autocomplete="off" id="admin-login" name="login" placeholder="Username" />
-						<g:hiddenField name="myHunt.id" value="${huntInstance.id}"/>
+						<g:hiddenField name="id" value="${huntInstance.id}"/>
 						<button id="new-admin-submit" type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i>Add</button>
 						</g:form>
 						<g:form>

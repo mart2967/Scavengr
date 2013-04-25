@@ -76,6 +76,8 @@ class PhotoController {
                 photoInstance.save()
                 if (!huntInstance.myUsers.find {user -> user == userInstance}){
                     userInstance.addToMyHunts(huntInstance)
+                    huntInstance.removeFromEmails(userInstance.login)
+                    huntInstance.removeFromEmails(userInstance.email)
                     userInstance.save()
                 }
 

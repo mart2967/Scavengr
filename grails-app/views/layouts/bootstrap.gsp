@@ -64,11 +64,10 @@
 								<li>
 								<g:render template="/shared/notifications"/>
 								<g:if test="${messages}">
-								<a id="mail" data-toggle="popover" data-placement="bottom">
+								<a id="mail">
 									<span id="message-indicator" class="badge badge-success">
 									<i class="icon-envelope"></i>
 									<span id="messages">${numMessages}</span>
-									
 									</span>
 									</a>
 								</g:if>

@@ -179,18 +179,7 @@
 							
 						</g:if>
 	
-						<g:if test="${huntInstance?.emails}">
-								<dt>
-									<g:message code="hunt.emails.label" default="Invited Participants" />
-								</dt>
-							<g:each in="${huntInstance?.emails}" var="email" >
-								
-		
-								<dd>
-									${email}
-								</dd>
-							</g:each>
-						</g:if>
+						
 	
 						<g:if test="${huntInstance?.myCreator}">
 							<dt>

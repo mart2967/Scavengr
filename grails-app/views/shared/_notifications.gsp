@@ -1,21 +1,31 @@
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#mail').popover({
-			title: 'Notifications' + $('#dismissAll').html(),
-			content: $('#notifications').html(),
-			html:true,
-			template: '<div class="popover notification-window"><div class="arrow"></div><div class="popover-inner "><h3 class="popover-title"></h3><div class="popover-content" style="padding:0;"><p></p></div></div></div>'
+		$('#mail').click(function(){
+			if($('#messages').html() > 0){
+				$('#mail').popover({
+					trigger: 'manual',
+					placement: 'bottom',
+					title: 'Notifications' + $('#dismissAll').html(),
+					content: function(){
+						return $('#notifications').html()
+					},
+					html:true,
+					template: '<div class="popover notification-window"><div class="arrow"></div><div class="popover-inner "><h3 class="popover-title"></h3><div class="popover-content" style="padding:0;"><p></p></div></div></div>'
+				});
+				$('#mail').popover('toggle')
+			}
 		});
-		
 	});
 	var removed = 0
 	function hideMsg(id){
-		div = document.getElementById('notification'+id);
-		$('.popover-content p > #notification'+id).slideUp();
-		$('#messages').html(${numMessages} - ++removed);
-		if(${numMessages} - removed == 0){
-			$('#message-indicator').removeClass("badge-success");
-		}
+		$('#notification'+id).remove();
+		$('.popover-content p > #notification'+id).slideUp(function(){
+			$('#messages').html(${numMessages} - ++removed);
+			if(${numMessages} - removed == 0){
+				$('#mail').popover('destroy');
+				$('#message-indicator').removeClass("badge-success");
+			}
+		});
 	}
 	function hideAll(){
 		$('.popover-content').slideUp(function(){
@@ -23,7 +33,6 @@
 			$('#message-indicator').removeClass("badge-success");
 			$('#messages').html(0);
 		});
-		
 	}
 </script>
 <div id="dismissAll" hidden="true">
@@ -32,8 +41,6 @@
 <div id="notifications" hidden="true">
 	<g:each in="${messages}" var="msg">
 		<div class="notification" id="notification${msg.id}" >
-			
-			
 			<div class="pull-right" style="margin-left:10px;">
 				<small class="pull-right">
 				<g:formatDate date="${msg?.dateCreated}" format="MM/dd hh:mm a"/>
