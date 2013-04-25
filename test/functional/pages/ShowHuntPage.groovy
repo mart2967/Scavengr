@@ -11,6 +11,7 @@ class ShowHuntPage extends Page {
     }
     
     static content = {
+        //huntKey = {$("a", id:"huntKey")
         
     }
 }

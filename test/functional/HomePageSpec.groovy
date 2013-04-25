@@ -2,6 +2,7 @@
 import pages.HomePage
 import pages.ListOfHuntsPage
 import pages.UserShowPage
+import pages.CreateAHuntPage
 
 import geb.spock.GebReportingSpec
 import spock.lang.*
@@ -36,6 +37,14 @@ class HomePageSpec extends GebReportingSpec{
         then:
         at HomePage
     }
+    
+    def 'can log in as bootstrapped data'() {
+        when:
+        loginAs("Walter", "password")
+        
+        then:
+        at UserShowPage
+    }
 
     def "can navigate to public hunts"() {
         when:
@@ -54,8 +63,34 @@ class HomePageSpec extends GebReportingSpec{
     }
 
 
+    def "hitting Create A Hunt while not logged in does not redirect" (){
+        when:
+        to HomePage
+        createAHuntButton.click()
+        
+        then:
+        at HomePage
+    }
+       
+    def "clicking the navbar create a hunt button redirects to the create a hunt page if logged in" (){
+        when:
+        loginAs("Walter", "password")
+        navbarCreateButton.click()
+        
+        then:
+        at CreateAHuntPage
+    }
 
-
+    def "clicking the big blue create a hunt button redirects to the create a hunt page if logged in" (){
+        when:
+        loginAs("Walter", "password")
+        to HomePage
+        createAHuntButton.click()
+        
+        then:
+        at CreateAHuntPage
+    }
+    
     def "can cancel signup box"() {
         when:
         to HomePage
@@ -123,27 +158,29 @@ class HomePageSpec extends GebReportingSpec{
     }
     
     //This test doesn't currently work presumably because the keys are randomly generated. 
-    /*def "entering a key brings you to a hunt"() {
+    def "entering a key brings you to a hunt"() {
         when:
         to HomePage
-        enterKeyBox("r867iljxc2")
+        enterKeyBox.value("yfe5mejs2a")
         findHuntButton.click()
         
         then:
         at ShowHuntPage
         
-    }*/
+    }
     
     //This test currently does not work but should at some point. 
     /*def "entering an incorrect key keeps you at the home page"() {
         when:
         to HomePage
-        enterKeyBox("incorrectkey")
+        enterKeyBox.value("incorrectkey")
         findHuntButton.click()
         
         then:
         at HomePage
         
     }*/
+    
+
 
 }

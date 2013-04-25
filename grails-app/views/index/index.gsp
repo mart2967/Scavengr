@@ -126,7 +126,7 @@
 
 				<div class="span4 frontpage">
 					<auth:ifLoggedIn>
-						<div onclick="document.location='user/myProfile'" class="btn btn-inverse frontpage-btn">
+						<div onclick="document.location='user/myProfile'" id="myProfileButton" class="btn btn-inverse frontpage-btn">
 							<i class="icon-user login-icon"></i>
 							<h2>My Profile</h2>
 						</div>

@@ -2,6 +2,7 @@ package pages
 
 import geb.Page
 import pages.UserShowPage
+import pages.CreateAHuntPage
 
 class HomePage extends Page {
     
@@ -17,7 +18,8 @@ class HomePage extends Page {
             viewPublicHunts(to: ListOfHuntsPage) {$("a", text: "View Public Hunts")}
             enterKeyBox() {$("input", name:"key")}
             
-            createAHunt() {$("a", text: "Create A Hunt")}
+            
+            createAHuntButton() {$("div", id: "create")}
             
             
             //Fields for Log in
@@ -34,6 +36,10 @@ class HomePage extends Page {
             
             createButton() {$('button', id:"submitSignup")}
             closeButton() {$('button', text:'×')}
+            
+            //Buttons that appear in user session
+            //this is the button at the top of the page when you are logged in
+            navbarCreateButton() {$("a", text: "Create A Hunt")}
             
             scavengrButton(to: HomePage) {$('a' , text: 'Scavengr')}
             helloButton(to: UserShowPage) {$("a", text: startsWith("Hello,")) }

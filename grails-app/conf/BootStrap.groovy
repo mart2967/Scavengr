@@ -36,7 +36,7 @@ class BootStrap {
 		
         /*Hunts*/
         def trees = new Hunt(title: 'Trees', description: 'Look at these fresh young trees.', 
-			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate).save(failOnError)
+			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate, key: "yfe5mejs2a").save(failOnError)
         def colors = new Hunt(title: 'Colors', description: 'I forgot how to see these, plz halp.', 
 			myCreator: laurie, isPrivate: true, startDate: new Date(), endDate: lateDate).save(failOnError)
         def raccoons = new Hunt(title: 'Raccoons', description: 'Raccoons. What more do you need?', 

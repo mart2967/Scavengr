@@ -192,7 +192,7 @@
 							</dt>
 
 							<dd>
-								<g:fieldValue bean="${huntInstance}" field="key" />
+								<g:fieldValue bean="${huntInstance}" field="key" id="huntKey" />
 							</dd>
 						
 					</g:if>

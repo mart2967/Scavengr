@@ -55,7 +55,7 @@
 <%--							</g:if>--%>
 							<auth:ifLoggedIn>
 								<li<%= request.forwardURI == "${createLink(uri: '/hunt/list')}" ? ' class="active"' : '' %>><g:link controller="hunt">Public Hunts</g:link></li>
-								<li><g:link controller="hunt" action="create">Create A Hunt</g:link></li>
+								<li><g:link controller="hunt" action="create" id="navbarCreateButton">Create A Hunt</g:link></li>
 							</auth:ifLoggedIn>
 							
 						</ul>
