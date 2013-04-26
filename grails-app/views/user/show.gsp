@@ -7,6 +7,12 @@
 <g:set var="entityName"
 	value="${message(code: 'user.label', default: 'User')}" />
 <title><g:message code="default.show.label" args="[entityName]" /></title>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#myTab a:first').tab('show');
+
+	});
+</script>
 </head>
 <body>
 <div class="container">
@@ -28,18 +34,38 @@
 				</bootstrap:alert>
 			</g:if>
 			<div class="row-fluid">
-				<ul class="thumbnails">
-				<g:each in="${photoInstanceList}" var="photoInstance">
-					<li class="span3">
-						<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: photoInstance?.id)}">
-							<bi:img size="medium" bean="${photoInstance}" />
-						</a>
-					</li>
-				</g:each>
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a href="#myPhotos" data-toggle="tab">Photos</a></li>
+					<li><a href="#favorites" data-toggle="tab">Favorites</a></li>
 				</ul>
-			</div>
-			<div class="pagination">
-				<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" total="${photoInstanceTotal}" />
+				<div class="tab-content">
+					<div class="tab-pane active" id="myPhotos">
+						<ul class="thumbnails">
+						<g:each in="${photoInstanceList}" var="photoInstance">
+							<li class="span3">
+								<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: photoInstance?.id)}">
+									<bi:img size="medium" bean="${photoInstance}" />
+								</a>
+							</li>
+						</g:each>
+						</ul>
+					</div>
+					<div class="pagination">
+						<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" total="${photoInstanceTotal}" />
+					</div>
+				</div>
+			
+<%--				<div class="tab-pane" id="favorites">--%>
+<%--					<ul class="thumbnails">--%>
+<%--						<g:each in="${userInstance.favorites}" var="favorite">--%>
+<%--							<li class="span3">--%>
+<%--								<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: favorite?.id)}">--%>
+<%--									<bi:img size="medium" bean="${favorite}" />--%>
+<%--								</a>--%>
+<%--							</li>--%>
+<%--						</g:each>--%>
+<%--					</ul>--%>
+<%--				</div>--%>
 			</div>
 		</div>
 

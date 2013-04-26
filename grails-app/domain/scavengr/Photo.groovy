@@ -12,13 +12,13 @@ class Photo {
     String title
     String description
     User myUser
-    //Participant myParticipants
+    Integer views = 0
     Prompt myPrompt
     Date dateCreated
-    static belongsTo = [myUser:User, myPrompt:Prompt] //,myParticipants:Participant]
-
+    
+    static belongsTo = [User, Prompt] //,myParticipants:Participant]
+    static hasMany = [likedBy:User]
     static constraints = {
-
         title blank:true, maxSize:22
         description blank:true, maxSize:250
         myUser nullable:true
@@ -26,9 +26,6 @@ class Photo {
         myPrompt nullable:true
         original sqlType: 'blob'
     }
-    
-    
-    
 
     String toString() {
         return "$title"

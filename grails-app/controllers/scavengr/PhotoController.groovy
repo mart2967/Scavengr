@@ -87,14 +87,49 @@ class PhotoController {
                 break
         }
     }
-
+    
+    def toggleFavorite(){
+        def photoInstance = Photo.get(params.id)
+        def userInstance = User.findByLogin(auth.user())
+        if(!userInstance){
+            return
+        }
+        if(userInstance.favorites.contains(photoInstance)){
+            userInstance.removeFromFavorites(photoInstance)
+        }else{
+            userInstance.addToFavorites(photoInstance)
+        }
+        render null
+    }
+    
+    def favorite(){
+        def photoInstance = Photo.get(params.id)
+        def userInstance = User.findByLogin(auth.user())
+        if(!userInstance){
+            return
+        }
+        userInstance.addToFavorites(photoInstance)
+        render null
+    }
+    
+    def unfavorite(){
+        def photoInstance = Photo.get(params.id)
+        def userInstance = User.findByLogin(auth.user())
+        if(!userInstance){
+            return
+        }
+        userInstance.removeFromFavorites(photoInstance)
+        render null
+    }
+    
     def show() {
 	//def participantInstance = Participant.get(params.participantId)
         def photoInstance = Photo.get(params.id)
         def showHunt = false
         def isMyPhoto = false
+        def userInstance = User.findByLogin(auth.user())
         def key
-        if (authenticationService.isLoggedIn(request) && User.findByLogin(auth.user()) == photoInstance.myUser) {
+        if (authenticationService.isLoggedIn(request) && userInstance == photoInstance.myUser) {
             isMyPhoto = true
         }
         if (!photoInstance.myPrompt?.myHunt?.isPrivate) {
@@ -118,7 +153,10 @@ class PhotoController {
         if (index != photoIdList.size()-1){
             nextId = photoIdList.get(index + 1)
         }
-        [photoInstance: photoInstance, isMyPhoto: isMyPhoto, showHunt: showHunt, key: key,
+        println userInstance.favorites
+        def isFavorite = userInstance.favorites.contains(photoInstance)
+        photoInstance.views++
+        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto, showHunt: showHunt, key: key,
 	    //,participantInstance:participantInstance
             prevId: prevId, nextId: nextId]
     }

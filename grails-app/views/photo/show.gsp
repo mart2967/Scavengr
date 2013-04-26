@@ -24,9 +24,16 @@
 						}
 					}
 				});				
-				
-				
 			});
+			function toggleFavorite(){
+				var before = $('#favButton').live().text();
+				if(before == 'Favorite' || before == ' Favorite'){
+					$('#favButton').html('<a><i class="icon icon-star"></i> Unfavorite</a>');
+				}else{
+					$('#favButton').html('<a><i class="icon icon-star-empty"></i> Favorite</a>');
+				}
+			}
+			
 		</script>
 		
 	</head>
@@ -82,6 +89,23 @@
 							</a>
 						</li>
 					</g:else>
+					<li  id="favButton" onclick="${remoteFunction(action:'toggleFavorite',params:['id':photoInstance.id], onSuccess:'toggleFavorite();')}">
+						<g:if test="${!isFavorite}">
+						<a>
+							<i id="favorited" class="icon icon-star-empty"> </i>
+							Favorite
+						</a>
+						</g:if>
+						<g:else>
+						<a>
+							<i id="favorited" class="icon icon-star"> </i>
+							Unfavorite
+							 </a>
+						</g:else>
+					</li>
+					
+
+					
 					<g:if test="${nextId}">
 						<li class="next">
 							<g:link action="show" id="${nextId}" elementId="nextPicture">
@@ -121,7 +145,10 @@
 								<dt>Upload Date</dt>
 								<dd>
 								<g:formatDate date="${photoInstance?.dateCreated}" type="datetime" style="LONG" timeStyle="SHORT"/>
-								</dd>							</g:if>
+								</dd>							
+							</g:if>
+							<dt>Views</dt>
+							<dd>${photoInstance.views}</dd>
 						<g:if test="${photoInstance?.myPrompt}">
 							<g:if test="${!photoInstance?.myPrompt?.myHunt?.isPrivate}" >
 								<dt>
