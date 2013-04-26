@@ -1,5 +1,5 @@
 
-import pages.HomePage
+import pages.HomePage 
 import pages.ListOfHuntsPage
 import pages.UserShowPage
 import pages.CreateAHuntPage
@@ -7,8 +7,6 @@ import pages.CreateAHuntPage
 import geb.spock.GebReportingSpec
 import spock.lang.*
 import pages.*
-
-
 
 
 class HomePageSpec extends GebReportingSpec{

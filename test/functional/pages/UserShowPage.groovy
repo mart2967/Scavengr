@@ -1,6 +1,6 @@
 package pages
 
-import geb.Page
+import geb.Page 
 import pages.HomePage
 import pages.ListOfHuntsPage
 import pages.CreateHuntPage
@@ -20,5 +20,6 @@ class UserShowPage extends Page {
             scavengrButton(to: HomePage) {$('a' , id:"scavengrButton")}
             helloButton(to: UserShowPage) {$("a", text: startsWith("Hello,")) }
             logoutButton() {$('a', text: "Log out")}
+			createAHuntButton{$('a', id="CreateHuntButton")}
         }
 }

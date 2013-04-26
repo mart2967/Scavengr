@@ -9,6 +9,7 @@ class CreateAHuntPage extends Page{
         }
         
         static content = {
+			addPromptButton(){ $('a', id="add-prompt-button") }
             
         }
 }
