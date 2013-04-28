@@ -39,7 +39,7 @@ class HomePage extends Page {
             
             //Buttons that appear in user session
             //this is the button at the top of the page when you are logged in
-            navbarCreateButton() {$("a", text: "Create A Hunt")}
+            navbarCreateButton(to: CreateAHuntPage) {$("a", text: "Create A Hunt")}
             
             scavengrButton(to: HomePage) {$('a' , text: 'Scavengr')}
             helloButton(to: UserShowPage) {$("a", text: startsWith("Hello,")) }

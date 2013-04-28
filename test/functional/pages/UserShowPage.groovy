@@ -20,6 +20,7 @@ class UserShowPage extends Page {
             scavengrButton(to: HomePage) {$('a' , id:"scavengrButton")}
             helloButton(to: UserShowPage) {$("a", text: startsWith("Hello,")) }
             logoutButton() {$('a', text: "Log out")}
-			createAHuntButton{$('a', id="CreateHuntButton")}
+            navbarCreateButton(to: CreateAHuntPage) {$("a", text: "Create A Hunt")}
+            createAHuntButton() {$('a', id:"CreateHuntButton")}
         }
 }

@@ -15,35 +15,6 @@
         $("#prompt-div").append(templateHtml);
         promptCount++;
     }
-
-    function addPromptOld( {
-
-    	var title = $('#new-prompt-title').val();
-		var description = $('#new-prompt-description').val();
-		$('#new-prompt-title').focus();
-		if (title != '') {
-			var newPromptField = '<div class="control-group" hidden="true" id="temp-prompt-div"> <g:textField name="temp-prompt-title" class="temp-prompt-title" /> <g:textArea name="temp-prompt-description" class="temp-prompt-description" /><g:hiddenField name="temp-prompt-hunt" class="prompt-item-hunt" /> <button type="button" id="temp-prompt-button" class="remove-prompt-button btn btn-secondary" value="Remove"><i class="icon-remove icon-black"></i></div>';
-			$('#new-prompt-title').attr('value', '');
-			$('#new-prompt-description').attr('value', '');
-
-			$('#prompt-list').prepend(newPromptField);
-			$('#temp-prompt-title').attr('id', 'myPrompts[' + addedPrompts + '].title');
-			$('#temp-prompt-description').attr('id', 'myPrompts[' + addedPrompts + '].description');
-			$('#temp-prompt-hunt').attr('id', 'myPrompts[' + addedPrompts + '].myHunt');
-			$('#temp-prompt-hunt').attr('value', "'${huntInstance}'" );
-			$('#temp-prompt-button').attr('id', 'remove-prompt-button-' + addedPrompts);
-			$('#prompt-div').show();
-			$('#temp-prompt-div').slideDown();
-			$('#temp-prompt-div').attr('id', 'prompt-item-' + addedPrompts);
-			$('.temp-prompt-title').attr('name', 'myPrompts[' + addedPrompts + '].title');
-			$('.temp-prompt-title').attr('value', title);
-			$('.temp-prompt-description').attr('name', 'myPrompts[' + addedPrompts + '].description');
-			$('.temp-prompt-description').attr('value', description);
-			$('.temp-prompt-title').attr('class', 'prompt-title-item');
-			$('.temp-prompt-description').attr('class', 'prompt-description-item');
-			addedPrompts++;
-		}
-        })
     
 </script>
 
@@ -57,7 +28,7 @@
 		<div class="control-group">
 			<g:textArea name="new-prompt-description" placeholder="Description"></g:textArea>
 
-			<button id="add-prompt-button" value="Add Prompt" type="button"
+			<button id="addPromptButton" value="Add Prompt" type="button"
 				class="btn btn-primary" onclick="addPrompt();">Add Prompt</button>
 		</div>
 	</fieldset>

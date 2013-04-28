@@ -1,9 +1,3 @@
-
-import pages.HomePage 
-import pages.ListOfHuntsPage
-import pages.UserShowPage
-import pages.CreateAHuntPage
-
 import geb.spock.GebReportingSpec
 import spock.lang.*
 import pages.*
@@ -155,7 +149,6 @@ class HomePageSpec extends GebReportingSpec{
         at HomePage
     }
     
-    //This test doesn't currently work presumably because the keys are randomly generated. 
     def "entering a key brings you to a hunt"() {
         when:
         to HomePage

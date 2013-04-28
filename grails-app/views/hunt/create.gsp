@@ -202,13 +202,13 @@
 						<h3>Add Prompts</h3>
 						<fieldset>
 							<div class="control-group">
-								<g:textField name="new-prompt-title" placeholder="Title" />
+								<g:textField id="promptTitle" name="new-prompt-title" placeholder="Title" />
 							</div>
 							<div class="control-group">
-								<g:textArea name="new-prompt-description"
+								<g:textArea id="promptDescription" name="new-prompt-description"
 									placeholder="Description"></g:textArea>
 
-								<button onclick="addPrompt()" id="add-prompt-button" value="Add Prompt" type="button"
+								<button onclick="addPrompt()" id="addPromptButton" value="Add Prompt" type="button"
 									class="btn btn-primary">Add Prompt</button>
 							</div>
 						</fieldset>
