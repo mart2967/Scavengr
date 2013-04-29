@@ -25,14 +25,7 @@
 					}
 				});				
 			});
-			function toggleFavorite(){
-				var before = $('#favButton').live().text();
-				if(before == 'Favorite' || before == ' Favorite'){
-					$('#favButton').html('<a><i class="icon icon-star"></i> Unfavorite</a>');
-				}else{
-					$('#favButton').html('<a><i class="icon icon-star-empty"></i> Favorite</a>');
-				}
-			}
+
 			
 		</script>
 		
@@ -89,19 +82,19 @@
 							</a>
 						</li>
 					</g:else>
-					<li  id="favButton" onclick="${remoteFunction(action:'toggleFavorite',params:['id':photoInstance.id], onSuccess:'toggleFavorite();')}">
-						<g:if test="${!isFavorite}">
-						<a>
-							<i id="favorited" class="icon icon-star-empty"> </i>
-							Favorite
+					<li id="favButton">
+						
+						<a id="favLink" onclick="${remoteFunction(action:'toggleFavorite',params:['id':photoInstance.id], update:'favLink')}">
+							<g:if test="${!isFavorite}">
+								<i id="favorited" class="icon icon-star"> </i>
+								Favorite
+							</g:if>
+							<g:else>
+								<i id="favorited" class="icon icon-star-empty"> </i>
+								Unfavorite
+							</g:else>
 						</a>
-						</g:if>
-						<g:else>
-						<a>
-							<i id="favorited" class="icon icon-star"> </i>
-							Unfavorite
-							 </a>
-						</g:else>
+						
 					</li>
 					
 

@@ -41,31 +41,37 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="myPhotos">
 						<ul class="thumbnails">
-						<g:each in="${photoInstanceList}" var="photoInstance">
-							<li class="span3">
-								<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: photoInstance?.id)}">
-									<bi:img size="medium" bean="${photoInstance}" />
-								</a>
-							</li>
-						</g:each>
+							<g:each in="${photoInstanceList}" var="photoInstance">
+								<li class="span3">
+									<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: photoInstance?.id)}">
+										<bi:img size="medium" bean="${photoInstance}" />
+									</a>
+								</li>
+							</g:each>
 						</ul>
+						<div class="pagination">
+							<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" total="${photoInstanceTotal}" />
+						</div>
 					</div>
-					<div class="pagination">
-						<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" total="${photoInstanceTotal}" />
+					
+					
+					<div class="tab-pane" id="favorites">
+						<ul class="thumbnails">
+							<g:each in="${userInstance.favorites}" var="favorite">
+								<li class="span3">
+									<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: favorite?.id)}">
+										<bi:img size="medium" bean="${favorite}" />
+									</a>
+								</li>
+							</g:each>
+						</ul>
+<%--						<div class="pagination">--%>
+<%--							<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" max="${params.favmax}" offset="${params.offsetmax}" total="${favoriteInstanceTotal}" />--%>
+<%--						</div>--%>
 					</div>
 				</div>
 			
-<%--				<div class="tab-pane" id="favorites">--%>
-<%--					<ul class="thumbnails">--%>
-<%--						<g:each in="${userInstance.favorites}" var="favorite">--%>
-<%--							<li class="span3">--%>
-<%--								<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: favorite?.id)}">--%>
-<%--									<bi:img size="medium" bean="${favorite}" />--%>
-<%--								</a>--%>
-<%--							</li>--%>
-<%--						</g:each>--%>
-<%--					</ul>--%>
-<%--				</div>--%>
+				
 			</div>
 		</div>
 

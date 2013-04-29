@@ -8,7 +8,7 @@ import org.apache.commons.validator.GenericValidator
 
 
 class UserController {
-    
+
     Map codeDefaultUser = [code: 'user.label', default: 'User']
     Map actionList = [action: 'list']
     Map flushTrue = [flush: true]
@@ -34,7 +34,7 @@ class UserController {
         }
         return pass
     }
-    
+
     def changeEmail(){
         def userInstance = User.findByLogin(auth.user())
         if (params.email != params.confirmEmail){
@@ -44,7 +44,7 @@ class UserController {
         }
         if(!GenericValidator.isEmail(params.email)) {
             flash.message = 'Invalid email address: ' + params.email
-            redirect action: 'show', params: [login: auth.user()]            
+            redirect action: 'show', params: [login: auth.user()]
             return
         }
         userInstance.email = params.email
@@ -52,7 +52,7 @@ class UserController {
         flash.message = 'Email changed to ' + params.email
         redirect action: 'show', params: [login: auth.user()]
     }
-    
+
     def resetPassword() {
         def userInstance = User.findByEmailAndLogin(params.email, params.login)
         if(!userInstance){
@@ -99,7 +99,7 @@ class UserController {
         redirect action: 'show', params: [login: auth.user()]
         return
     }
-    
+
     def downloadPhotos(){
         def userInstance = User.findByLogin(auth.user())
         if(!userInstance?.myPhotos){
@@ -121,7 +121,7 @@ class UserController {
         response.outputStream << baos.toByteArray()
         response.outputStream.flush()
     }
-    
+
     def index() {
         redirect action:'list', params: params
     }
@@ -138,28 +138,7 @@ class UserController {
             redirect action: 'show', params: [login: auth.user()]
         }
     }
-    
-    //UNUSED, HANDLED BY AUTHENTICATION PLUGIN
-/*
-    def create() {
-        switch (request.method) {
-            case 'GET':
-                [userInstance: new User(params)]
-                break
-            case 'POST':
-                def userInstance = User.findByLogin(params.login)
 
-                if (!userInstance.save(flushTrue)) {
-                    render view: 'create', model: [userInstance: userInstance]
-                    return
-                }
-                flash.message = message(code: 'scavengr.User.created.label',
-                        args: [message(codeDefaultUser), userInstance.id])
-                redirect action: 'show', params: [login:userInstance.login]
-                break
-        }
-    }
-*/
     def show() {
 
         def userInstance = User.findByLogin(params.login)
@@ -171,10 +150,15 @@ class UserController {
             redirect actionList
             return
         }
-        
+
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
+        params.favmax = Math.min(params.favmax ? params.int('favmax') : 8, 100)
         def photoInstanceList = Photo.findAllByMyUser(userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
-        
+        def favoriteInstanceList = Photo.withCriteria(max:params.favmax, offset:params.favoffset){
+            likedBy{
+                eq('login', userInstance.login)
+            }
+        }
         def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll {hunt -> hunt.isPrivate == false}
         def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll {hunt -> hunt.isPrivate == true}
         def publicAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll {hunt -> hunt.isPrivate == false}
@@ -182,15 +166,16 @@ class UserController {
         def publicHuntParticipationList = userInstance.myHunts.findAll {hunt -> hunt.isPrivate == false}
         def privateHuntParticipationList = userInstance.myHunts.findAll {hunt -> hunt.isPrivate == true}
 
-            [userInstance: userInstance, photoInstanceList: photoInstanceList,
-                        publicCreatedHuntInstanceList: publicCreatedHuntInstanceList, 
-                        privateCreatedHuntInstanceList: privateCreatedHuntInstanceList,
-                        publicAdministratedHuntInstanceList:publicAdministratedHuntInstanceList,
-                        privateAdministratedHuntInstanceList:privateAdministratedHuntInstanceList,
-                        publicHuntParticipationList: publicHuntParticipationList, 
-                        privateHuntParticipationList: privateHuntParticipationList,
-                        isLoggedInUser: isLoggedInUser, photoInstanceTotal: Photo.findAllByMyUser(userInstance).size(),
-                        myEmail:loggedInUser?.email]
+        [userInstance: userInstance, photoInstanceList: photoInstanceList,
+                    publicCreatedHuntInstanceList: publicCreatedHuntInstanceList,
+                    privateCreatedHuntInstanceList: privateCreatedHuntInstanceList,
+                    publicAdministratedHuntInstanceList:publicAdministratedHuntInstanceList,
+                    privateAdministratedHuntInstanceList:privateAdministratedHuntInstanceList,
+                    publicHuntParticipationList: publicHuntParticipationList,
+                    privateHuntParticipationList: privateHuntParticipationList,
+                    isLoggedInUser: isLoggedInUser, photoInstanceTotal: Photo.findAllByMyUser(userInstance).size(),
+                    favoriteInstanceList:favoriteInstanceList, favoriteInstanceTotal:userInstance.favorites.size(),
+                    myEmail:loggedInUser?.email]
     }
 
     def cancel() {
@@ -199,88 +184,4 @@ class UserController {
 
     }
 
-    //UNUSED, HANDLED BY PASSWORD CHANGE / RESET STUFF
-/*
-    def edit() {
-        switch (request.method) {
-            case 'GET':
-                def userInstance = User.get(params.id)
-                if (User.findByLogin(auth.user()) != userInstance) {
-                    redirect action: 'show', params:[login: userInstance.login]
-                    return
-                }
-                if (!userInstance) {
-                    flash.message = message(code: 'default.not.found.message',
-                            args: [message(codeDefaultUser), params.id])
-                    redirect actionList
-                    return
-                }
-
-                [userInstance: userInstance]
-                break
-            case 'POST':
-                def userInstance = User.get(params.id)
-                if (User.findByLogin(auth.user()) != userInstance) {
-                    redirect action: 'show', params:[login: userInstance.login]
-                    return
-                }
-                if (!userInstance) {
-                    flash.message = message(code: 'default.not.found.message',
-                            args: [message(codeDefaultUser), params.id])
-                    redirect actionList
-                    return
-                }
-
-                if (params.version) {
-                    def version = params.version.toLong()
-                    if (userInstance.version > version) {
-                        userInstance.errors.rejectValue('version', 'default.optimistic.locking.failure',
-                                [message(codeDefaultUser)] as Object[],
-                                'Another user has updated this User while you were editing')
-                        render view: 'edit', model: [userInstance: userInstance]
-                        return
-                    }
-                }
-
-                userInstance.login = params.login
-                userInstance.email = params.email
-
-                if (!userInstance.save(flushTrue)) {
-                    render view: 'edit', model: [userInstance: userInstance]
-                    return
-                }
-
-                flash.message = message(code: 'default.updated.message',
-                        args: [message(codeDefaultUser), userInstance.id])
-                redirect action: 'show', params: [login: userInstance.login]
-                break
-        }
-    }
-*/
-
-    def delete() {
-        def userInstance = User.get(params.id)
-        if (User.findByLogin(auth.user()) != userInstance) {
-            redirect action: 'show', params:[login: userInstance.login]
-            return
-        }
-        if (!userInstance) {
-            flash.message = message(code: 'default.not.found.message',
-                    args: [message(codeDefaultUser), params.id])
-            redirect actionList
-            return
-        }
-
-        try {
-            userInstance.delete(flushTrue)
-            flash.message = message(code: 'default.deleted.message',
-                    args: [message(codeDefaultUser), params.id])
-            redirect actionList
-        }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message',
-                    args: [message(codeDefaultUser), params.id])
-            redirect action: 'show', params: [login: userInstance.login]
-        }
-    }
 }

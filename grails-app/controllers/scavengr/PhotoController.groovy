@@ -96,30 +96,12 @@ class PhotoController {
         }
         if(userInstance.favorites.contains(photoInstance)){
             userInstance.removeFromFavorites(photoInstance)
+            render '<i class="icon icon-star"></i> Favorite'
         }else{
             userInstance.addToFavorites(photoInstance)
+            render '<i class="icon icon-star-empty"></i> Unfavorite'
         }
-        render null
-    }
-    
-    def favorite(){
-        def photoInstance = Photo.get(params.id)
-        def userInstance = User.findByLogin(auth.user())
-        if(!userInstance){
-            return
-        }
-        userInstance.addToFavorites(photoInstance)
-        render null
-    }
-    
-    def unfavorite(){
-        def photoInstance = Photo.get(params.id)
-        def userInstance = User.findByLogin(auth.user())
-        if(!userInstance){
-            return
-        }
-        userInstance.removeFromFavorites(photoInstance)
-        render null
+        
     }
     
     def show() {
@@ -153,7 +135,6 @@ class PhotoController {
         if (index != photoIdList.size()-1){
             nextId = photoIdList.get(index + 1)
         }
-        println userInstance.favorites
         def isFavorite = userInstance.favorites.contains(photoInstance)
         photoInstance.views++
         [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto, showHunt: showHunt, key: key,

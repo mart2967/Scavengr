@@ -9,9 +9,9 @@ class NotificationController {
         def userInstance = User.findByLogin(auth.user())
         def notificationInstance = Notification.get(params.id)
         notificationInstance.read = true
-		def messages = Notification.findAll("from Notification as n where n.recipient=:user and n.read=:f",
-			[user:userInstance,f:false],[sort:'dateCreated', order:'desc', max:10])
-        render messages
+//		def messages = Notification.findAll("from Notification as n where n.recipient=:user and n.read=:f",
+//			[user:userInstance,f:false],[sort:'dateCreated', order:'desc', max:10])
+        render null
     }
     
     def dismissAll(){
@@ -21,6 +21,6 @@ class NotificationController {
         messages.each{ msg ->
             msg.read = true
         }
-        render messages
+        render null
     }
 }
