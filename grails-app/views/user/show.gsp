@@ -10,7 +10,17 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#myTab a:first').tab('show');
+		// Javascript to enable link to tab
+		var hash = document.location.hash;
+		var prefix = "tab_";
+		if (hash) {
+		    $('.nav-tabs a[href='+hash.replace(prefix,"")+']').tab('show');
+		} 
 
+		// Change hash for page-reload
+		$('.nav-tabs a').on('shown', function (e) {
+		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
+		});
 	});
 </script>
 </head>
@@ -50,14 +60,14 @@
 							</g:each>
 						</ul>
 						<div class="pagination">
-							<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" total="${photoInstanceTotal}" />
+							<bootstrap:paginate fragment="myPhotos" mapping="user" params="[login: userInstance?.login]" total="${photoInstanceTotal}" />
 						</div>
 					</div>
 					
 					
 					<div class="tab-pane" id="favorites">
 						<ul class="thumbnails">
-							<g:each in="${userInstance.favorites}" var="favorite">
+							<g:each in="${favoriteInstanceList}" var="favorite">
 								<li class="span3">
 									<a class="thumbnail" href="${createLink(controller:'photo', action:'show', id: favorite?.id)}">
 										<bi:img size="medium" bean="${favorite}" />
@@ -65,9 +75,9 @@
 								</li>
 							</g:each>
 						</ul>
-<%--						<div class="pagination">--%>
-<%--							<bootstrap:paginate mapping="user" params="[login: userInstance?.login]" max="${params.favmax}" offset="${params.offsetmax}" total="${favoriteInstanceTotal}" />--%>
-<%--						</div>--%>
+						<div class="pagination">
+							<bootstrap:paginate fragment="favorites" mapping="user" params="[login: userInstance?.login]" max="${params.favmax}" offset="${params.offsetmax}" total="${favoriteInstanceTotal}" />
+						</div>
 					</div>
 				</div>
 			

@@ -152,9 +152,10 @@ class UserController {
         }
 
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
-        params.favmax = Math.min(params.favmax ? params.int('favmax') : 8, 100)
+        //params.favmax = Math.min(params.favmax ? params.int('favmax') : 8, 100)
         def photoInstanceList = Photo.findAllByMyUser(userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
-        def favoriteInstanceList = Photo.withCriteria(max:params.favmax, offset:params.favoffset){
+        def f = Photo.createCriteria()
+        def favoriteInstanceList = f.list(max:params.max, offset:params.offset){
             likedBy{
                 eq('login', userInstance.login)
             }
