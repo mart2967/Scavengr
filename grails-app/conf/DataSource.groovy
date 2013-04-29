@@ -28,7 +28,7 @@ environments {
             driverClassName = 'com.mysql.jdbc.Driver'
             username = 'grails'
             password = 'server'
-            dbCreate = 'create-drop' // use 'update'
+            dbCreate = 'update' // use 'update'
             url = 'jdbc:mysql://localhost:3306/magmalick_prod?autoreconnect=true'
             pooled = true
             properties {
