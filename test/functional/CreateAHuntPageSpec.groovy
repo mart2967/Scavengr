@@ -37,4 +37,16 @@ class CreateAHuntPageSpec extends GebReportingSpec {
         at CreateAHuntPage
     }
     
+    private "can create hunt with a title, description, start date, end date"() {
+        when:
+        getToCreateHuntPage()
+        huntTitleBox.value("The Batman")
+        huntDescriptionBox.value("Take pictures inspired by the dark knight")
+        huntStartDate.value("04/25/2013 02:37 PM")
+        huntEndDate.value("04/25/2099 02:45 AM")
+        createHuntButton.click()
+        
+        then:
+        at HuntShowPage
+    }
 }

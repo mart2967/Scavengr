@@ -136,7 +136,7 @@
 						</div>
 						
 						<div id="span1 hunt-create-button">
-							<button type="submit" class="btn btn-large btn-success" >
+							<button id="createHuntButton" type="submit" class="btn btn-large btn-success" >
 								<g:message code="default.button.create.label" default="Create" />
 							</button>
 						</div>
@@ -169,7 +169,7 @@
 						<label for="title">Title</label>
 						<input type="text" name="title" id="title" value="${huntInstance?.title}" required/>
 						<label for="description">Description</label>
-						<g:textArea name="description" value="${huntInstance?.description}" />
+						<g:textArea name="description" id="description" value="${huntInstance?.description}" />
 						<label for="startDate">Start Date</label>
 						<div class="input-prepend datepicker">
 							<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
@@ -185,7 +185,7 @@
 						
 						
 						<div class="switch" data-on-label="Private" data-off-label="Public" data-toggle="tooltip" title="Click to toggle privacy." data-animation="true" data-placement="right" id="privacy">
-							<g:checkBox name="isPrivate" value="true" />
+							<g:checkBox name="isPrivate" value="true" id="toggle" />
 						</div>
 
 						
