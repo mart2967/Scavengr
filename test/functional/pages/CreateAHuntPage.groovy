@@ -22,6 +22,9 @@ class CreateAHuntPage extends Page{
             promptDescriptionBox() {$('textarea', id:"promptDescription") }
             addPromptButton(){ $('button', id:"addPromptButton") }
             removePromptButton() {$('button', id:"remove0") }
-
+            
+            emailBox() {$('input', id:"new-email")}
+            emailButton() {$('button', id:"add-email-button")}
+            deleteEmailButton() {$('button', id:"remove0")}
         }
     }
