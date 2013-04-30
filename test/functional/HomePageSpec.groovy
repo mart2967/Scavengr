@@ -156,7 +156,7 @@ class HomePageSpec extends GebReportingSpec{
         findHuntButton.click()
         
         then:
-        at ShowHuntPage
+        at HuntShowPage
         
     }
     

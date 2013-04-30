@@ -1,9 +1,6 @@
 package pages
 
 import geb.Page 
-import pages.HomePage
-import pages.ListOfHuntsPage
-import pages.CreateHuntPage
 
 class UserShowPage extends Page {
     

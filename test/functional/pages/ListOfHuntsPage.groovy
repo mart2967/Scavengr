@@ -1,8 +1,6 @@
 package pages
 
 import geb.Page
-import pages.UserShowPage
-import pages.HomePage
 
 class ListOfHuntsPage extends Page {
 
