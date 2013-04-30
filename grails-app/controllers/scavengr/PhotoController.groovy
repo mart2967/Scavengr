@@ -20,14 +20,7 @@ class PhotoController {
     def authenticationService
     static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
 
-//    def index() {
-//        redirect action: 'list', params: params
-//    }
-//
-//    def list() {
-//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-//        [photoInstanceList: Photo.list(params), photoInstanceTotal: Photo.count()]
-//    }
+
     def create() {
         switch (request.method) {
             case 'GET':
@@ -60,15 +53,16 @@ class PhotoController {
                 
                 def image = request.getFile('myFile')
                 def okcontents = ['image/png', 'image/jpeg', 'image/gif']
-                if (!okcontents.contains(image.getContentType())) {
+                if (!okcontents.contains(image.contentType)) {
                     flash.message = "Photo must be one of: ${okcontents}"
                     redirect controller: 'prompt', action: 'show', id: photoInstance.myPrompt.id
                     return
                 }
                 photoInstance.original = image.getBytes()
-                photoInstance.fileType = image.getContentType()
+                photoInstance.fileType = image.contentType
                 if (!photoInstance.save(flushTrue)) {
-                    render controller: 'prompt', view: 'show', model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
+                    render controller: 'prompt', view: 'show', 
+                        model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
                     return
                 }
                 imageUploadService.save(photoInstance)

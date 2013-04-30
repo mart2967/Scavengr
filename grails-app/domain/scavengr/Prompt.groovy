@@ -24,9 +24,4 @@ class Prompt {
     String toString() {
         return "$title"
     }
-    def equals(Prompt p){
-        if(this.id == p.id){
-            return 0
-        }
-    }
 }

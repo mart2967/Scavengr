@@ -60,11 +60,6 @@ class Hunt {
         return key
     }
     
-    def equals(Hunt h){
-        if(this.id == h.id){
-            return 0
-        }
-    }
     
     public String genTest(){
         generateKey()

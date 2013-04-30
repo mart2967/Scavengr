@@ -19,9 +19,4 @@ class Notification {
         link blank:true, nullable: true
     }
     
-    def equals(Notification n){
-        if(this.id == n.id){
-            return 0
-        }
-    }
 }

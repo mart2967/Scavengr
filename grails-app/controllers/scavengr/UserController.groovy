@@ -65,19 +65,19 @@ class UserController {
         }
         if(!userInstance){
             flash.message = 'No user named ' + params.login + ' with email address ' + params.email
-            redirect action:'list'
+            redirect actionList
             return
         }
         def newPassword = randomPassword(8)
         userInstance.password = authenticationService.encodePassword(newPassword)
         if(!userInstance.save(flushTrue)){
             flash.message = 'Password reset failed'
-            redirect action:'list'
+            redirect actionList
             return
         }
         NotifierService.sendPasswordReset(userInstance.email, newPassword)
         flash.message = 'Password reset email sent to ' + userInstance.email
-        redirect action:'list'
+        redirect actionList
     }
 
     def changePassword() {

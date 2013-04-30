@@ -65,7 +65,8 @@ class PromptController {
         [promptInstance: promptInstance, //photoInstance: photoInstance,
                     photoInstanceList: photoInstanceList, userInstance: userInstance,
                     photoInstanceTotal: Photo.findAllByMyPrompt(promptInstance).size(),
-                    closedHunt:closedHunt, endDate:endDate, isCreatorOrAdmin:isCreatorOrAdmin, participantInstance:participantInstance]
+                    closedHunt:closedHunt, endDate:endDate, isCreatorOrAdmin:isCreatorOrAdmin]
+                    //, participantInstance:participantInstance]
     }
 
     def cancel() {

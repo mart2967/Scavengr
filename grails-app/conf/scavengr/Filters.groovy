@@ -1,10 +1,9 @@
 package scavengr
-//import Notification
-
-class SiteFilters {
+import scavengr.Notification
+class Filters {
     def authenticationService
     def filters = {
-        all(controller:'*', action:'*'){
+        allPages(controller:'*', action:'*'){
             after = { model ->
                 try{
                     def user = authenticationService.getUserPrincipal()
@@ -14,7 +13,7 @@ class SiteFilters {
                         }
                     model?.currentDate = new Date()
                 }catch(Exception e){
-                    log.error "Error occured running siteFilters: ${e.message}", e
+                    log.error "Error occured running Filters: ${e.message}", e
                 }
             }
         }
