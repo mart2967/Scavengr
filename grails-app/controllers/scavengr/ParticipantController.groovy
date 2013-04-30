@@ -1,6 +1,6 @@
 package scavengr
 
-import java.util.Map;
+import java.util.Map
 
 import org.springframework.dao.DataIntegrityViolationException
 

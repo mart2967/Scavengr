@@ -31,10 +31,10 @@
 	var promptCount = 0;
 	function addPrompt(title, description) {
 		if (typeof title == 'undefined') {
-        	title = $('#new-prompt-title').val();
+        	title = $('#promptTitle').val();
         }
         if (typeof description == 'undefined'){
-        	description = $('#new-prompt-description').val();
+        	description = $('#promptDescription').val();
         }
 		if (title != ''){
 	        var htmlId = 'prompt' + promptCount;
@@ -46,11 +46,11 @@
 	        $('#prompt-list').append(templateHtml);
 	        $('#prompt-div').show();
 	        $('#'+htmlId).slideDown();
-	        var title = $('#new-prompt-title').val('');
-	        var description = $('#new-prompt-description').val('');
+	        var title = $('#promptTitle').val('');
+	        var description = $('#promptDescription').val('');
 	        promptCount++;
 		}
-		$('#new-prompt-title').focus();
+		$('#promptTitle').focus();
     }
     
 	var deletedPrompts = 0;

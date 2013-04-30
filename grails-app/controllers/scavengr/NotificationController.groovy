@@ -1,12 +1,12 @@
 package scavengr
-import scavengr.Notification
-import grails.converters.JSON
+//import scavengr.Notification
+//import grails.converters.JSON
 
 class NotificationController {
     def authenticationService
     
     def dismiss(){
-        def userInstance = User.findByLogin(auth.user())
+        //def userInstance = User.findByLogin(auth.user())
         def notificationInstance = Notification.get(params.id)
         notificationInstance.read = true
 //		def messages = Notification.findAll("from Notification as n where n.recipient=:user and n.read=:f",

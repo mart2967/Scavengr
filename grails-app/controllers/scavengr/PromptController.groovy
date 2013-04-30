@@ -1,7 +1,7 @@
 package scavengr
 
 import org.springframework.dao.DataIntegrityViolationException
-import scavengr.Hunt
+//import scavengr.Hunt
 
 class PromptController {
 
@@ -55,9 +55,11 @@ class PromptController {
         def now = new Date()
         def closedHunt = promptInstance.myHunt.endDate < now || promptInstance.myHunt.startDate > now
         def endDate = promptInstance.myHunt.endDate.getDateTimeString()
-        def isCreatorOrAdmin = (userInstance == promptInstance.myHunt.myCreator || promptInstance.myHunt.myAdmins.contains(userInstance))
+        def isCreatorOrAdmin = (userInstance == promptInstance.myHunt.myCreator 
+            || promptInstance.myHunt.myAdmins.contains(userInstance))
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
-        def photoInstanceList = Photo.findAllByMyPrompt(promptInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
+        def photoInstanceList = Photo.findAllByMyPrompt(
+            promptInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
 
 
         [promptInstance: promptInstance, //photoInstance: photoInstance,
@@ -75,7 +77,8 @@ class PromptController {
     def removePhoto(){
         def promptInstance = Prompt.get(params.id)
         def userInstance = User.findByLogin(auth.user())
-        if (userInstance != promptInstance.myHunt.myCreator && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
+        if (userInstance != promptInstance.myHunt.myCreator 
+            && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
             redirect action: 'show', id: promptInstance.id
             return
         }
@@ -91,7 +94,8 @@ class PromptController {
                 def promptInstance = Prompt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 
-                if (userInstance != promptInstance.myHunt.myCreator && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
+                if (userInstance != promptInstance.myHunt.myCreator 
+                    && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
                     redirect action: 'show', id: promptInstance.id
                     return
                 }
@@ -102,7 +106,8 @@ class PromptController {
                     return
                 }
                 params.max = Math.min(params.max ? params.int('max') : 8, 100)
-                def photoInstanceList = Photo.findAllByMyPrompt(promptInstance, [max:params.max, offset:params.offset])
+                def photoInstanceList = Photo.findAllByMyPrompt(
+                    promptInstance, [max:params.max, offset:params.offset])
                 
                 [promptInstance: promptInstance, photoInstanceList: photoInstanceList,
                     photoInstanceTotal: Photo.findAllByMyPrompt(promptInstance).size()]
@@ -110,7 +115,8 @@ class PromptController {
             case 'POST':
                 def promptInstance = Prompt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
-                if (userInstance != promptInstance.myHunt.myCreator && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
+                if (userInstance != promptInstance.myHunt.myCreator 
+                    && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
                     redirect action: 'show', id: promptInstance.id
                     return
                 }

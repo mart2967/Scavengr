@@ -1,7 +1,7 @@
 package scavengr
 
 import grails.test.mixin.TestFor
-import scavengr.Participant;
+import scavengr.Participant
 import spock.lang.Specification
 
 /**

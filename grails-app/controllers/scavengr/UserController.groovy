@@ -1,9 +1,9 @@
 package scavengr
 
-import grails.gorm.DetachedCriteria
+//import grails.gorm.DetachedCriteria
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-import org.springframework.dao.DataIntegrityViolationException
+//import org.springframework.dao.DataIntegrityViolationException
 import org.apache.commons.validator.GenericValidator
 
 
@@ -37,6 +37,10 @@ class UserController {
 
     def changeEmail(){
         def userInstance = User.findByLogin(auth.user())
+        if(!userInstance){
+            redirect controller:'index', params:[login:true]
+            return
+        }
         if (params.email != params.confirmEmail){
             flash.message = 'The emails entered did not match.'
             redirect action: 'show', params: [login: auth.user()]
@@ -55,6 +59,10 @@ class UserController {
 
     def resetPassword() {
         def userInstance = User.findByEmailAndLogin(params.email, params.login)
+        if(!userInstance){
+            redirect controller:'index', params:[login:true]
+            return
+        }
         if(!userInstance){
             flash.message = 'No user named ' + params.login + ' with email address ' + params.email
             redirect action:'list'
@@ -110,7 +118,8 @@ class UserController {
         ByteArrayOutputStream baos = new ByteArrayOutputStream()
         ZipOutputStream zipFile = new ZipOutputStream(baos)
         userInstance.myPhotos.each { photo ->
-            zipFile.putNextEntry(new ZipEntry((photo.title ?: 'Untitled-' + photo.id) + '.' + photo.fileType.split('/')[1]))
+            zipFile.putNextEntry(new ZipEntry(
+                (photo.title ?: 'Untitled-' + photo.id) + '.' + photo.fileType.split('/')[1]))
             zipFile << photo.original
             zipFile.closeEntry()
         }
@@ -153,19 +162,26 @@ class UserController {
 
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
         //params.favmax = Math.min(params.favmax ? params.int('favmax') : 8, 100)
-        def photoInstanceList = Photo.findAllByMyUser(userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
+        def photoInstanceList = Photo.findAllByMyUser(
+            userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
         def f = Photo.createCriteria()
         def favoriteInstanceList = f.list(max:params.max, offset:params.offset){
             likedBy{
                 eq('login', userInstance.login)
             }
         }
-        def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll {hunt -> hunt.isPrivate == false}
-        def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll {hunt -> hunt.isPrivate == true}
-        def publicAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll {hunt -> hunt.isPrivate == false}
-        def privateAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll {hunt -> hunt.isPrivate == true}
-        def publicHuntParticipationList = userInstance.myHunts.findAll {hunt -> hunt.isPrivate == false}
-        def privateHuntParticipationList = userInstance.myHunts.findAll {hunt -> hunt.isPrivate == true}
+        def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll 
+        {hunt -> hunt.isPrivate == false}
+        def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll 
+        {hunt -> hunt.isPrivate == true}
+        def publicAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll 
+        {hunt -> hunt.isPrivate == false}
+        def privateAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll 
+        {hunt -> hunt.isPrivate == true}
+        def publicHuntParticipationList = userInstance.myHunts.findAll 
+        {hunt -> hunt.isPrivate == false}
+        def privateHuntParticipationList = userInstance.myHunts.findAll 
+        {hunt -> hunt.isPrivate == true}
 
         [userInstance: userInstance, photoInstanceList: photoInstanceList,
                     publicCreatedHuntInstanceList: publicCreatedHuntInstanceList,

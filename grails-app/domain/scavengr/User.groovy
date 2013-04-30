@@ -28,4 +28,9 @@ class User {
 	String toString(){
             return "$login"
 	}
+    def equals(User u){
+        if(this.id == u.id){
+            return 0
+        }
+    }
 }

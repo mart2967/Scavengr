@@ -18,4 +18,10 @@ class Notification {
         action blank:true, nullable: true
         link blank:true, nullable: true
     }
+    
+    def equals(Notification n){
+        if(this.id == n.id){
+            return 0
+        }
+    }
 }

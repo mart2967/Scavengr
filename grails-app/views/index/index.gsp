@@ -41,8 +41,8 @@
 	
 	function loginTooltip() {
 		$('#view-slider').slideDown(function() {
-			$('#login').focus();
-			$('#login').popover('show');	
+			$('#loginUsername').focus();
+			$('#loginUsername').popover('show');	
 		});
 	}
 

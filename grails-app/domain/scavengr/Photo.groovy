@@ -30,4 +30,10 @@ class Photo {
     String toString() {
         return "$title"
     }
+    
+    def equals(Photo p){
+        if(this.id == p.id){
+            return 0
+        }   
+    }
 }

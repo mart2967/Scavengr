@@ -1,7 +1,7 @@
 package scavengr
 
 import grails.test.mixin.TestFor
-import scavengr.Notification;
+import scavengr.Notification
 import spock.lang.Specification
 
 /**

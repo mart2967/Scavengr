@@ -13,7 +13,7 @@ class BootStrap {
     def init = { servletContext ->
         if(Environment.getCurrent() != Environment.PRODUCTION ) {
         
-        def burningImageService
+        //def burningImageService
 	Map failOnError = [failOnError: true]
 
         def baseDate = new Date()
@@ -39,12 +39,12 @@ class BootStrap {
 			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate, key: "yfe5mejs2a").save(failOnError)
         def colors = new Hunt(title: 'Colors', description: 'I forgot how to see these, plz halp.', 
 			myCreator: laurie, isPrivate: true, startDate: new Date(), endDate: lateDate).save(failOnError)
-        def raccoons = new Hunt(title: 'Raccoons', description: 'Raccoons. What more do you need?', 
-			myCreator: laurie, isPrivate: true, startDate: new Date(), endDate: lateDate).save(failOnError)
+        //def raccoons = new Hunt(title: 'Raccoons', description: 'Raccoons. What more do you need?', 
+	//		myCreator: laurie, isPrivate: true, startDate: new Date(), endDate: lateDate).save(failOnError)
         def cells = new Hunt(title: 'Plant Cells', description: 'Microscope. Now.', 
 			myCreator: edward, isPrivate: false, startDate: new Date(), endDate: lateDate).save(failOnError)
-        def people = new Hunt(title: 'People', description: 'Stalking 101', 
-			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate).save(failOnError)
+        //def people = new Hunt(title: 'People', description: 'Stalking 101', 
+	//		myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate).save(failOnError)
         def animals = new Hunt(title: 'Animals', description: 'Everyone Loves Them', 
 			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate).save(failOnError)
 
@@ -61,7 +61,7 @@ class BootStrap {
 
         /*Photos*/
         /*SetUp*/
-        def dirPath = './WEB-INF/testImages/'
+        //def dirPath = './WEB-INF/testImages/'
         //def img = burningImageService.doWith(getMultipartFile('tree_canopy.jpg'), dirPath)
         /*
         

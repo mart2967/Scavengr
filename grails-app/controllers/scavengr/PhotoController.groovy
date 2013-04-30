@@ -1,7 +1,7 @@
 package scavengr
 
 
-import pl.burningice.plugins.image.test.FileUploadUtils
+//import pl.burningice.plugins.image.test.FileUploadUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
@@ -124,7 +124,8 @@ class PhotoController {
             return
         }
 	
-        def photoIdList = Photo.executeQuery("select p.id from Photo p where p.myUser = ?",[photoInstance.myUser],[order:'desc']).reverse()
+        def photoIdList = Photo.executeQuery("select p.id from Photo p where p.myUser = ?",
+            [photoInstance.myUser],[order:'desc']).reverse()
         def index = photoIdList.indexOf(params.long('id'))
         def prevId
         def nextId

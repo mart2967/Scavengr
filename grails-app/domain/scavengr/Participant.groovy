@@ -17,4 +17,5 @@ class Participant {
 	name nullable:true, maxSize:20
 	myUser nullable:true
     }
+    
 }
