@@ -1,3 +1,4 @@
+package scavengr
 import scavengr.Notification
 
 class SiteFilters {

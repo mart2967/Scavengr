@@ -20,15 +20,14 @@ class PhotoController {
     def authenticationService
     static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
 
-    def index() {
-        redirect action: 'list', params: params
-    }
-
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [photoInstanceList: Photo.list(params), photoInstanceTotal: Photo.count()]
-    }
-
+//    def index() {
+//        redirect action: 'list', params: params
+//    }
+//
+//    def list() {
+//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+//        [photoInstanceList: Photo.list(params), photoInstanceTotal: Photo.count()]
+//    }
     def create() {
         switch (request.method) {
             case 'GET':
