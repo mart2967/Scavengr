@@ -1,10 +1,7 @@
 import geb.spock.GebReportingSpec
 import spock.lang.*
 import pages.*
-import pages.HomePage
-import pages.ListOfHuntsPage
-import pages.UserShowPage
-import pages.CreateHuntPage
+
 
 
 class UserShowPageSpec extends GebReportingSpec {
