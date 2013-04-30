@@ -6,9 +6,9 @@ import org.springframework.web.servlet.support.RequestContextUtils as RCU
 
 class PaginationTagLib {
 
-	static namespace = 'bootstrap'
-	
-	def paginate = { attrs ->
+    static namespace = 'bootstrap'
+
+    def paginate = { attrs ->
         def writer = out
         if (attrs.total == null) {
             throwTagError('Tag [paginate] is missing required attribute [total]')
@@ -23,15 +23,25 @@ class PaginationTagLib {
         def max = attrs.int('max')
         def maxsteps = (attrs.int('maxsteps') ?: 10)
 
-        if (!offset) offset = (params.int('offset') ?: 0)
-        if (!max) max = (params.int('max') ?: 10)
+        if (!offset) {
+            offset = (params.int('offset') ?: 0)
+        }
+        if (!max){
+            max = (params.int('max') ?: 10)
+        }
 
         def linkParams = [:]
-        if (attrs.params) linkParams.putAll(attrs.params)
+        if (attrs.params) {
+            linkParams.putAll(attrs.params)
+        }
         linkParams.offset = offset - max
         linkParams.max = max
-        if (params.sort) linkParams.sort = params.sort
-        if (params.order) linkParams.order = params.order
+        if (params.sort) {
+            linkParams.sort = params.sort
+        }
+        if (params.order) {
+            linkParams.order = params.order
+        }
 
         def linkTagAttrs = [action: action]
         if (attrs.controller) {
@@ -51,21 +61,21 @@ class PaginationTagLib {
         int firststep = 1
         int laststep = Math.round(Math.ceil(total / max))
 
-		writer << '<ul>'
+        writer << '<ul>'
 
         // display previous link when not on firststep
-		if (currentstep > firststep) {
-			linkTagAttrs.class = 'prevLink'
-			linkParams.offset = offset - max
-			writer << '<li'
-			if (currentstep == firststep) writer << ' class="disabled"'
-			writer << '>'
-			def prevLinkAttrs = linkTagAttrs.clone()
-			prevLinkAttrs += [title: (attrs.prev ?: messageSource.getMessage('paginate.prev', null, 
-				messageSource.getMessage('default.paginate.prev', null, 'Previous', locale), locale))]
-			writer << link(prevLinkAttrs, '<i class="icon-chevron-left"></i>')
-			writer << '</li>'
-		}
+        if (currentstep > firststep) {
+            linkTagAttrs.class = 'prevLink'
+            linkParams.offset = offset - max
+            writer << '<li'
+            if (currentstep == firststep) writer << ' class="disabled"'
+            writer << '>'
+            def prevLinkAttrs = linkTagAttrs.clone()
+            prevLinkAttrs += [title: (attrs.prev ?: messageSource.getMessage('paginate.prev', null,
+                        messageSource.getMessage('default.paginate.prev', null, 'Previous', locale), locale))]
+            writer << link(prevLinkAttrs, '<i class="icon-chevron-left"></i>')
+            writer << '</li>'
+        }
 
         // display steps when steps are enabled and laststep is not firststep
         if (steps && laststep > firststep) {
@@ -88,31 +98,35 @@ class PaginationTagLib {
             }
 
             // display paginate steps
-			for (int i in beginstep..endstep) {
+            for (int i in beginstep..endstep) {
                 linkParams.offset = (i - 1) * max
-				writer << '<li'
-				if (currentstep == i) writer << ' class="active"'
-				writer << '>'
-                   writer << link(linkTagAttrs.clone()) {i.toString()}
-				writer << '</li>'
+                writer << '<li'
+                if (currentstep == i) {
+                    writer << ' class="active"'
+                }
+                writer << '>'
+                writer << link(linkTagAttrs.clone()) {i.toString()}
+                writer << '</li>'
             }
         }
 
         // display next link when not on laststep
-		if (currentstep < laststep) {
-			linkTagAttrs.class = 'nextLink'
-			linkParams.offset = offset + max
-			writer << '<li'
-			if (currentstep == laststep) writer << ' class="disabled"'
-			writer << '>'
-			def nextLinkAttrs = linkTagAttrs.clone()
-			nextLinkAttrs += [title: (attrs.next ? attrs.next : messageSource.getMessage('paginate.next', null, 
-				messageSource.getMessage('default.paginate.next', null, 'Next', locale), locale))]
-			writer << link(nextLinkAttrs, '<i class="icon-chevron-right"></i>')
-			writer << '</li>'
-		}
-		
-		writer << '</ul>'
-	}
+        if (currentstep < laststep) {
+            linkTagAttrs.class = 'nextLink'
+            linkParams.offset = offset + max
+            writer << '<li'
+            if (currentstep == laststep) {
+                writer << ' class="disabled"'
+            }
+            writer << '>'
+            def nextLinkAttrs = linkTagAttrs.clone()
+            nextLinkAttrs += [title: (attrs.next ? attrs.next : messageSource.getMessage('paginate.next', null,
+                        messageSource.getMessage('default.paginate.next', null, 'Next', locale), locale))]
+            writer << link(nextLinkAttrs, '<i class="icon-chevron-right"></i>')
+            writer << '</li>'
+        }
+
+        writer << '</ul>'
+    }
 
 }

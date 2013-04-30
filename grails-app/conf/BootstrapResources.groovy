@@ -3,7 +3,8 @@ def log = org.apache.log4j.Logger.getLogger('grails.plugins.twitterbootstrap.Boo
 def dev = grails.util.GrailsUtil.isDevelopmentEnv()
 
 def applicationContext = org.codehaus.groovy.grails.commons.ApplicationHolder.application.mainContext
-def lesscssPlugin = applicationContext.pluginManager.getGrailsPlugin('lesscss-resources') || applicationContext.pluginManager.getGrailsPlugin('less-resources')
+def lesscssPlugin = (applicationContext.pluginManager.getGrailsPlugin('lesscss-resources') 
+    || applicationContext.pluginManager.getGrailsPlugin('less-resources'))
 def jqueryPlugin = applicationContext.pluginManager.getGrailsPlugin('jquery')
 def configTagLib = org.codehaus.groovy.grails.commons.ApplicationHolder.application.config.grails.plugins.twitterbootstrap.fixtaglib
 def configDefaultBundle = org.codehaus.groovy.grails.commons.ApplicationHolder.application.config.grails.plugins.twitterbootstrap.defaultBundle
@@ -47,7 +48,8 @@ modules = {
         defaultBundle configDefaultBundle
         dependsOn 'bootstrap-css'
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'css', file: (dev ? 'bootstrap-responsive.css' : 'bootstrap-responsive.min.css')], disposition: 'head', exclude:'minify'
+        resource url:[plugin: 'twitter-bootstrap', dir: 'css', 
+            file: (dev ? 'bootstrap-responsive.css' : 'bootstrap-responsive.min.css')], disposition: 'head', exclude:'minify'
     }
 
     'bootstrap-alert' {
@@ -174,7 +176,9 @@ modules = {
         if (jqueryPlugin) {
             dependsOn 'jquery'
         }
-        dependsOn 'bootstrap-transition,bootstrap-alert,bootstrap-dropdown,bootstrap-modal,bootstrap-scrollspy,bootstrap-tab,bootstrap-tooltip,bootstrap-popover,bootstrap-button,bootstrap-carousel,bootstrap-typeahead,bootstrap-collapse,bootstrap-affix'
+        dependsOn 'bootstrap-transition,bootstrap-alert,bootstrap-dropdown,bootstrap-modal,' + 
+            'bootstrap-scrollspy,bootstrap-tab,bootstrap-tooltip,bootstrap-popover,bootstrap-button,' + 
+            'bootstrap-carousel,bootstrap-typeahead,bootstrap-collapse,bootstrap-affix'
     }
 
     'bootstrap-less' {
@@ -182,7 +186,8 @@ modules = {
         if (configTagLib) {
             dependsOn 'bootstrap-fixtaglib'
         }
-        resource id:'bootstrap-less', url:[plugin: 'twitter-bootstrap', dir: 'less', file: 'bootstrap.less'], attrs:[rel: "stylesheet/less", type:'css', order:100], disposition: 'head'
+        resource id:'bootstrap-less', url:[plugin: 'twitter-bootstrap', dir: 'less', 
+            file: 'bootstrap.less'], attrs:[rel: "stylesheet/less", type:'css', order:100], disposition: 'head'
     }
 
     bootstrap {

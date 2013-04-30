@@ -119,7 +119,7 @@ class UserController {
         ZipOutputStream zipFile = new ZipOutputStream(baos)
         userInstance.myPhotos.each { photo ->
             zipFile.putNextEntry(new ZipEntry(
-                (photo.title ?: 'Untitled-' + photo.id) + '.' + photo.fileType.split('/')[1]))
+                    (photo.title ?: 'Untitled-' + photo.id) + '.' + photo.fileType.split('/')[1]))
             zipFile << photo.original
             zipFile.closeEntry()
         }
@@ -141,10 +141,10 @@ class UserController {
     }
 
     def myProfile() {
-        if (!authenticationService.isLoggedIn(request)) {
-            redirect action: 'index'
-        } else {
+        if (authenticationService.isLoggedIn(request)) {
             redirect action: 'show', params: [login: auth.user()]
+        } else {
+            redirect action: 'index'
         }
     }
 
@@ -163,24 +163,24 @@ class UserController {
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
         //params.favmax = Math.min(params.favmax ? params.int('favmax') : 8, 100)
         def photoInstanceList = Photo.findAllByMyUser(
-            userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
+                userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
         def f = Photo.createCriteria()
         def favoriteInstanceList = f.list(max:params.max, offset:params.offset){
             likedBy{
                 eq('login', userInstance.login)
             }
         }
-        def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll 
+        def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll
         {hunt -> hunt.isPrivate == false}
-        def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll 
+        def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll
         {hunt -> hunt.isPrivate == true}
-        def publicAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll 
+        def publicAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll
         {hunt -> hunt.isPrivate == false}
-        def privateAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll 
+        def privateAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll
         {hunt -> hunt.isPrivate == true}
-        def publicHuntParticipationList = userInstance.myHunts.findAll 
+        def publicHuntParticipationList = userInstance.myHunts.findAll
         {hunt -> hunt.isPrivate == false}
-        def privateHuntParticipationList = userInstance.myHunts.findAll 
+        def privateHuntParticipationList = userInstance.myHunts.findAll
         {hunt -> hunt.isPrivate == true}
 
         [userInstance: userInstance, photoInstanceList: photoInstanceList,
