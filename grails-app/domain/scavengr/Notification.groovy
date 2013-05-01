@@ -11,7 +11,9 @@ class Notification {
     boolean read = false
     
     static belongsTo = [recipient:User]
-    
+    static mapping = {
+        read column:'`read'
+    }
     static constraints = {
         subject maxSize:25
         message blank:true, nullable: true
