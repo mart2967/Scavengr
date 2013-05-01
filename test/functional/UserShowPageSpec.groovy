@@ -1,4 +1,4 @@
-import geb.spock.GebReportingSpec
+import geb.spock.GebReportingSpec 
 import spock.lang.*
 import pages.*
 
@@ -22,22 +22,39 @@ class UserShowPageSpec extends GebReportingSpec {
         confirmPasswordBox.value(password)
         createButton.click()
     }
-    
-//    def 'create user redirects to the user show page'() {
+	
+//	private changePassword(currentPassword, newPassword){
+//		changePassword.click()
+//		currentPasswordBox.value(currentPassword) != newPasswordBox.value(newPassword)
+//		newPasswordBox.value(newPassword) == confirmPasswordBox.value(newPassword)
+//		confirmPasswordButton.click()
+//	}
+	
+	def 'when you log in you will be at the user show page'() {
+		when:
+		loginAs("Walter", "password")
+		
+		then:
+		at UserShowPage
+	}
+	
+
+//    def 'redirects to create a hunt page when create hunt is clicked'() {
 //        when:
-//        createUser("userName", "email@email.com", "password")
+//        loginAs("Walter","password")
+//        createAHuntButton.click()
 //        
 //        then:
-//        at UserShowPage
+//        at CreateAHuntPage  
 //    }
- /*   
-    def 'redirects to create a hunt page when create hunt is clicked'() {
-        when:
-        loginAs("userName","password")
-        createAHuntButton.click()
-        
-        then:
-        at CreateHuntPage  
-    }
-*/
+//	
+//	def 'after changing password you are on the user show page'() {
+//		when:
+//		loginAs("Walter","password")
+//		changePassword("password", "password1")
+//		
+//		then:
+//		at UserShowPage
+//	}
+
 }

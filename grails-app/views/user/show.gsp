@@ -93,19 +93,19 @@
 					<g:if test="${isLoggedInUser}">
 						<li class="nav-header">Actions</li>
 						<li>
-							<g:link class="create" controller="hunt" action="create">
+							<g:link id="createHunt" class="create" controller="hunt" action="create">
 								<i class="icon-plus"></i>
 								Create Hunt
 							</g:link>
-							<g:link fragment="changeModal" data-toggle="modal">
+							<g:link id="changePassword" fragment="changeModal" data-toggle="modal">
 								<i class="icon-key"></i>
 								Change Password
 							</g:link>
-							<g:link fragment="emailModal" data-toggle="modal">
+							<g:link id="changeEmail" fragment="emailModal" data-toggle="modal">
 								<i class="icon-envelope"></i>
 								Change Email
 							</g:link>
-							<g:link action="downloadPhotos">
+							<g:link id="downloadPhotos" action="downloadPhotos">
 								<i class="icon-download"></i>
 								Download My Photos
 							</g:link>
