@@ -10,12 +10,12 @@ import pl.burningice.plugins.image.test.FileUploadUtils
 class BootStrap {
     def authenticationService
     def init = { servletContext ->
-        if(Environment.getCurrent() != Environment.PRODUCTION ) {
+        if(Environment.current != Environment.PRODUCTION ) {
         
 	Map failOnError = [failOnError: true]
 
         def baseDate = new Date()
-        def lateDate = new Date(baseDate.getTime() + 1000*60*60*24)
+        def lateDate = new Date(baseDate.time + 1000*60*60*24)
 
         /*Users*/
         def walter = new User(login: 'Walter', password:authenticationService.encodePassword('password'), 

@@ -64,13 +64,13 @@
 						<g:hiddenField name="id" value="${huntInstance?.id}" />
 						<div class="pull-right">
 							
-							<g:link class="btn" action="edit" id="${huntInstance?.id}" style="margin-top:10px;">
+							<g:link class="btn" action="edit" id="${huntInstance?.id}" >
 								<i class="icon-pencil"></i>
 								Edit Hunt
 							</g:link>
 							<g:if test="${userInstance == huntInstance.myCreator}" >
 							<br />
-							<button class="btn btn-danger" type="submit" name="_action_delete" style="margin-top:10px;">
+							<button class="btn btn-danger" type="submit" name="_action_delete" style="margin-top:8px;">
 								<i class="icon-trash icon-white"></i>
 								Delete Hunt
 							</button>

@@ -49,7 +49,8 @@ modules = {
         dependsOn 'bootstrap-css'
 
         resource url:[plugin: 'twitter-bootstrap', dir: 'css', 
-            file: (dev ? 'bootstrap-responsive.css' : 'bootstrap-responsive.min.css')], disposition: 'head', exclude:'minify'
+            file: (dev ? 'bootstrap-responsive.css' : 'bootstrap-responsive.min.css')], 
+            disposition: 'head', exclude:'minify'
     }
 
     'bootstrap-alert' {

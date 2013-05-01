@@ -1,9 +1,7 @@
 package scavengr
 
-//import grails.gorm.DetachedCriteria
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-//import org.springframework.dao.DataIntegrityViolationException
 import org.apache.commons.validator.GenericValidator
 
 
@@ -147,7 +145,49 @@ class UserController {
             redirect action: 'index'
         }
     }
-
+    
+    def getAuthorizedPhotos(userInstance, loggedInUser){
+        def userPhotos = Photo.createCriteria()
+        userPhotos.list(sort:'dateCreated', order:'desc', max:params.max, offset:params.offset){
+            and{
+                myUser {
+                    eq('login', userInstance.login)
+                }
+                myPrompt {
+                    or {
+                        myHunt {
+                            eq('isPrivate', false)
+                        }
+                        'in'('myHunt', loggedInUser?.myCreatedHunts)
+                        'in'('myHunt', loggedInUser?.myAdministratedHunts)
+                        'in'('myHunt', loggedInUser?.myHunts)
+                    }
+                }
+            }
+        }
+    }
+    
+    def getAuthorizedFavorites(userInstance, loggedInUser){
+        def favPhotos = Photo.createCriteria()
+        favPhotos.list(sort:'dateCreated', order:'desc', max:params.max, offset:params.offset){
+            and{
+                likedBy {
+                    eq('login', userInstance.login)
+                }
+                myPrompt {
+                    or {
+                        myHunt {
+                            eq('isPrivate', false)
+                        }
+                        'in'('myHunt', loggedInUser?.myCreatedHunts)
+                        'in'('myHunt', loggedInUser?.myAdministratedHunts)
+                        'in'('myHunt', loggedInUser?.myHunts)
+                    }
+                }
+            }
+        }
+    }
+    
     def show() {
 
         def userInstance = User.findByLogin(params.login)
@@ -159,27 +199,31 @@ class UserController {
             redirect actionList
             return
         }
-
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
-        //params.favmax = Math.min(params.favmax ? params.int('favmax') : 8, 100)
-        def photoInstanceList = Photo.findAllByMyUser(
-                userInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
-        def f = Photo.createCriteria()
-        def favoriteInstanceList = f.list(max:params.max, offset:params.offset){
-            likedBy{
-                eq('login', userInstance.login)
-            }
-        }
+        def photoInstanceList = getAuthorizedPhotos(userInstance, loggedInUser)
+        def favoriteInstanceList = getAuthorizedFavorites(userInstance, loggedInUser)
+        def photoInstanceTotal = userInstance.myPhotos.findAll {photo ->
+            def hunt = photo?.myPrompt?.myHunt
+            hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) || 
+                loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
+        }.size()
+        //println "photos: " + photoInstanceTotal
+        def favoriteInstanceTotal = userInstance.favorites.findAll {photo ->
+            def hunt = photo?.myPrompt?.myHunt
+            hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) ||
+                loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
+        }.size()
+        //println 'favorites: ' + favoriteInstanceTotal
         def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll
-        {hunt -> hunt.isPrivate == false}
+        {hunt -> (hunt.isPrivate == false || (!isLoggedInUser && loggedInUser?.myCreatedHunts?.contains(hunt)) )}
         def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll
         {hunt -> hunt.isPrivate == true}
         def publicAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll
-        {hunt -> hunt.isPrivate == false}
+        {hunt -> hunt.isPrivate == false || (!isLoggedInUser && loggedInUser?.myAdministratedHunts?.contains(hunt))}
         def privateAdministratedHuntInstanceList = userInstance.myAdministratedHunts.findAll
         {hunt -> hunt.isPrivate == true}
         def publicHuntParticipationList = userInstance.myHunts.findAll
-        {hunt -> hunt.isPrivate == false}
+        {hunt -> hunt.isPrivate == false || (!isLoggedInUser && loggedInUser?.myHunts?.contains(hunt))}
         def privateHuntParticipationList = userInstance.myHunts.findAll
         {hunt -> hunt.isPrivate == true}
 
@@ -190,8 +234,8 @@ class UserController {
                     privateAdministratedHuntInstanceList:privateAdministratedHuntInstanceList,
                     publicHuntParticipationList: publicHuntParticipationList,
                     privateHuntParticipationList: privateHuntParticipationList,
-                    isLoggedInUser: isLoggedInUser, photoInstanceTotal: Photo.findAllByMyUser(userInstance).size(),
-                    favoriteInstanceList:favoriteInstanceList, favoriteInstanceTotal:userInstance.favorites.size(),
+                    isLoggedInUser: isLoggedInUser, photoInstanceTotal: photoInstanceTotal,
+                    favoriteInstanceList:favoriteInstanceList, favoriteInstanceTotal:favoriteInstanceTotal,
                     myEmail:loggedInUser?.email]
     }
 

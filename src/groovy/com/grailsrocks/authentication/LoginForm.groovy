@@ -1,3 +1,4 @@
+package com.grailsrocks.authentication
 
 
 class LoginForm implements Serializable {

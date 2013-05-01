@@ -17,7 +17,9 @@ class NotifierService {
 
     
     def sendNotification(sender, recipient, subject, message, link='', action=''){
-        def notificationInstance = new Notification(subject:subject, sender:sender, recipient:recipient, message:message, link:link, action:action)
+        def notificationInstance = new Notification(
+            subject:subject, sender:sender, recipient:recipient, message:message, link:link, action:action)
+        
         recipient.addToRecieved(notificationInstance)
     }
     

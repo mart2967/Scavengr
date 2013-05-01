@@ -12,7 +12,7 @@
 		$('#myTab a:first').tab('show');
 		// Javascript to enable link to tab
 		var hash = document.location.hash;
-		var prefix = "tab_";
+		var prefix = "";
 		if (hash) {
 		    $('.nav-tabs a[href='+hash.replace(prefix,"")+']').tab('show');
 		} 
@@ -21,6 +21,8 @@
 		$('.nav-tabs a').on('shown', function (e) {
 		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
 		});
+
+		
 	});
 </script>
 </head>
@@ -76,7 +78,7 @@
 							</g:each>
 						</ul>
 						<div class="pagination">
-							<bootstrap:paginate fragment="favorites" mapping="user" params="[login: userInstance?.login]" max="${params.favmax}" offset="${params.offsetmax}" total="${favoriteInstanceTotal}" />
+							<bootstrap:paginate fragment="favorites" mapping="user" params="[login: userInstance?.login]" total="${favoriteInstanceTotal}" />
 						</div>
 					</div>
 				</div>
@@ -112,10 +114,12 @@
 					</g:if>
 					<g:if test="${userInstance?.myCreatedHunts}">
 						<g:if test="${isLoggedInUser}">
-						<li class="nav-header">My Created Hunts</li>
+							<li class="nav-header">My Created Hunts</li>
 						</g:if>
 						<g:else>
-						<li class="nav-header">Created Public Hunts</li>
+							<g:if test="${publicCreatedHuntInstanceList}">
+								<li class="nav-header">Created Hunts</li>
+							</g:if>
 						</g:else>
 						
 						<g:each in="${publicCreatedHuntInstanceList}" var="huntInstance" >
@@ -127,22 +131,24 @@
 							</li>
 						</g:each>
 						<g:if test="${isLoggedInUser}">
-						<g:each in="${privateCreatedHuntInstanceList}" var="huntInstance" >
-							<li>
-								<g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
-									<i class="icon-search"></i>
-									<g:fieldValue bean="${huntInstance}" field="title" />
-								</g:link>
-							</li>
-						</g:each>
+							<g:each in="${privateCreatedHuntInstanceList}" var="huntInstance" >
+								<li>
+									<g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
+										<i class="icon-search"></i>
+										<g:fieldValue bean="${huntInstance}" field="title" />
+									</g:link>
+								</li>
+							</g:each>
 						</g:if>
 					</g:if>
 					<g:if test="${userInstance?.myAdministratedHunts}">
 						<g:if test="${isLoggedInUser}">
-						<li class="nav-header">Hunts I Administrate</li>
+							<li class="nav-header">Hunts I Administrate</li>
 						</g:if>
 						<g:else>
-						<li class="nav-header">Admin of Hunts</li>
+							<g:if test="${publicAdministratedHuntInstanceList}">
+								<li class="nav-header">Admin of Hunts</li>
+							</g:if>
 						</g:else>
 						<g:each in="${publicAdministratedHuntInstanceList}" var="huntInstance">
 							<li><g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
@@ -150,6 +156,7 @@
 									<g:fieldValue bean="${huntInstance}" field="title" />
 							</g:link></li>
 						</g:each>
+						
 						<g:if test="${isLoggedInUser}">
 							<g:each in="${privateAdministratedHuntInstanceList}" var="huntInstance">
 								<li><g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
@@ -161,10 +168,12 @@
 					</g:if>
 					<g:if test="${userInstance?.myHunts}">
 						<g:if test="${isLoggedInUser}">
-						<li class="nav-header">My Hunt Participation</li>
+							<li class="nav-header">My Hunt Participation</li>
 						</g:if>
 						<g:else>
-						<li class="nav-header">Public Hunt Participation</li>
+							<g:if test="${publicHuntParticipationList}">
+								<li class="nav-header">Hunt Participation</li>
+							</g:if>
 						</g:else>
 						<g:each in="${publicHuntParticipationList}" var="huntInstance" >
 							<li><g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
@@ -173,12 +182,12 @@
 							</g:link></li>
 						</g:each>
 						<g:if test="${isLoggedInUser}">
-						<g:each in="${privateHuntParticipationList}" var="huntInstance" >
-							<li><g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
-								<i class="icon-search"></i>
-								<g:fieldValue bean="${huntInstance}" field="title" />
-							</g:link></li>
-						</g:each>
+							<g:each in="${privateHuntParticipationList}" var="huntInstance" >
+								<li><g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
+									<i class="icon-search"></i>
+									<g:fieldValue bean="${huntInstance}" field="title" />
+								</g:link></li>
+							</g:each>
 						</g:if>
 					</g:if>
 				</ul>
