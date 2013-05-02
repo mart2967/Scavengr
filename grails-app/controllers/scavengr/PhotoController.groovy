@@ -48,13 +48,13 @@ class PhotoController {
                     photoInstance.myHunter = session.hunter
                 }
                 def now = new Date()
-                def closedHunt = huntInstance.endDate < now || huntInstance.startDate > now 
+                def closedHunt = huntInstance.endDate < now || huntInstance.startDate > now
                 if(closedHunt){
                     flash.message = 'Upload failed: this hunt has closed.'
                     redirect controller: promptController, action: showAction, id: photoInstance.myPrompt.id
                     return
                 }
-                
+
                 def image = request.getFile('myFile')
                 def okcontents = ['image/png', 'image/jpeg', 'image/gif']
                 if (!okcontents.contains(image.contentType)) {
@@ -65,8 +65,8 @@ class PhotoController {
                 photoInstance.original = image.bytes
                 photoInstance.fileType = image.contentType
                 if (!photoInstance.save(flushTrue)) {
-                    render controller: promptController, view: 'show', 
-                        model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
+                    render controller: promptController, view: 'show',
+                            model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
                     return
                 }
                 imageUploadService.save(photoInstance)
@@ -84,7 +84,7 @@ class PhotoController {
                 break
         }
     }
-    
+
     def toggleFavorite(){
         def photoInstance = Photo.get(params.id)
         def userInstance = User.findByLogin(auth.user())
@@ -98,16 +98,16 @@ class PhotoController {
             userInstance.addToFavorites(photoInstance)
             render '<i class="icon icon-star-empty"></i> Unfavorite'
         }
-        
+
     }
-    
+
     def isInHunt(hunt, user){
         if(hunt.myUsers.contains(user) || hunt.myAdmins.contains(user) || hunt.myCreator == user){
             return true
         }
         return false
     }
-    
+
     def show() {
         def photoInstance = Photo.get(params.id)
         def showHunt = false
@@ -118,7 +118,7 @@ class PhotoController {
             isMyPhoto = true
         }
         def hunt = photoInstance.myPrompt?.myHunt
-        
+
         if (!hunt?.isPrivate || isInHunt(hunt, loggedInUser)) {
             showHunt = true
             key = photoInstance.myPrompt?.myHunt?.key
@@ -129,7 +129,7 @@ class PhotoController {
             redirect actionList
             return
         }
-	
+
         def photoIdList = authorizedIds(loggedInUser, photoInstance.myUser)
         def index = photoIdList.indexOf(params.long('id'))
         def prevId
@@ -143,10 +143,10 @@ class PhotoController {
         def isFavorite = loggedInUser?.favorites?.contains(photoInstance)
         photoInstance.views++
 
-        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto, 
-            showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
+        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto,
+                    showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
     }
-    
+
     def authorizedIds(loggedInUser, photoOwner){
         def photoIds = Photo.createCriteria()
         photoIds.list(){
@@ -173,20 +173,7 @@ class PhotoController {
     }
     def viewImage() {
         def photoInstance = Photo.get( params.id )
-        switch(params.size){
-            case 'large':
-                response.outputStream << photoInstance.large
-                break
-            case 'medium':
-                response.outputStream << photoInstance.medium
-                break
-            case 'thumbnail':
-                response.outputStream << photoInstance.thumbnail
-                break
-            default:
-                response.outputStream << photoInstance.original
-                break
-        }
+        response.outputStream << photoInstance.original
         response.outputStream.flush()
     }
 

@@ -149,7 +149,7 @@ class UserController {
 
     def getAuthorizedPhotos(userInstance, loggedInUser){
         def userPhotos = Photo.createCriteria()
-        userPhotos.list(maxResults:params.max, firstResult:params.offset){
+        userPhotos.list(max:params.max, offset:params.offset){
             order('dateCreated', 'desc')
             and{
                 myUser {
@@ -171,7 +171,7 @@ class UserController {
 
     def getAuthorizedFavorites(userInstance, loggedInUser){
         def favPhotos = Photo.createCriteria()
-        favPhotos.list(maxResults:params.max, firstResult:params.offset){
+        favPhotos.list(max:params.max, offset:params.offset){
             order('dateCreated', 'desc')
             and{
                 likedBy {

@@ -9,7 +9,7 @@ import spock.lang.Specification
  */
 @TestFor(User)
 class UserSpec extends Specification {
-
+        def blank = ''
 	@Override
 	def setup() {
 	}
@@ -21,13 +21,13 @@ class UserSpec extends Specification {
 	def "testUserConstraints"() {
 		when:
 		def user1 = new User(login: 'testUser1', email: 'testUser1@email.com', password: 'testUserPassword1')
-		def user2 = new User(login: 'testUser2', email: '', password: 'testUserPassword2')
-		def user3 = new User(login: '', email: 'testUser3@email.com', password: 'testUserPassword3')
-		def user4 = new User(login: '', email: '', password: 'testUserPassword4')
+		def user2 = new User(login: 'testUser2', email: blank, password: 'testUserPassword2')
+		def user3 = new User(login: blank, email: 'testUser3@email.com', password: 'testUserPassword3')
+		def user4 = new User(login: blank, email: blank, password: 'testUserPassword4')
 		def user5 = new User(login: 'testUser5', email: 'testUserEmail5', password: 'testUserPassword5')
-		def user6 = new User(login: 'testUser6', email: '', password: 'testUserPassword6')
-		def user7 = new User(login: '', email: 'testUserEmail7', password: 'testUserPassword7')
-		def user8 = new User(login: '', email: '', password: 'testUserPassword8')
+		def user6 = new User(login: 'testUser6', email: blank, password: 'testUserPassword6')
+		def user7 = new User(login: blank, email: 'testUserEmail7', password: 'testUserPassword7')
+		def user8 = new User(login: blank, email: blank, password: 'testUserPassword8')
 		mockForConstraintsTests(User, [user1, user2, user3, user4, user5, user6, user7, user8])
 		
 		then:
@@ -43,11 +43,13 @@ class UserSpec extends Specification {
 	
 	def "testToString"() {
 		when:
-		def user9 = new User(login: 'testUser9', email: 'testUser9@email.com', password: 'testUserPassword9')
-		def user10 = new User(login: 'testUser10', email: '', password: 'testUserPassword10')
+                def u9 = 'testUser9'
+                def u10 = 'testUser10'
+		def user9 = new User(login: u9, email: 'testUser9@email.com', password: 'testUserPassword9')
+		def user10 = new User(login: u10, email: blank, password: 'testUserPassword10')
 		
 		then:
-		user9.toString() == 'testUser9'
-		user10.toString() == 'testUser10'
+		user9.toString() == u9
+		user10.toString() == u10
 	}
 }

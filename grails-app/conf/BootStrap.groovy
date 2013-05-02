@@ -7,6 +7,7 @@ import com.grailsrocks.authentication.*
 
 class BootStrap {
     def authenticationService
+    def pass = 'password'
     def init = { servletContext ->
         if(Environment.current != Environment.PRODUCTION ) {
         
@@ -16,17 +17,17 @@ class BootStrap {
         def lateDate = new Date(baseDate.time + 1000*60*60*24)
 
         /*Users*/
-        def walter = new User(login: 'Walter', password:authenticationService.encodePassword('password'), 
+        def walter = new User(login: 'Walter', password:authenticationService.encodePassword(pass), 
 			email: 'walter@email.com', status:AuthenticationService.STATUS_VALID).save(failOnError)
-        def edward = new User(login: 'Edward', password:authenticationService.encodePassword('password'), 
+        def edward = new User(login: 'Edward', password:authenticationService.encodePassword(pass), 
 			email: 'edward@email.com', status:AuthenticationService.STATUS_VALID).save(failOnError)
-        def laurie = new User(login: 'Laurie', password:authenticationService.encodePassword('password'), 
+        def laurie = new User(login: 'Laurie', password:authenticationService.encodePassword(pass), 
 			email: 'laurie@email.com', status:AuthenticationService.STATUS_VALID).save(failOnError)
 
         
         /*Hunts*/
         def trees = new Hunt(title: 'Trees', description: 'Look at these fresh young trees.', 
-			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate, key: "yfe5mejs2a").save(failOnError)
+			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate, key: 'yfe5mejs2a').save(failOnError)
         def colors = new Hunt(title: 'Colors', description: 'I forgot how to see these, plz halp.', 
 			myCreator: laurie, isPrivate: true, startDate: new Date(), endDate: lateDate).save(failOnError)
         def cells = new Hunt(title: 'Plant Cells', description: 'Microscope. Now.', 
@@ -44,8 +45,6 @@ class BootStrap {
         prompts.add( new Prompt(title: 'Cats', description: '', myHunt: animals).save(failOnError) )
         prompts.add( new Prompt(title: 'Guinea Pigs', description: '', myHunt: animals).save(failOnError) )
         prompts.add( new Prompt(title: 'Dogs', description: 'Mans Best Friend', myHunt: animals).save(failOnError) )
-
-
         
         }
     }
