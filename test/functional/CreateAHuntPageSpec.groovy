@@ -11,14 +11,14 @@ class CreateAHuntPageSpec extends GebReportingSpec {
         loginButton.click()
     }
     
-    private getToCreateHuntPage() {
+    private goToCreateHuntPage() {
         loginAs('Walter', 'password')
         navbarCreateButton.click()
     }
     
     def 'can navigate to create a hunt page'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
 
         then:
         at CreateAHuntPage
@@ -27,7 +27,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
     
     def 'can delete a prompt'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         promptTitleBox.value('Animals')
         promptDescriptionBox.value('Take pictures of them.')
         addPromptButton.click()
@@ -39,7 +39,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
     
     def 'can create hunt with a title, description, start date, end date'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         huntTitleBox.value('The Batman')
         huntDescriptionBox.value('Take pictures inspired by the dark knight')
         huntStartDate.value('04/25/2013 02:37 PM')
@@ -52,7 +52,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
     
     def 'can add emails to a hunt when you are creating one'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         emailBox.value('anemail@email.com')
         emailButton.click()
         deleteEmailButton.click()
@@ -63,7 +63,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
     
     def 'can create hunt with a title, description, start date, end date, prompt, and an email'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         huntTitleBox.value('The Batman')
         huntDescriptionBox.value('Take pictures inspired by the dark knight')
         huntStartDate.value('04/25/2013 02:37 PM')
@@ -81,7 +81,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
      //This test doesn't pass, it comes up with a grails runtime exception
     /*def 'creating a hunt with an end date before the start date'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         huntTitleBox.value('The Batman')
         huntDescriptionBox.value('Take pictures inspired by the dark knight')
         huntStartDate.value('04/25/2099 02:37 PM')
@@ -94,7 +94,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
     
     def 'attempting to create a hunt without a title remains on the create a hunt page'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         createHuntButton.click()
         
         then:
@@ -103,7 +103,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
     
     def 'adding a prompt without a title does not cause an error'() {
         when:
-        getToCreateHuntPage()
+        goToCreateHuntPage()
         promptDescriptionBox.value('whatever')
         createHuntButton.click()
         
