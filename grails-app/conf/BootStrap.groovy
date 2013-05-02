@@ -1,11 +1,9 @@
 
 import scavengr.Hunt
-import scavengr.Photo
 import scavengr.Prompt
 import scavengr.User
 import grails.util.Environment
 import com.grailsrocks.authentication.*
-import pl.burningice.plugins.image.test.FileUploadUtils
 
 class BootStrap {
     def authenticationService

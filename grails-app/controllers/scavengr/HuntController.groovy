@@ -160,7 +160,8 @@ class HuntController {
             return
         }
 
-        def link = grailsLinkGenerator.link( controller: 'hunt', action: showAction, params: [key: huntInstance.key])
+        def link = grailsLinkGenerator.link( 
+            controller: 'hunt', action: showAction, params: [key: huntInstance.key])
         if(GenericValidator.isEmail(user)){
             def userInstance = User.findByEmail(user)
             if(userInstance != null){
@@ -213,7 +214,8 @@ class HuntController {
             return
         }
         if (!huntInstance.myAdmins.find {admin -> admin == newAdmin}){
-            def link = grailsLinkGenerator.link( controller: 'hunt', action: showAction, params: [key: huntInstance.key])
+            def link = grailsLinkGenerator.link( 
+                controller: 'hunt', action: showAction, params: [key: huntInstance.key])
             newAdmin.addToMyAdministratedHunts(huntInstance)
             NotifierService.sendNotification(currentUser, newAdmin,
                     'You Are Now an Admin', "You have been made administrator of the hunt \"$huntInstance.title\"",

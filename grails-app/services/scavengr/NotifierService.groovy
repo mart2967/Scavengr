@@ -8,7 +8,6 @@ class NotifierService {
     def mailService
     def link
     def authenticationService
-    static atmosphere
     
 
     

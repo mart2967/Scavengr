@@ -1,13 +1,10 @@
 package scavengr
 import pl.burningice.plugins.image.ast.FileImageContainer
-import pl.burningice.plugins.image.engines.scale.ScaleType
+//import pl.burningice.plugins.image.engines.scale.ScaleType
 
 @FileImageContainer(field = 'myFile')
 class Photo {
     byte[] original
-//    byte[] large // 870x*
-//    byte[] medium //300x300
-//    byte[] thumbnail //100x100
     String fileType
     String title
     String description
@@ -17,7 +14,7 @@ class Photo {
     Prompt myPrompt
     Date dateCreated
     
-    static belongsTo = [User, Prompt] //,myParticipants:Participant]
+    static belongsTo = [User, Prompt]
     static hasMany = [likedBy:User]
     static constraints = {
         title blank:true, maxSize:22
