@@ -32,7 +32,7 @@ class UserShowPageSpec extends GebReportingSpec {
 	
 	def 'when you log in you will be at the user show page'() {
 		when:
-		loginAs("Walter", "password")
+		loginAs('Walter', 'password')
 		
 		then:
 		at UserShowPage
@@ -41,7 +41,7 @@ class UserShowPageSpec extends GebReportingSpec {
 
 //    def 'redirects to create a hunt page when create hunt is clicked'() {
 //        when:
-//        loginAs("Walter","password")
+//        loginAs('Walter','password')
 //        createAHuntButton.click()
 //        
 //        then:
@@ -50,8 +50,8 @@ class UserShowPageSpec extends GebReportingSpec {
 //	
 //	def 'after changing password you are on the user show page'() {
 //		when:
-//		loginAs("Walter","password")
-//		changePassword("password", "password1")
+//		loginAs('Walter','password')
+//		changePassword('password', 'password1')
 //		
 //		then:
 //		at UserShowPage

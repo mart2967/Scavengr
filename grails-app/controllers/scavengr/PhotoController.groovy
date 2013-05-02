@@ -58,7 +58,7 @@ class PhotoController {
                     redirect controller: 'prompt', action: 'show', id: photoInstance.myPrompt.id
                     return
                 }
-                photoInstance.original = image.getBytes()
+                photoInstance.original = image.bytes
                 photoInstance.fileType = image.contentType
                 if (!photoInstance.save(flushTrue)) {
                     render controller: 'prompt', view: 'show', 
@@ -116,7 +116,7 @@ class PhotoController {
         def all = loggedInUser?.myCreatedHunts + loggedInUser?.myAdministratedHunts + loggedInUser?.myHunts
         //println hunt
         //println loggedInUser.myCreatedHunts.contains(hunt)
-        println hunt?.myUsers?.asList().indexOf(loggedInUser) //?.myUsers?.contains(loggedInUser)//loggedInUser?.myCreatedHunts?.contains(hunt)
+        //println hunt?.myUsers?.asList().indexOf(loggedInUser) //?.myUsers?.contains(loggedInUser)//loggedInUser?.myCreatedHunts?.contains(hunt)
         if (!photoInstance) {
             flash.message = message(code: 'default.not.found.message',
                     args: [message(codeDefaultPhoto), params.id])

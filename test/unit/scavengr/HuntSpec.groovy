@@ -21,7 +21,7 @@ class HuntSpec extends Specification {
 	def "testHuntConstraints"() {
 		when:
 		def baseDate = new Date()
-		def lateDate = new Date(baseDate.getTime() + 1000*60*60*24)
+		def lateDate = new Date(baseDate.time + 1000*60*60*24)
 		
 		def hunt1 = new Hunt(title: 'testHunt1', description: 'testHuntDescription1', myCreator: new User(), 
 			isPrivate: true, startDate: new Date(), endDate: lateDate, key:'6a0p0345ru', huntersEmail:'anEmail@email.fu')

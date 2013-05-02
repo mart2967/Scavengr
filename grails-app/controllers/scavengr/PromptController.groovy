@@ -14,14 +14,6 @@ class PromptController {
     def authenticationService
     static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
 
-//    def index() {
-//        redirect action: 'list', params: params
-//    }
-//
-//    def list() {
-//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-//        [promptInstanceList: Prompt.list(params), promptInstanceTotal: Prompt.count()]
-//    }
 
     def create() {
         switch (request.method) {
@@ -46,27 +38,21 @@ class PromptController {
 
     def show() {
 	def userInstance = User.findByLogin(auth.user())
-	def participantInstance = Participant.get(params.participantId)
         def promptInstance = Prompt.get(params.id)
-//        if (!userInstance && !participantInstance) {
-//        	redirect controller: 'participant', action: 'create', params: [participantId: promptInstance.myHunt.id]
-//        	return
-//         } 
         def now = new Date()
         def closedHunt = promptInstance.myHunt.endDate < now || promptInstance.myHunt.startDate > now
-        def endDate = promptInstance.myHunt.endDate.getDateTimeString()
-        def isCreatorOrAdmin = (userInstance == promptInstance.myHunt.myCreator 
-            || promptInstance.myHunt.myAdmins.contains(userInstance))
+        def endDate = promptInstance.myHunt.endDate.dateTimeString
+        //def isCreatorOrAdmin = isAdminOrCreator(userInstance, promptInstance.myHunt)
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
         def photoInstanceList = Photo.findAllByMyPrompt(
             promptInstance, [sort:'dateCreated', order:'desc', max:params.max, offset:params.offset])
 
 
-        [promptInstance: promptInstance, //photoInstance: photoInstance,
+        [promptInstance: promptInstance,
                     photoInstanceList: photoInstanceList, userInstance: userInstance,
                     photoInstanceTotal: Photo.findAllByMyPrompt(promptInstance).size(),
-                    closedHunt:closedHunt, endDate:endDate, isCreatorOrAdmin:isCreatorOrAdmin]
-                    //, participantInstance:participantInstance]
+                    closedHunt:closedHunt, endDate:endDate, 
+                    isCreatorOrAdmin:isAdminOrCreator(userInstance, promptInstance.myHunt)]
     }
 
     def cancel() {
@@ -78,8 +64,7 @@ class PromptController {
     def removePhoto(){
         def promptInstance = Prompt.get(params.id)
         def userInstance = User.findByLogin(auth.user())
-        if (userInstance != promptInstance.myHunt.myCreator 
-            && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
+        if (!isAdminOrCreator(userInstance, promptInstance.myHunt)) {
             redirect action: 'show', id: promptInstance.id
             return
         }
@@ -89,14 +74,21 @@ class PromptController {
         redirect action: 'edit', id: promptInstance.id, params:params
         return
     }
+    
+    def isAdminOrCreator(user, hunt){
+        if(user != hunt.myCreator && !hunt.myAdmins.contains(user)){
+            return false
+        }
+        return true
+    }
+    
     def edit() {
         switch (request.method) {
             case 'GET':
                 def promptInstance = Prompt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 
-                if (userInstance != promptInstance.myHunt.myCreator 
-                    && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
+                if (!isAdminOrCreator(userInstance, promptInstance.myHunt)) {
                     redirect action: 'show', id: promptInstance.id
                     return
                 }
@@ -116,8 +108,7 @@ class PromptController {
             case 'POST':
                 def promptInstance = Prompt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
-                if (userInstance != promptInstance.myHunt.myCreator 
-                    && !promptInstance.myHunt.myAdmins.contains(userInstance)) {
+                if (!isAdminOrCreator(userInstance, promptInstance.myHunt)) {
                     redirect action: 'show', id: promptInstance.id
                     return
                 }
@@ -155,7 +146,7 @@ class PromptController {
 
     def delete() {
         def promptInstance = Prompt.get(params.id)
-        if (User.findByLogin(auth.user()) != promptInstance.myHunt.myCreator) {
+        if (!isAdminOrCreator(User.findByLogin(auth.user()) , promptInstance.myHunt)) {
             redirect action: 'show', id: promptInstance.id
             return
         }

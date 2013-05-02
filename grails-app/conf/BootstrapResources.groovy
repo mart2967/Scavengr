@@ -27,12 +27,17 @@ log.debug "config: grails.plugins.twitterbootstrap.defaultBundle = ${configDefau
 log.debug "is lesscss-resources plugin loaded? ${!!lesscssPlugin}"
 log.debug "is jquery plugin loaded? ${!!jqueryPlugin}"
 
+def css = 'css'
+def head = 'head'
+def minify = 'minify'
+def twitterBootstrap = 'twitter-bootstrap'
+
 modules = {
 
     'bootstrap-fixtaglib' {
         defaultBundle 'fixtaglib'
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'css', file: 'bootstrap-fixtaglib.css'], disposition: 'head'
+        resource url:[plugin: twitterBootstrap, dir: css, file: 'bootstrap-fixtaglib.css'], disposition: css
     }
 
     'bootstrap-css' {
@@ -41,16 +46,16 @@ modules = {
             dependsOn 'bootstrap-fixtaglib'
         }
 
-        resource url:[dir: 'css', file: (dev ? cssFile : cssminFile)], disposition: 'head', exclude:'minify'
+        resource url:[dir: css, file: (dev ? cssFile : cssminFile)], disposition: css, exclude:minify
     }
 
     'bootstrap-responsive-css' {
         defaultBundle configDefaultBundle
         dependsOn 'bootstrap-css'
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'css', 
+        resource url:[plugin: twitterBootstrap, dir: css, 
             file: (dev ? 'bootstrap-responsive.css' : 'bootstrap-responsive.min.css')], 
-            disposition: 'head', exclude:'minify'
+            disposition: css, exclude:minify
     }
 
     'bootstrap-alert' {
@@ -59,7 +64,7 @@ modules = {
             dependsOn 'jquery'
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-alert.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-alert.js']
     }
 
     'bootstrap-affix' {
@@ -68,7 +73,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-affix.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-affix.js']
     }
 
     'bootstrap-dropdown' {
@@ -77,7 +82,7 @@ modules = {
             dependsOn 'jquery'
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-dropdown.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-dropdown.js']
     }
 
     'bootstrap-modal' {
@@ -97,7 +102,7 @@ modules = {
             dependsOn 'jquery'
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-popover.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-popover.js']
     }
 
     'bootstrap-scrollspy' {
@@ -106,7 +111,7 @@ modules = {
             dependsOn 'jquery'
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-scrollspy.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-scrollspy.js']
     }
 
     'bootstrap-tab' {
@@ -115,7 +120,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-tab.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-tab.js']
     }
 
     'bootstrap-tooltip' {
@@ -124,7 +129,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-tooltip.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-tooltip.js']
     }
 
     'bootstrap-button' {
@@ -133,7 +138,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-button.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-button.js']
     }
 
     'bootstrap-carousel' {
@@ -142,7 +147,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-carousel.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-carousel.js']
     }
 
     'bootstrap-typeahead' {
@@ -151,7 +156,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-typeahead.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-typeahead.js']
     }
 
     'bootstrap-collapse' {
@@ -160,7 +165,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-collapse.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-collapse.js']
     }
 
     'bootstrap-transition' {
@@ -169,7 +174,7 @@ modules = {
             dependsOn "jquery"
         }
 
-        resource url:[plugin: 'twitter-bootstrap', dir: 'js', file: 'bootstrap-transition.js']
+        resource url:[plugin: twitterBootstrap, dir: 'js', file: 'bootstrap-transition.js']
     }
 
     'bootstrap-js' {
@@ -187,8 +192,8 @@ modules = {
         if (configTagLib) {
             dependsOn 'bootstrap-fixtaglib'
         }
-        resource id:'bootstrap-less', url:[plugin: 'twitter-bootstrap', dir: 'less', 
-            file: 'bootstrap.less'], attrs:[rel: "stylesheet/less", type:'css', order:100], disposition: 'head'
+        resource id:'bootstrap-less', url:[plugin: twitterBootstrap, dir: 'less', 
+            file: 'bootstrap.less'], attrs:[rel: "stylesheet/less", type:css, order:100], disposition: css
     }
 
     bootstrap {

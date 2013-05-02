@@ -1,11 +1,11 @@
 class UrlMappings {
     static mappings = {
-
+        def keyRegex = /[a-z0-9]{10}/
         name huntKey: "/hunt/$key"{
             controller = 'hunt'
             action = 'show'
             constraints {
-                key(matches:/[a-z0-9]{10}/) //key is ten characters long [a-z0-9]{10,10}
+                key(matches:keyRegex) //key is ten characters long [a-z0-9]{10,10}
             }
         }
 
@@ -26,7 +26,7 @@ class UrlMappings {
             controller = 'prompt'
             action = 'show'
             constraints {
-                key(matches:/[a-z0-9]{10}/) //key is ten characters long [a-z0-9]{10,10}
+                key(matches:keyRegex) //key is ten characters long [a-z0-9]{10,10}
             }
         }
         
@@ -34,7 +34,7 @@ class UrlMappings {
             controller = 'prompt'
             action = 'edit'
             constraints {
-                key(matches:/[a-z0-9]{10}/) //key is ten characters long [a-z0-9]{10,10}
+                key(matches:keyRegex) //key is ten characters long [a-z0-9]{10,10}
             }
         }
 

@@ -7,7 +7,11 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.apache.commons.validator.GenericValidator
 
 class HuntController {
-
+    def createAction = 'create'
+    def showAction = 'show'
+    def invited = 'You have been invited to participate in the hunt '
+    def quotation = '"'
+    def goToHunt = 'Go to Hunt'
     Map codeDefaultHunt = [code: 'hunt.label', default: 'Hunt']
     Map actionList = [action: 'list']
     Map flushTrue = [flush: true]
@@ -39,7 +43,7 @@ class HuntController {
         }
         if(p == 0) {
             flash.message = 'No photos to download!'
-            redirect action: 'show', params: [key: huntInstance.key]
+            redirect action: showAction, params: [key: huntInstance.key]
             return
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream()
@@ -93,7 +97,7 @@ class HuntController {
                 def prompts = huntInstance.myPrompts as grails.converters.JSON ?: []
                 if(params.start > params.end){
                     huntInstance.errors.reject('scavengr.Hunt.endDate.validator.invalid')
-                    render view: 'create', model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
+                    render view: createAction, model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
                     return
                 }
                 try{
@@ -101,7 +105,7 @@ class HuntController {
                     huntInstance.endDate = dateParser.parse(params.end)
                 } catch(java.text.ParseException e){
                     flash.message = 'Invalid date(s)'
-                    render view: 'create', model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
+                    render view: createAction, model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
                     return
                 }
 
@@ -111,7 +115,7 @@ class HuntController {
                 for(email in emailArray){
                     if(!GenericValidator.isEmail(email)) {
                         flash.message = 'Invalid email address: ' + email
-                        render view: 'create', model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
+                        render view: createAction, model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
                         return
                     }
                 }
@@ -119,7 +123,7 @@ class HuntController {
 
                 if (!creator.save(flushTrue)) {
 
-                    render view: 'create', model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
+                    render view: createAction, model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
                     return
                 }
 
@@ -137,7 +141,7 @@ class HuntController {
                 }
 
 
-                redirect action: 'show', params: [key:huntInstance.key]
+                redirect action: showAction, params: [key:huntInstance.key]
                 break
         }
     }
@@ -147,16 +151,16 @@ class HuntController {
         def user = params.user.toString()
         if(huntInstance.emails.contains(user)){
             flash.message = user + ' has already been invited.'
-            redirect controller: 'hunt', action: 'show', params: [key: huntInstance.key]
+            redirect action: showAction, params: [key: huntInstance.key]
             return
         }
-        def link = grailsLinkGenerator.link( controller: 'hunt', action: 'show', params: [key: huntInstance.key])
+        def link = grailsLinkGenerator.link( controller: 'hunt', action: showAction, params: [key: huntInstance.key])
         if(GenericValidator.isEmail(user)){
             def userInstance = User.findByEmail(user)
             if(userInstance != null){
 
                 NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
-                        "You have been invited to participate in the hunt \"$huntInstance.title\"", link, "Go to Hunt")
+                        invited + quotation + huntInstance.title + quotation, link, goToHunt)
             }
             NotifierService.contactHunters(huntInstance.myCreator.login, user,
                     huntInstance.key, huntInstance.title)
@@ -164,19 +168,19 @@ class HuntController {
             def userInstance = User.findByLogin(user)
             if(userInstance != null){
                 NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
-                        "You have been invited to participate in the hunt \"$huntInstance.title\"", link, "Go to Hunt")
+                        invited + quotation + huntInstance.title + quotation, link, goToHunt)
 
                 NotifierService.contactHunters(huntInstance.myCreator.login, userInstance.email,
                         huntInstance.key, huntInstance.title)
             }else{
                 flash.message = 'User not found with email or username: ' + user
-                redirect controller: 'hunt', action: 'show', params: [key: huntInstance.key]
+                redirect action: showAction, params: [key: huntInstance.key]
                 return
             }
         }
         huntInstance.addToEmails(user)
         flash.message = 'Invite sent to ' + user
-        redirect controller: 'hunt', action: 'show', params: [key: huntInstance.key]
+        redirect action: showAction, params: [key: huntInstance.key]
     }
 
     def inviteAdmin() {
@@ -185,47 +189,47 @@ class HuntController {
         def currentUser = User.findByLogin(auth.user())
         if(!newAdmin){
             flash.message = 'User not found with name ' + params.login
-            redirect action: 'show', params:['key':huntInstance.key]
+            redirect action: showAction, params:['key':huntInstance.key]
             return
         }
         if (newAdmin == currentUser){
             flash.message = 'You already have administrative powers!'
-            redirect action: 'show', params:['key':huntInstance.key]
+            redirect action: showAction, params:['key':huntInstance.key]
             return
         }
         if (!huntInstance.myAdmins.find {admin -> admin == newAdmin}){
-            def link = grailsLinkGenerator.link( controller: 'hunt', action: 'show', params: [key: huntInstance.key])
+            def link = grailsLinkGenerator.link( controller: 'hunt', action: showAction, params: [key: huntInstance.key])
             newAdmin.addToMyAdministratedHunts(huntInstance)
             NotifierService.sendNotification(currentUser, newAdmin,
                     'You Are Now an Admin', "You have been made administrator of the hunt \"$huntInstance.title\"",
-                    link, "Go to Hunt")
+                    link, goToHunt)
             newAdmin.save()
             flash.message = 'Admin added: ' + newAdmin.login
-            redirect action: 'show', params:['key':huntInstance.key]
+            redirect action: showAction, params:['key':huntInstance.key]
             return
         }
         flash.message = newAdmin.login + ' is already an admin!'
-        redirect action: 'show', params:['key':huntInstance.key]
+        redirect action: showAction, params:['key':huntInstance.key]
     }
 
     def removeAdmin(){
         def huntInstance = Hunt.get(params.myHunt.id)
         def userInstance = User.findByLogin(auth.user())
         if(userInstance != huntInstance.myCreator){
-            redirect action: 'show', params:['key':huntInstance.key]
+            redirect action: showAction, params:['key':huntInstance.key]
             return
         }
         def admin = User.findByLogin(params.login)
         if(!admin || !huntInstance.myAdmins.contains(admin) ){
             flash.message = admin.login + ' is not an admin of this hunt.'
-            redirect action: 'show', params:['key':huntInstance.key]
+            redirect action: showAction, params:['key':huntInstance.key]
             return
         }
         huntInstance.removeFromMyAdmins(admin)
         NotifierService.sendNotification(userInstance, admin,
                 "No Longer Admin", "You are no longer an administrator of the hunt \"$huntInstance.title\"")
         flash.message = admin.login + ' is no longer an admin'
-        redirect action: 'show', params:['key':huntInstance.key]
+        redirect action: showAction, params:['key':huntInstance.key]
 
     }
 
@@ -233,13 +237,13 @@ class HuntController {
         def huntInstance = Hunt.get(params.myHunt.id)
         def userInstance = User.findByLogin(auth.user())
         if (userInstance != huntInstance.myCreator && !huntInstance.myAdmins.contains(userInstance)){
-            redirect action: 'show', params: [key:huntInstance.key]
+            redirect action: showAction, params: [key:huntInstance.key]
             return
         }
         def userToRemove = User.findByLogin(params.login)
         if (userToRemove == huntInstance.myCreator || huntInstance.myAdmins.contains(userToRemove)){
             flash.message = 'Requested user was an admin, please revoke their power first.'
-            redirect action: 'show', params: [key:huntInstance.key]
+            redirect action: showAction, params: [key:huntInstance.key]
             return
         }
         huntInstance.myPrompts.each{prompt ->
@@ -253,7 +257,7 @@ class HuntController {
         NotifierService.sendNotification(userInstance, userToRemove,
                 "Banned From Hunt", "You have been banned from uploading to the hunt \"$huntInstance.title\"")
         flash.message = userToRemove.login + ' and their photos have been removed from the hunt.'
-        redirect action: 'show', params:['key':huntInstance.key]
+        redirect action: showAction, params:['key':huntInstance.key]
     }
 
     def show() {
@@ -267,12 +271,26 @@ class HuntController {
         }
 
         def promptInstanceList = Prompt.findAllByMyHunt(huntInstance,[sort:'dateCreated', order:'asc'])
+        def promptPhotoList = buildPromptList(huntInstance, userInstance)
+
+        def userLoginList = User.executeQuery("select u.login from User u")
+        def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
+                || huntInstance.myAdmins.contains(userInstance))
+        def isParticipating = huntInstance.myUsers.contains(userInstance)
+        [huntInstance: huntInstance,promptPhotoList: promptPhotoList,
+                    userInstance:userInstance, isCreatorOrAdmin:isCreatorOrAdmin, 
+                    userLoginList:userLoginList as grails.converters.JSON,
+                    now: new Date(), isParticipating:isParticipating ]
+    }
+
+    def buildPromptList(hunt, loggedInUser){
+        def promptInstanceList = Prompt.findAllByMyHunt(hunt,[sort:'dateCreated', order:'asc'])
         def promptPhotoList = []
         for (promptInstance in promptInstanceList) {
             def userPhotoList = Photo.findAllByMyUserAndMyPrompt(
-                    userInstance, promptInstance,[sort:'dateCreated', order:'desc', max:6])
+                    loggedInUser, promptInstance,[sort:'dateCreated', order:'desc', max:6])
             def photoInstanceList = Photo.findAllByMyUserNotEqualAndMyPrompt(
-                    userInstance, promptInstance,[sort:'dateCreated', order:'desc', max:6-userPhotoList.size()])
+                    loggedInUser, promptInstance,[sort:'dateCreated', order:'desc', max:6-userPhotoList.size()])
             def promptFilled = userPhotoList.size() > 0
             def promptPhotoContainer = []
             promptPhotoContainer.add(promptInstance)
@@ -280,33 +298,25 @@ class HuntController {
             promptPhotoContainer.addAll(userPhotoList)
             promptPhotoContainer.addAll(photoInstanceList)
             promptPhotoList.add(promptPhotoContainer)
-
         }
-        def userLoginList = User.executeQuery("select u.login from User u")
-        def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
-                || huntInstance.myAdmins.contains(userInstance))
-        def isParticipating = huntInstance.myUsers.contains(userInstance)
-        [huntInstance: huntInstance, promptInstanceList: promptInstanceList,
-                    promptPhotoList: promptPhotoList, userInstance:userInstance,
-                    isCreatorOrAdmin:isCreatorOrAdmin, userLoginList:userLoginList as grails.converters.JSON,
-                    now: new Date(), isParticipating:isParticipating ]
+        return promptPhotoList
     }
 
     def closeHunt() {
         def huntInstance = Hunt.get(params.id)
         def userInstance = User.findByLogin(auth.user())
         if (userInstance != huntInstance.myCreator && !huntInstance.myAdmins.contains(userInstance)){
-            redirect action: 'show', params: [key:huntInstance.key]
+            redirect action: showAction, params: [key:huntInstance.key]
             return
         }
         huntInstance.endDate = new Date()
         flash.message = 'Hunt closed. To reopen, edit the end date.'
-        redirect action: 'show', params: [key:huntInstance.key]
+        redirect action: showAction, params: [key:huntInstance.key]
     }
 
     def cancel() {
         def huntInstance = Hunt.get(params.id)
-        redirect action: 'show', params: [key:huntInstance.key]
+        redirect action: showAction, params: [key:huntInstance.key]
     }
 
     def edit() {
@@ -324,7 +334,7 @@ class HuntController {
                 params.start = dateParser.format(huntInstance.startDate)
                 params.end = dateParser.format(huntInstance.endDate)
                 if (userInstance != huntInstance.myCreator && !huntInstance.myAdmins.contains(userInstance)) {
-                    redirect action: 'show', params:[key: huntInstance.key]
+                    redirect action: showAction, params:[key: huntInstance.key]
                     return
                 }
 
@@ -354,7 +364,7 @@ class HuntController {
                 def huntInstance = Hunt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 if (userInstance != huntInstance.myCreator && !huntInstance.myAdmins.contains(userInstance)) {
-                    redirect action: 'show', params:[key: huntInstance.key]
+                    redirect action: showAction, params:[key: huntInstance.key]
                     return
                 }
                 if (!huntInstance) {
@@ -391,7 +401,7 @@ class HuntController {
                 }
 
                 flash.message = 'Hunt: ' + huntInstance.title + ' updated'
-                redirect action: 'show', params: [key: huntInstance.key]
+                redirect action: showAction, params: [key: huntInstance.key]
                 break
         }
     }
@@ -399,7 +409,7 @@ class HuntController {
     def delete() {
         def huntInstance = Hunt.get(params.id)
         if (User.findByLogin(auth.user()) != huntInstance.myCreator) {
-            redirect action: 'show', params:[key: huntInstance.key]
+            redirect action: showAction, params:[key: huntInstance.key]
             return
         }
         if (!huntInstance) {
@@ -420,7 +430,7 @@ class HuntController {
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message',
                     args: [message(codeDefaultHunt), params.id])
-            redirect action: 'show', params: [key: huntInstance.key]
+            redirect action: showAction, params: [key: huntInstance.key]
         }
     }
 }
