@@ -10,7 +10,8 @@ class UserController {
     Map codeDefaultUser = [code: 'user.label', default: 'User']
     Map actionList = [action: 'list']
     Map flushTrue = [flush: true]
-
+    def showAction = 'show'
+    def indexString = 'index'
     static List getPost = ['GET', 'POST']
     def NotifierService
     def authenticationService
@@ -36,29 +37,29 @@ class UserController {
     def changeEmail(){
         def userInstance = User.findByLogin(auth.user())
         if(!userInstance){
-            redirect controller:'index', params:[login:true]
+            redirect controller:indexString, params:[login:true]
             return
         }
         if (params.email != params.confirmEmail){
             flash.message = 'The emails entered did not match.'
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
             return
         }
         if(!GenericValidator.isEmail(params.email)) {
             flash.message = 'Invalid email address: ' + params.email
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
             return
         }
         userInstance.email = params.email
         userInstance.save()
         flash.message = 'Email changed to ' + params.email
-        redirect action: 'show', params: [login: auth.user()]
+        redirect action: showAction, params: [login: auth.user()]
     }
 
     def resetPassword() {
         def userInstance = User.findByEmailAndLogin(params.email, params.login)
         if(!userInstance){
-            redirect controller:'index', params:[login:true]
+            redirect controller:indexString, params:[login:true]
             return
         }
         if(!userInstance){
@@ -82,27 +83,27 @@ class UserController {
         def userInstance = User.findByLogin(auth.user())
         if (authenticationService.encodePassword(params.password) != userInstance.password){
             flash.message = 'Password change failed: entered wrong password!'
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
             return
         }
         if (params.newPassword != params.confirmPassword){
             flash.message = 'Password change failed: passwords did not match!'
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
             return
         }
         if (params.newPassword.size() < 6){
             flash.message = 'Password change failed: password must be at least 6 characters long.'
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
             return
         }
         userInstance.password = authenticationService.encodePassword(params.newPassword)
         if(!userInstance.save(flushTrue)){
             flash.message = 'Password change failed: error saving new password.'
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
             return
         }
         flash.message = 'Password Changed!'
-        redirect action: 'show', params: [login: auth.user()]
+        redirect action: showAction, params: [login: auth.user()]
         return
     }
 
@@ -110,7 +111,7 @@ class UserController {
         def userInstance = User.findByLogin(auth.user())
         if(!userInstance?.myPhotos){
             flash.message = 'No photos to download!'
-            redirect action: 'show', params: [login: userInstance.login]
+            redirect action: showAction, params: [login: userInstance.login]
             return
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream()
@@ -123,7 +124,7 @@ class UserController {
         }
 
         zipFile.finish()
-        response.setHeader("Content-disposition", "filename=\"${userInstance.login}-Scavengr.zip\"")
+        response.setHeader('Content-disposition', 'filename=\'${userInstance.login}-Scavengr.zip\'')
         response.contentType = "application/zip"
         response.outputStream << baos.toByteArray()
         response.outputStream.flush()
@@ -140,9 +141,9 @@ class UserController {
 
     def myProfile() {
         if (authenticationService.isLoggedIn(request)) {
-            redirect action: 'show', params: [login: auth.user()]
+            redirect action: showAction, params: [login: auth.user()]
         } else {
-            redirect action: 'index'
+            redirect action: indexString
         }
     }
 
@@ -241,7 +242,7 @@ class UserController {
 
     def cancel() {
         def userInstance = User.get(params.id)
-        redirect action: 'show', params: [login: userInstance.login]
+        redirect action: showAction, params: [login: userInstance.login]
 
     }
 

@@ -16,7 +16,8 @@ class PhotoController {
     Map flushTrue = [flush: true]
 
     static List getPost = ['GET', 'POST']
-
+    def promptController = 'prompt'
+    def showAction = 'show'
     def authenticationService
     static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
 
@@ -32,13 +33,13 @@ class PhotoController {
                 def userInstance = User.findByLogin(auth.user())
                 if(!userInstance) {
                     flash.message = 'You must have an account to upload to a hunt. Please log in or create an account.'
-                    redirect controller: 'prompt', action: 'show', id: params.myPrompt.id
+                    redirect controller: promptController, action: showAction, id: params.myPrompt.id
                     return
                 }
                 def promptInstance = Prompt.get(params.myPrompt.id)
                 if(promptInstance.myHunt.bannedUsers.contains(userInstance)){
                     flash.message = 'Upload failed: you have been banned from this hunt.'
-                    redirect controller: 'prompt', action: 'show', id: params.myPrompt.id
+                    redirect controller: promptController, action: showAction, id: params.myPrompt.id
                     return
                 }
                 photoInstance.myPrompt = promptInstance
@@ -50,7 +51,7 @@ class PhotoController {
                 def closedHunt = huntInstance.endDate < now || huntInstance.startDate > now 
                 if(closedHunt){
                     flash.message = 'Upload failed: this hunt has closed.'
-                    redirect controller: 'prompt', action: 'show', id: photoInstance.myPrompt.id
+                    redirect controller: promptController, action: showAction, id: photoInstance.myPrompt.id
                     return
                 }
                 
@@ -58,13 +59,13 @@ class PhotoController {
                 def okcontents = ['image/png', 'image/jpeg', 'image/gif']
                 if (!okcontents.contains(image.contentType)) {
                     flash.message = "Photo must be one of: ${okcontents}"
-                    redirect controller: 'prompt', action: 'show', id: photoInstance.myPrompt.id
+                    redirect controller: promptController, action: showAction, id: photoInstance.myPrompt.id
                     return
                 }
                 photoInstance.original = image.bytes
                 photoInstance.fileType = image.contentType
                 if (!photoInstance.save(flushTrue)) {
-                    render controller: 'prompt', view: 'show', 
+                    render controller: promptController, view: 'show', 
                         model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
                     return
                 }
@@ -79,7 +80,7 @@ class PhotoController {
 
                 flash.message = message(code: 'scavengr.Photo.created.message',
                         args: [message(codeDefaultPhoto), photoInstance.id])
-                redirect action: 'show', controller: 'prompt', id: params.myPrompt.id
+                redirect action: showAction, controller: promptController, id: params.myPrompt.id
                 break
         }
     }
@@ -189,7 +190,7 @@ class PhotoController {
 
     def cancel() {
         def photoInstance = Photo.get( params.id )
-        redirect action: 'show', id: photoInstance.id
+        redirect action: showAction, id: photoInstance.id
     }
 
     def edit() {
@@ -197,7 +198,7 @@ class PhotoController {
             case 'GET':
                 def photoInstance = Photo.get(params.id)
                 if (User.findByLogin(auth.user()) != photoInstance.myUser) {
-                    redirect action: 'show', id: photoInstance.id
+                    redirect action: showAction, id: photoInstance.id
                     return
                 }
                 if (!photoInstance) {
@@ -212,7 +213,7 @@ class PhotoController {
             case 'POST':
                 def photoInstance = Photo.get(params.id)
                 if (User.findByLogin(auth.user()) != photoInstance.myUser) {
-                    redirect action: 'show', id: photoInstance.id
+                    redirect action: showAction, id: photoInstance.id
                     return
                 }
                 if (!photoInstance) {
@@ -241,7 +242,7 @@ class PhotoController {
 
                 flash.message = message(code: 'scavengr.Photo.updated.message',
                         args: [message(codeDefaultPhoto), photoInstance.id])
-                redirect action: 'show', id: photoInstance.id
+                redirect action: showAction, id: photoInstance.id
                 break
         }
     }
@@ -249,7 +250,7 @@ class PhotoController {
     def delete() {
         def photoInstance = Photo.get(params.id)
         if (User.findByLogin(auth.user()) != photoInstance.myUser) {
-            redirect action: 'show', id: photoInstance.id
+            redirect action: showAction, id: photoInstance.id
             return
         }
         if (!photoInstance) {
@@ -268,7 +269,7 @@ class PhotoController {
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message',
                     args: [message(codeDefaultPhoto), params.id])
-            redirect action: 'show', id: params.id
+            redirect action: showAction, id: params.id
         }
     }
 }

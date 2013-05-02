@@ -59,8 +59,8 @@ class HuntController {
         }
 
         zipFile.finish()
-        response.setHeader("Content-disposition", "filename=\"${huntInstance.title}.zip\"")
-        response.contentType = "application/zip"
+        response.setHeader('Content-disposition', 'filename=\'${huntInstance.title}.zip\'')
+        response.contentType = 'application/zip'
         response.outputStream << baos.toByteArray()
         response.outputStream.flush()
     }
@@ -242,7 +242,7 @@ class HuntController {
         }
         huntInstance.removeFromMyAdmins(admin)
         NotifierService.sendNotification(userInstance, admin,
-                "No Longer Admin", "You are no longer an administrator of the hunt \"$huntInstance.title\"")
+                'No Longer Admin', "You are no longer an administrator of the hunt \"$huntInstance.title\"")
         flash.message = admin.login + ' is no longer an admin'
         redirect action: showAction, params:['key':huntInstance.key]
 
@@ -270,7 +270,7 @@ class HuntController {
         huntInstance.removeFromMyUsers(userToRemove)
         huntInstance.addToBannedUsers(userToRemove)
         NotifierService.sendNotification(userInstance, userToRemove,
-                "Banned From Hunt", "You have been banned from uploading to the hunt \"$huntInstance.title\"")
+                'Banned From Hunt', "You have been banned from uploading to the hunt \"$huntInstance.title\"")
         flash.message = userToRemove.login + ' and their photos have been removed from the hunt.'
         redirect action: showAction, params:['key':huntInstance.key]
     }
@@ -288,7 +288,7 @@ class HuntController {
         def promptInstanceList = Prompt.findAllByMyHunt(huntInstance,[sort:'dateCreated', order:'asc'])
         def promptPhotoList = buildPromptList(huntInstance, userInstance)
 
-        def userLoginList = User.executeQuery("select u.login from User u")
+        def userLoginList = User.executeQuery('select u.login from User u')
         def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
                 || huntInstance.myAdmins.contains(userInstance))
         def isParticipating = huntInstance.myUsers.contains(userInstance)
