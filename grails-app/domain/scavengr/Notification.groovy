@@ -17,5 +17,7 @@ class Notification {
         action blank:true, nullable: true
         link blank:true, nullable: true
     }
-    
+    String toString(){
+        return subject
+    }
 }

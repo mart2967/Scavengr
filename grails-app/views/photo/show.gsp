@@ -82,6 +82,7 @@
 							</a>
 						</li>
 					</g:else>
+					<auth:ifLoggedIn>
 					<li id="favButton">
 						
 						<a id="favLink" onclick="${remoteFunction(action:'toggleFavorite',params:['id':photoInstance.id], update:'favLink')}">
@@ -96,8 +97,7 @@
 						</a>
 						
 					</li>
-					
-
+					</auth:ifLoggedIn>
 					
 					<g:if test="${nextId}">
 						<li class="next">

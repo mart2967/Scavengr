@@ -1,5 +1,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
+		
+		$('.notification-window').css('top', $(window).scrollTop()+50);
 		$('#mail').click(function(){
 			if($('#messages').html() > 0){
 				$('#mail').popover({
@@ -11,8 +13,10 @@
 					},
 					html:true,
 					template: '<div class="popover notification-window"><div class="arrow"></div><div class="popover-inner "><h3 class="popover-title"></h3><div class="popover-content" style="padding:0;"><p></p></div></div></div>'
-				});
-				$('#mail').popover('toggle')
+				}).data('popover').tip().css('z-index', 1030);
+				//$('.notification-window').css('position', 'fixed')
+				$('#mail').popover('toggle');
+				
 			}
 		});
 	});

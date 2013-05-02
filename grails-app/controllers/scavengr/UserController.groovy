@@ -145,13 +145,13 @@ class UserController {
             redirect action: 'index'
         }
     }
-    
+
     def getAuthorizedPhotos(userInstance, loggedInUser){
         def userPhotos = Photo.createCriteria()
         userPhotos.list(sort:'dateCreated', order:'desc', max:params.max, offset:params.offset){
             and{
                 myUser {
-                    eq('login', userInstance.login)
+                    eq('login', userInstance?.login)
                 }
                 myPrompt {
                     or {
@@ -166,13 +166,13 @@ class UserController {
             }
         }
     }
-    
+
     def getAuthorizedFavorites(userInstance, loggedInUser){
         def favPhotos = Photo.createCriteria()
         favPhotos.list(sort:'dateCreated', order:'desc', max:params.max, offset:params.offset){
             and{
                 likedBy {
-                    eq('login', userInstance.login)
+                    eq('login', userInstance?.login)
                 }
                 myPrompt {
                     or {
@@ -187,7 +187,7 @@ class UserController {
             }
         }
     }
-    
+
     def show() {
 
         def userInstance = User.findByLogin(params.login)
@@ -204,14 +204,14 @@ class UserController {
         def favoriteInstanceList = getAuthorizedFavorites(userInstance, loggedInUser)
         def photoInstanceTotal = userInstance.myPhotos.findAll {photo ->
             def hunt = photo?.myPrompt?.myHunt
-            hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) || 
-                loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
+            hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) ||
+                    loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
         }.size()
         //println "photos: " + photoInstanceTotal
         def favoriteInstanceTotal = userInstance.favorites.findAll {photo ->
             def hunt = photo?.myPrompt?.myHunt
             hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) ||
-                loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
+                    loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
         }.size()
         //println 'favorites: ' + favoriteInstanceTotal
         def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll

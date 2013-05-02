@@ -102,15 +102,24 @@ class PhotoController {
         def photoInstance = Photo.get(params.id)
         def showHunt = false
         def isMyPhoto = false
-        def userInstance = User.findByLogin(auth.user())
+        def loggedInUser = User.findByLogin(auth.user())
         def key
-        if (authenticationService.isLoggedIn(request) && userInstance == photoInstance.myUser) {
+        if (authenticationService.isLoggedIn(request) && loggedInUser == photoInstance.myUser) {
             isMyPhoto = true
         }
-        if (!photoInstance.myPrompt?.myHunt?.isPrivate) {
+        def hunt = photoInstance.myPrompt?.myHunt
+        
+        if (!hunt?.isPrivate || loggedInUser?.myCreatedHunts?.contains(hunt) || loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt)) {
             showHunt = true
             key = photoInstance.myPrompt?.myHunt?.key
         }
+        def all = loggedInUser?.myCreatedHunts + loggedInUser?.myAdministratedHunts + loggedInUser?.myHunts
+        println all.find{ h->
+            h == hunt
+        }
+        //println hunt
+        //println loggedInUser.myCreatedHunts.contains(hunt)
+        println hunt?.myUsers?.asList().indexOf(loggedInUser) //?.myUsers?.contains(loggedInUser)//loggedInUser?.myCreatedHunts?.contains(hunt)
         if (!photoInstance) {
             flash.message = message(code: 'default.not.found.message',
                     args: [message(codeDefaultPhoto), params.id])
@@ -118,24 +127,47 @@ class PhotoController {
             return
         }
 	
-        def photoIdList = Photo.executeQuery("select p.id from Photo p where p.myUser = ?",
-            [photoInstance.myUser],[order:'desc']).reverse()
+        def photoIdList = authorizedIds(loggedInUser, photoInstance.myUser)
+        //println photoIdList
+        //Photo.executeQuery("select p.id from Photo p where p.myUser = ?",[photoInstance.myUser],[order:'desc']).reverse()
         def index = photoIdList.indexOf(params.long('id'))
         def prevId
         def nextId
-        if (index != 0){
+        if (index > 0){
             prevId = photoIdList.get(index - 1)
         }
-        if (index != photoIdList.size()-1){
+        if (index < photoIdList.size()-1){
             nextId = photoIdList.get(index + 1)
         }
-        def isFavorite = userInstance.favorites.contains(photoInstance)
+        def isFavorite = loggedInUser?.favorites?.contains(photoInstance)
         photoInstance.views++
-        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto, showHunt: showHunt, key: key,
-	    //,participantInstance:participantInstance
-            prevId: prevId, nextId: nextId]
+        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto, 
+            showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
     }
-
+    
+    def authorizedIds(loggedInUser, photoOwner){
+        def photoIds = Photo.createCriteria()
+        photoIds.list(sort:'dateCreated', order:'desc'){
+            projections {
+                property("id")
+            }
+            and{
+                myUser {
+                    eq('login', photoOwner?.login)
+                }
+                myPrompt {
+                    or {
+                        myHunt {
+                            eq('isPrivate', false)
+                        }
+                        'in'('myHunt', loggedInUser?.myCreatedHunts)
+                        'in'('myHunt', loggedInUser?.myAdministratedHunts)
+                        'in'('myHunt', loggedInUser?.myHunts)
+                    }
+                }
+            }
+        }
+    }
     def viewImage() {
         def photoInstance = Photo.get( params.id )
         switch(params.size){
