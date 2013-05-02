@@ -114,9 +114,6 @@ class PhotoController {
             key = photoInstance.myPrompt?.myHunt?.key
         }
         def all = loggedInUser?.myCreatedHunts + loggedInUser?.myAdministratedHunts + loggedInUser?.myHunts
-        println all.find{ h->
-            h == hunt
-        }
         //println hunt
         //println loggedInUser.myCreatedHunts.contains(hunt)
         println hunt?.myUsers?.asList().indexOf(loggedInUser) //?.myUsers?.contains(loggedInUser)//loggedInUser?.myCreatedHunts?.contains(hunt)
