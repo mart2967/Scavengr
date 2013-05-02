@@ -29,7 +29,6 @@ class Prompt {
     
     
     def sessionSuccess(hunter) {
-        println 'Running sessionSuccess'
         for(photo in myPhotos) {
             if (photo.myHunter != null && photo.myHunter == hunter) {
                 return true
