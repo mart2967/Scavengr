@@ -117,11 +117,11 @@ class PhotoController {
         if (authenticationService.isLoggedIn(request) && loggedInUser == photoInstance.myUser) {
             isMyPhoto = true
         }
-        def hunt = photoInstance.myPrompt?.myHunt
+        def hunt = photoInstance?.myPrompt?.myHunt
 
         if (!hunt?.isPrivate || isInHunt(hunt, loggedInUser)) {
             showHunt = true
-            key = photoInstance.myPrompt?.myHunt?.key
+            key = photoInstance?.myPrompt?.myHunt?.key
         }
         if (!photoInstance) {
             flash.message = message(code: 'default.not.found.message',
@@ -154,7 +154,7 @@ class PhotoController {
                 property('id')
             }
             order('dateCreated', 'desc')
-            and{
+            //and{
                 myUser {
                     eq('login', photoOwner?.login)
                 }
@@ -168,7 +168,7 @@ class PhotoController {
                         inList('myHunt', loggedInUser?.myHunts)
                     }
                 }
-            }
+            //}
         }
     }
     def viewImage() {

@@ -149,8 +149,8 @@ class UserController {
 
     def getAuthorizedPhotos(userInstance, loggedInUser){
         def userPhotos = Photo.createCriteria()
-        return userPhotos.list (max:params.max, offset:params.offset) {
-            and {
+        userPhotos.list (max:params.max, offset:params.offset) {
+            //and {
                 myUser {
                     eq('login', userInstance?.login)
                 }
@@ -164,7 +164,7 @@ class UserController {
                         inList('myHunt', loggedInUser?.myHunts)
                     }
                 }
-            }
+            //}
             order('dateCreated', 'desc')
         }
     }
@@ -172,7 +172,7 @@ class UserController {
     def getAuthorizedFavorites(userInstance, loggedInUser){
         def favPhotos = Photo.createCriteria()
         return favPhotos.list(max:params.max, offset:params.offset){
-            and {
+            //and {
                 likedBy {
                     eq('login', userInstance?.login)
                 }
@@ -186,7 +186,7 @@ class UserController {
                         inList('myHunt', loggedInUser?.myHunts)
                     }
                 }
-            }
+            //}
             order('dateCreated', 'desc')
         }
     }
