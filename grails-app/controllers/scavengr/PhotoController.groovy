@@ -101,6 +101,13 @@ class PhotoController {
         
     }
     
+    def isInHunt(hunt, user){
+        if(hunt.myUsers.contains(user) || hunt.myAdmins.contains(user) || hunt.myCreator == user){
+            return true
+        }
+        return false
+    }
+    
     def show() {
         def photoInstance = Photo.get(params.id)
         def showHunt = false
@@ -112,14 +119,10 @@ class PhotoController {
         }
         def hunt = photoInstance.myPrompt?.myHunt
         
-        if (!hunt?.isPrivate || loggedInUser?.myCreatedHunts?.contains(hunt) || loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt)) {
+        if (!hunt?.isPrivate || isInHunt(hunt, loggedInUser)) {
             showHunt = true
             key = photoInstance.myPrompt?.myHunt?.key
         }
-        def all = loggedInUser?.myCreatedHunts + loggedInUser?.myAdministratedHunts + loggedInUser?.myHunts
-        //println hunt
-        //println loggedInUser.myCreatedHunts.contains(hunt)
-        //println hunt?.myUsers?.asList().indexOf(loggedInUser) //?.myUsers?.contains(loggedInUser)//loggedInUser?.myCreatedHunts?.contains(hunt)
         if (!photoInstance) {
             flash.message = message(code: 'default.not.found.message',
                     args: [message(codeDefaultPhoto), params.id])
@@ -128,8 +131,6 @@ class PhotoController {
         }
 	
         def photoIdList = authorizedIds(loggedInUser, photoInstance.myUser)
-        //println photoIdList
-        //Photo.executeQuery("select p.id from Photo p where p.myUser = ?",[photoInstance.myUser],[order:'desc']).reverse()
         def index = photoIdList.indexOf(params.long('id'))
         def prevId
         def nextId
@@ -161,9 +162,9 @@ class PhotoController {
                         myHunt {
                             eq('isPrivate', false)
                         }
-                        'in'('myHunt', loggedInUser?.myCreatedHunts)
-                        'in'('myHunt', loggedInUser?.myAdministratedHunts)
-                        'in'('myHunt', loggedInUser?.myHunts)
+                        inList('myHunt', loggedInUser?.myCreatedHunts)
+                        inList('myHunt', loggedInUser?.myAdministratedHunts)
+                        inList('myHunt', loggedInUser?.myHunts)
                     }
                 }
             }

@@ -159,9 +159,9 @@ class UserController {
                         myHunt {
                             eq('isPrivate', false)
                         }
-                        'in'('myHunt', loggedInUser?.myCreatedHunts)
-                        'in'('myHunt', loggedInUser?.myAdministratedHunts)
-                        'in'('myHunt', loggedInUser?.myHunts)
+                        inList('myHunt', loggedInUser?.myCreatedHunts)
+                        inList('myHunt', loggedInUser?.myAdministratedHunts)
+                        inList('myHunt', loggedInUser?.myHunts)
                     }
                 }
             }
@@ -180,9 +180,9 @@ class UserController {
                         myHunt {
                             eq('isPrivate', false)
                         }
-                        'in'('myHunt', loggedInUser?.myCreatedHunts)
-                        'in'('myHunt', loggedInUser?.myAdministratedHunts)
-                        'in'('myHunt', loggedInUser?.myHunts)
+                        inList('myHunt', loggedInUser?.myCreatedHunts)
+                        inList('myHunt', loggedInUser?.myAdministratedHunts)
+                        inList('myHunt', loggedInUser?.myHunts)
                     }
                 }
             }

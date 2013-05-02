@@ -159,7 +159,7 @@ class HuntController {
             redirect action: showAction, params: [key: huntInstance.key]
             return
         }
-        
+
         def link = grailsLinkGenerator.link( controller: 'hunt', action: showAction, params: [key: huntInstance.key])
         if(GenericValidator.isEmail(user)){
             def userInstance = User.findByEmail(user)
@@ -293,7 +293,7 @@ class HuntController {
                 || huntInstance.myAdmins.contains(userInstance))
         def isParticipating = huntInstance.myUsers.contains(userInstance)
         [huntInstance: huntInstance,promptPhotoList: promptPhotoList,
-                    userInstance:userInstance, isCreatorOrAdmin:isCreatorOrAdmin, 
+                    userInstance:userInstance, isCreatorOrAdmin:isCreatorOrAdmin,
                     userLoginList:userLoginList as grails.converters.JSON,
                     now: new Date(), isParticipating:isParticipating ]
     }
@@ -318,7 +318,7 @@ class HuntController {
         return promptPhotoList
 
     }
-    
+
     def hunterMode() {
         if (params.hunter != '') {
             session.hunter = params.hunter
@@ -326,7 +326,7 @@ class HuntController {
         }
         redirect action: 'show', params: [key:params.key]
     }
-    
+
     def normalMode() {
         def userInstance = User.findByLogin(auth.user())
         if (authenticationService.encodePassword(params.password) == userInstance.password) {
@@ -373,23 +373,12 @@ class HuntController {
                 }
 
 
-                def promptInstanceList = Prompt.findAllByMyHunt(huntInstance)
-                def promptPhotoList = []
-                for (promptInstance in promptInstanceList) {
-                    def userPhotoList = Photo.findAllByMyUserAndMyPrompt(userInstance, promptInstance)
-                    def photoInstanceList = promptInstance ? Photo.findAllByMyPrompt(promptInstance,[max:6]) : []
-                    def promptFilled = userPhotoList.size() > 0
-                    def promptPhotoContainer = []
-                    promptPhotoContainer.add(promptInstance)
-                    promptPhotoContainer.add(promptFilled)
-                    promptPhotoContainer.addAll(photoInstanceList)
-                    promptPhotoList.add(promptPhotoContainer)
+                def promptPhotoList = buildPromptList(huntInstance, userInstance)
 
-                }
                 def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
                         || huntInstance.myAdmins.contains(userInstance))
-                [huntInstance: huntInstance, userInstance:userInstance, promptInstanceList: promptInstanceList,
-                            promptPhotoList: promptPhotoList, userInstance:userInstance,
+                [huntInstance: huntInstance, userInstance:userInstance,
+                            promptPhotoList: promptPhotoList,
                             isCreatorOrAdmin:isCreatorOrAdmin ]
 
 
