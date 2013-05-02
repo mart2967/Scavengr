@@ -150,44 +150,40 @@ class UserController {
     def getAuthorizedPhotos(userInstance, loggedInUser){
         def userPhotos = Photo.createCriteria()
         userPhotos.list (max:params.max, offset:params.offset) {
-            //and {
-                myUser {
-                    eq('login', userInstance?.login)
-                }
-                myPrompt {
-                    or {
-                        myHunt {
-                            eq('isPrivate', false)
-                        }
-                        inList('myHunt', loggedInUser?.myCreatedHunts)
-                        inList('myHunt', loggedInUser?.myAdministratedHunts)
-                        inList('myHunt', loggedInUser?.myHunts)
+            myUser {
+                eq("login", userInstance?.login)
+            }
+            myPrompt {
+                or {
+                    myHunt {
+                        eq("isPrivate", false)
                     }
+                    inList("myHunt", loggedInUser?.myCreatedHunts)
+                    inList("myHunt", loggedInUser?.myAdministratedHunts)
+                    inList("myHunt", loggedInUser?.myHunts)
                 }
-            //}
-            order('dateCreated', 'desc')
+            }
+            order("dateCreated", "desc")
         }
     }
 
     def getAuthorizedFavorites(userInstance, loggedInUser){
         def favPhotos = Photo.createCriteria()
-        return favPhotos.list(max:params.max, offset:params.offset){
-            //and {
-                likedBy {
-                    eq('login', userInstance?.login)
-                }
-                myPrompt {
-                    or {
-                        myHunt {
-                            eq('isPrivate', false)
-                        }
-                        inList('myHunt', loggedInUser?.myCreatedHunts)
-                        inList('myHunt', loggedInUser?.myAdministratedHunts)
-                        inList('myHunt', loggedInUser?.myHunts)
+        favPhotos.list(max:params.max, offset:params.offset){
+            likedBy {
+                eq("login", userInstance?.login)
+            }
+            myPrompt {
+                or {
+                    myHunt {
+                        eq("isPrivate", false)
                     }
+                    inList("myHunt", loggedInUser?.myCreatedHunts)
+                    inList("myHunt", loggedInUser?.myAdministratedHunts)
+                    inList("myHunt", loggedInUser?.myHunts)
                 }
-            //}
-            order('dateCreated', 'desc')
+            }
+            order("dateCreated", "desc")
         }
     }
 
