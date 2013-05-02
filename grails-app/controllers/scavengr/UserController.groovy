@@ -210,13 +210,11 @@ class UserController {
             hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) ||
                     loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
         }.size()
-        //println "photos: " + photoInstanceTotal
         def favoriteInstanceTotal = userInstance.favorites.findAll {photo ->
             def hunt = photo?.myPrompt?.myHunt
             hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) ||
                     loggedInUser?.myAdministratedHunts?.contains(hunt) || loggedInUser?.myHunts?.contains(hunt))
         }.size()
-        //println 'favorites: ' + favoriteInstanceTotal
         def publicCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll
         {hunt -> (hunt.isPrivate == false || (!isLoggedInUser && loggedInUser?.myCreatedHunts?.contains(hunt)) )}
         def privateCreatedHuntInstanceList = userInstance.myCreatedHunts.findAll
@@ -245,7 +243,6 @@ class UserController {
     def cancel() {
         def userInstance = User.get(params.id)
         redirect action: showAction, params: [login: userInstance.login]
-
     }
 
 }
