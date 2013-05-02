@@ -1,5 +1,6 @@
 package scavengr
 
+
 class Prompt {
     String title
     String description
@@ -23,5 +24,17 @@ class Prompt {
 
     String toString() {
         return "$title"
+    }
+    
+    
+    
+    def sessionSuccess(hunter) {
+        println 'Running sessionSuccess'
+        for(photo in myPhotos) {
+            if (photo.myHunter != null && photo.myHunter == hunter) {
+                return true
+            }
+        }
+        return false
     }
 }

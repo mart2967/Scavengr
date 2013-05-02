@@ -314,7 +314,26 @@ class HuntController {
             promptPhotoContainer.addAll(photoInstanceList)
             promptPhotoList.add(promptPhotoContainer)
         }
+
         return promptPhotoList
+
+    }
+    
+    def hunterMode() {
+        if (params.hunter != '') {
+            session.hunter = params.hunter
+            session.key = params.key
+        }
+        redirect action: 'show', params: [key:params.key]
+    }
+    
+    def normalMode() {
+        def userInstance = User.findByLogin(auth.user())
+        if (authenticationService.encodePassword(params.password) == userInstance.password) {
+            session.hunter = null
+            session.key = null
+        }
+        redirect action: 'show', params: [key:params.key]
     }
 
     def closeHunt() {

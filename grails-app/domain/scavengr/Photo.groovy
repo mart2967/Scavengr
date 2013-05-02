@@ -11,6 +11,7 @@ class Photo {
     String fileType
     String title
     String description
+    String myHunter
     User myUser
     Integer views = 0
     Prompt myPrompt
@@ -25,6 +26,7 @@ class Photo {
         original nullable:false, maxSize:5000000
         myPrompt nullable:true
         original sqlType: 'blob'
+        myHunter nullable:true
     }
 
     String toString() {

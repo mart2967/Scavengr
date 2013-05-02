@@ -66,7 +66,7 @@
 				</g:else>
 			</div>
 			
-			<g:if test="${isCreatorOrAdmin}">
+			<g:if test="${isCreatorOrAdmin && session.hunter == null}">
 			<div class="well">
 				<h2>Admin Options</h2>
 				<g:form>

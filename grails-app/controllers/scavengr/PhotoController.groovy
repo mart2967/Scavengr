@@ -43,6 +43,9 @@ class PhotoController {
                 }
                 photoInstance.myPrompt = promptInstance
                 photoInstance.myUser = userInstance
+                if (session.hunter != null) {
+                    photoInstance.myHunter = session.hunter
+                }
                 def now = new Date()
                 def closedHunt = huntInstance.endDate < now || huntInstance.startDate > now 
                 if(closedHunt){
@@ -98,7 +101,6 @@ class PhotoController {
     }
     
     def show() {
-	//def participantInstance = Participant.get(params.participantId)
         def photoInstance = Photo.get(params.id)
         def showHunt = false
         def isMyPhoto = false
@@ -138,6 +140,7 @@ class PhotoController {
         }
         def isFavorite = loggedInUser?.favorites?.contains(photoInstance)
         photoInstance.views++
+
         [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto, 
             showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
     }
