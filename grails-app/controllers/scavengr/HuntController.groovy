@@ -145,7 +145,12 @@ class HuntController {
                 break
         }
     }
-
+    def isInHunt(hunt, user){
+        if(hunt.myUsers.contains(user) || hunt.myAdmins.contains(user) || hunt.myCreator == user){
+            return true
+        }
+        return false
+    }
     def invite() {
         def huntInstance = Hunt.get(params.id)
         def user = params.user.toString()
@@ -154,11 +159,16 @@ class HuntController {
             redirect action: showAction, params: [key: huntInstance.key]
             return
         }
+        
         def link = grailsLinkGenerator.link( controller: 'hunt', action: showAction, params: [key: huntInstance.key])
         if(GenericValidator.isEmail(user)){
             def userInstance = User.findByEmail(user)
             if(userInstance != null){
-
+                if (isInHunt(huntInstance, userInstance)){
+                    flash.message = userInstance.login + ' is already in the hunt!'
+                    redirect action: showAction, params: [key: huntInstance.key]
+                    return
+                }
                 NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
                         invited + quotation + huntInstance.title + quotation, link, goToHunt)
             }
@@ -167,6 +177,11 @@ class HuntController {
         }else{
             def userInstance = User.findByLogin(user)
             if(userInstance != null){
+                if (isInHunt(huntInstance, userInstance)){
+                    flash.message = userInstance.login + ' is already in the hunt!'
+                    redirect action: showAction, params: [key: huntInstance.key]
+                    return
+                }
                 NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
                         invited + quotation + huntInstance.title + quotation, link, goToHunt)
 

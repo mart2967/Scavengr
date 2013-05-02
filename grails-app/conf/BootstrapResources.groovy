@@ -5,7 +5,7 @@ def dev = grails.util.GrailsUtil.isDevelopmentEnv()
 def applicationContext = org.codehaus.groovy.grails.commons.ApplicationHolder.application.mainContext
 def lesscssPlugin = (applicationContext.pluginManager.getGrailsPlugin('lesscss-resources') 
     || applicationContext.pluginManager.getGrailsPlugin('less-resources'))
-def jqueryPlugin = applicationContext.pluginManager.getGrailsPlugin(jquery)
+def jqueryPlugin = applicationContext.pluginManager.getGrailsPlugin('jquery')
 def configTagLib = org.codehaus.groovy.grails.commons.ApplicationHolder.application.config.grails.plugins.twitterbootstrap.fixtaglib
 def configDefaultBundle = org.codehaus.groovy.grails.commons.ApplicationHolder.application.config.grails.plugins.twitterbootstrap.defaultBundle
 if (!configDefaultBundle && !configDefaultBundle.equals(false)) {
