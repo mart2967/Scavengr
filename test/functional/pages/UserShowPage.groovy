@@ -10,29 +10,31 @@ class UserShowPage extends Page {
             title.endsWith('Show User')
         }
         
+        def a = 'a'
+        
         static content = {
             //This button currently does not work
           //  createAHuntButton(to: CreateHuntPage) {$('li.g', text: endsWith('Create Hunt') )}
             
             
             //The navbar buttons
-            scavengrButton(to: HomePage){$('a' , id:'scavengrButton')}
+            scavengrButton(to: HomePage){$(a , id:'scavengrButton')}
 			
-            helloButton(to: UserShowPage){$('a', text: startsWith('Hello,')) }
+            helloButton(to: UserShowPage){$(a, text: startsWith('Hello,')) }
 		
-            logoutButton() {$('a', text: 'Log out')}
+            logoutButton() {$(a, text: 'Log out')}
 			
-            navbarCreateButton(to: CreateAHuntPage){$('a', text: 'Create A Hunt')}
+            navbarCreateButton(to: CreateAHuntPage){$(a, text: 'Create A Hunt')}
 			
-            createAHuntButton(){$('a', id:'createHunt')}
+            createAHuntButton(){$(a, id:'createHunt')}
 			
-			changePassword{$('a', id='changePassword')}
+			changePassword{$(a, id='changePassword')}
 			
-			changeEmail{$('a', id='changeEmail')}
+			changeEmail{$(a, id='changeEmail')}
 			
-			downloadPhotos{$('a', id='downloadPhotos')}
+			downloadPhotos{$(a, id='downloadPhotos')}
 			
-			comfirmPasswordButton{$('a', id='submitChange')}
+			comfirmPasswordButton{$(a, id='submitChange')}
 			
 			currentPasswordBox(){$('input', id:'changePassword')}
 			
