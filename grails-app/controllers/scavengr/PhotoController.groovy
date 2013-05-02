@@ -149,9 +149,9 @@ class PhotoController {
 
     def authorizedIds(loggedInUser, photoOwner){
         def photoIds = Photo.createCriteria()
-        photoIds.list(){
+        return photoIds.list{
             projections {
-                property("id")
+                property('id')
             }
             order('dateCreated', 'desc')
             and{
