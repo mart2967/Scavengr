@@ -3,7 +3,7 @@ package scavengr
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import org.apache.commons.validator.GenericValidator
-
+import scavengr.Photo
 
 class UserController {
 
@@ -148,7 +148,7 @@ class UserController {
     }
 
     def getAuthorizedPhotos(userInstance, loggedInUser, offset){
-        Photo.createCriteria().list{
+        Photo.withCriteria{
             myUser {
                 eq('login', userInstance?.login)
             }
@@ -169,7 +169,7 @@ class UserController {
     }
 
     def getAuthorizedFavorites(userInstance, loggedInUser, offset){
-        Photo.createCriteria().list{
+        Photo.withCriteria{
             likedBy {
                 eq('login', userInstance?.login)
             }

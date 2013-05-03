@@ -148,7 +148,7 @@ class PhotoController {
     }
 
     def authorizedIds(loggedInUser, photoOwner){
-        Photo.createCriteria().list{
+        Photo.withCriteria{
             projections {
                 property('id')
             }
