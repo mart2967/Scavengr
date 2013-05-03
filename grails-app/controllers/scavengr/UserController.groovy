@@ -153,14 +153,18 @@ class UserController {
             myUser {
                 eq("login", userInstance?.login)
             }
-            myPrompt {
-                or {
+            or {
+                myPrompt {
+                    or{
+                        inList("myHunt", loggedInUser?.myCreatedHunts)
+                        inList("myHunt", loggedInUser?.myAdministratedHunts)
+                        inList("myHunt", loggedInUser?.myHunts)
+                    }
+                }
+                myPrompt{
                     myHunt {
                         eq("isPrivate", false)
                     }
-                    inList("myHunt", loggedInUser?.myCreatedHunts)
-                    inList("myHunt", loggedInUser?.myAdministratedHunts)
-                    inList("myHunt", loggedInUser?.myHunts)
                 }
             }
             order("dateCreated", "desc")
@@ -173,14 +177,18 @@ class UserController {
             likedBy {
                 eq("login", userInstance?.login)
             }
-            myPrompt {
-                or {
+            or {
+                myPrompt {
+                    or{
+                        inList("myHunt", loggedInUser?.myCreatedHunts)
+                        inList("myHunt", loggedInUser?.myAdministratedHunts)
+                        inList("myHunt", loggedInUser?.myHunts)
+                    }
+                }
+                myPrompt{
                     myHunt {
                         eq("isPrivate", false)
                     }
-                    inList("myHunt", loggedInUser?.myCreatedHunts)
-                    inList("myHunt", loggedInUser?.myAdministratedHunts)
-                    inList("myHunt", loggedInUser?.myHunts)
                 }
             }
             order("dateCreated", "desc")
