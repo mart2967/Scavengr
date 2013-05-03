@@ -23,12 +23,20 @@ class UserShowPageSpec extends GebReportingSpec {
         createButton.click()
     }
 	
-//	private changePassword(currentPassword, newPassword){
-//		changePassword.click()
-//		currentPasswordBox.value(currentPassword) != newPasswordBox.value(newPassword)
-//		newPasswordBox.value(newPassword) == confirmPasswordBox.value(newPassword)
-//		confirmPasswordButton.click()
-//	}
+	private changePasswordToANewOne(currentPassword, newPassword){
+		changePassword.click()
+		currentPasswordBox.value(currentPassword) //!= newPasswordBox.value(newPassword)
+		newPasswordBox.value(newPassword) //== confirmPasswordBox.value(newPassword)
+		confirmNewPasswordBox.value(newPassword)
+		confirmPasswordButton.click()
+	}
+	
+	private switchEmail(Email){
+		changeEmail.click()
+		newEmail.value(Email)
+		confirmEmail(Email)
+		confirmEmailButton.click()
+	}
 	
 	def 'when you log in you will be at the user show page'() {
 		when:
@@ -48,10 +56,20 @@ class UserShowPageSpec extends GebReportingSpec {
         at CreateAHuntPage
     }
 	
-//	def 'after changing password you are on the user show page'() {
+	
+	def 'after changing password you are on the user show page'() {
+		when:
+		loginAs('Walter','password')
+		changePasswordToANewOne('password', 'NewPassword')
+		
+		then:
+		at UserShowPage
+	}
+	
+//	def 'after changing your Email you are on the user show page'() {
 //		when:
 //		loginAs('Walter','password')
-//		changePassword('password', 'password1')
+//		switchEmail('newEmail@example.aaa')
 //		
 //		then:
 //		at UserShowPage

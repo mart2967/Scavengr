@@ -20,8 +20,22 @@ class HomePage extends Page {
             
             
             createAHuntButton() {$('div', id: 'create')}
+			
+/////////////User show page buttons////////////////////////////////////////////////////////////
 			userCreateAHuntButton(){$(a, text:'Create Hunt')}
-            
+			
+//			changeEmail{$()(a, id:'changeEmail')}
+//			newEmail(){$(a, id:'newEmail')}
+//			confirmEmail(){$(a, id:'confirmEmail')}
+//			confirmEmailButton(){$('button', id:'submitEmail')}
+			
+			downloadPhotos(){$(a, text:'Download My Photos')}
+			
+			currentPasswordBox(){$('input', id:'changePassword')}
+			newPasswordBox(){$('input', id:'newPassword')}
+			confirmNewPasswordBox(){$('input', id:'confirmPassword')}
+			confirmPasswordButton(){$('button', id:'submitChange')}
+			changePassword(){$(a, text:'Change Password')}
             
             //Fields for Log in
             loginUserNameBox() {$(input, id: 'loginUsername')}

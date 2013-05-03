@@ -24,12 +24,18 @@ class UserShowPage extends Page {
             navbarCreateButton(to: CreateAHuntPage){$(a, text: 'Create A Hunt')}
             userCreateAHuntButton(){$(a, text:'Create Hunt')}
 			
-			changePassword{$(a, id='changePassword')}
-			changeEmail{$(a, id='changeEmail')}
-			downloadPhotos{$(a, id='downloadPhotos')}
-			comfirmPasswordButton{$(a, id='submitChange')}
+			
+//			changeEmail{$()(a, id:'changeEmail')}
+//			newEmail(){$(a, id:'newEmail')}
+//			confirmEmail(){$(a, id:'confirmEmail')}
+//			confirmEmailButton(){$('button', id:'submitEmail')}
+			
+			downloadPhotos(){$(a, text:'Download My Photos')}
+			
+			changePassword(){$(a, text:'Change Password')}
 			currentPasswordBox(){$('input', id:'changePassword')}
 			newPasswordBox(){$('input', id:'newPassword')}
 			confirmNewPasswordBox(){$('input', id:'confirmPassword')}
+			confirmPasswordButton(){$('button', id:'submitChange')}
         }
 }
