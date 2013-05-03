@@ -158,9 +158,9 @@ class PhotoController {
             }
             myPrompt {
                 or {
-                    if (loggedInUser?.myCreatedHunts) inList('myHunt', loggedInUser?.myCreatedHunts)
-                    if (loggedInUser?.myAdministratedHunts) inList('myHunt', loggedInUser?.myAdministratedHunts)
-                    if (loggedInUser?.myHunts) inList('myHunt', loggedInUser?.myHunts)
+                    if (loggedInUser?.myCreatedHunts){ inList('myHunt', loggedInUser?.myCreatedHunts) }
+                    if (loggedInUser?.myAdministratedHunts){ inList('myHunt', loggedInUser?.myAdministratedHunts) }
+                    if (loggedInUser?.myHunts){ inList('myHunt', loggedInUser?.myHunts) }
                     myHunt {
                         eq('isPrivate', false)
                     }

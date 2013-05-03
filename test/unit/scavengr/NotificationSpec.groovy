@@ -18,7 +18,8 @@ class NotificationSpec extends Specification {
 
     void 'test notification creation'() {
         when:
-        def n = new Notification(sender: new User(), recipient: new User(), subject:'hello', message:'how are you', action:'leave here', link:'google.com')
+        def n = new Notification(sender: new User(), recipient: new User(), 
+            subject:'hello', message:'how are you', action:'leave here', link:'google.com')
         then:
         n.validate()
     }

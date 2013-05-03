@@ -4,7 +4,9 @@ import pages.*
 
 
 class HomePageSpec extends GebReportingSpec{
-
+    def pass = 'password'
+    def stuff123 = 'stuff123'
+    def walter = 'Walter'
     private loginAs(user, password) {
         to HomePage
         loginUserNameBox.value(user)
@@ -32,7 +34,7 @@ class HomePageSpec extends GebReportingSpec{
     
     def 'can log in as bootstrapped data'() {
         when:
-        loginAs('Walter', 'password')
+        loginAs(walter, pass)
         
         then:
         at UserShowPage
@@ -48,7 +50,7 @@ class HomePageSpec extends GebReportingSpec{
 
     def 'can create account'() {
         when:
-        createUser('Pleasurewizard', 'email@junk.gov', 'password')
+        createUser('Pleasurewizard', 'email@junk.gov', pass)
 
         then:
         at UserShowPage
@@ -66,7 +68,7 @@ class HomePageSpec extends GebReportingSpec{
        
     def 'clicking the navbar create a hunt button redirects to the create a hunt page if logged in' (){
         when:
-        loginAs('Walter', 'password')
+        loginAs(walter, pass)
         navbarCreateButton.click()
         
         then:
@@ -75,7 +77,7 @@ class HomePageSpec extends GebReportingSpec{
 
     def 'clicking the big blue create a hunt button redirects to the create a hunt page if logged in' (){
         when:
-        loginAs('Walter', 'password')
+        loginAs(walter, pass)
         to HomePage
         createAHuntButton.click()
         
@@ -95,10 +97,10 @@ class HomePageSpec extends GebReportingSpec{
 
     def 'can log out and then in again'() {
         when:
-        createUser('Stuff123', 'stuff@junk.gov', 'password')
+        createUser(stuff123, 'stuff@junk.gov', pass)
         to HomePage
         logoutButton.click()
-        loginAs('Stuff123','password')
+        loginAs(stuff123,pass)
 
         then:
         at UserShowPage
@@ -108,7 +110,7 @@ class HomePageSpec extends GebReportingSpec{
 
     def 'hello user button redirects to user page'() {
         when:
-        loginAs('Stuff123', 'password')
+        loginAs(stuff123, pass)
         to HomePage
         helloButton.click()
 
@@ -119,7 +121,7 @@ class HomePageSpec extends GebReportingSpec{
 
     def 'scavengr button redirects to home page'() {
         when:
-        loginAs('Stuff123', 'password')
+        loginAs(stuff123, pass)
         scavengrButton.click()
 
         then:
@@ -128,7 +130,7 @@ class HomePageSpec extends GebReportingSpec{
 // THis test fails, but it should pass because logging out should take you to the homepage.
 //    def 'log out redirects to home page'() {
 //        when:
-//        loginAs('Stuff123', 'password')
+//        loginAs(stuff123, pass)
 //        logoutButton.click()
 //
 //        then:
@@ -137,14 +139,14 @@ class HomePageSpec extends GebReportingSpec{
 
     def 'create an account with an identical name to another account'() {
         when:
-        createUser('Stuff123', 'stuff@junk.gov', 'password')
+        createUser(stuff123, 'stuff@junk.gov', pass)
         then:
         at HomePage
     }
 
     def 'log in with incorrect password'() {
         when:
-        loginAs('Stuff123', 'incorrectpassword')
+        loginAs(stuff123, 'incorrectpassword')
         then:
         at HomePage
     }

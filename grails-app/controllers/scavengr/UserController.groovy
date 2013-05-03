@@ -12,6 +12,7 @@ class UserController {
     Map flushTrue = [flush: true]
     def showAction = 'show'
     def indexString = 'index'
+    def myHuntString = 'myHunt'
     static List getPost = ['GET', 'POST']
     def NotifierService
     def authenticationService
@@ -148,9 +149,6 @@ class UserController {
     }
 
     def getAuthorizedPhotos(userInstance, loggedInUser, offset){
-        //println Photo.findAll('from Photo as p where p.myUser=:u and ((p.myPrompt.myHunt in (:c)) or (p.myPrompt.myHunt in (:a)) or (p.myPrompt.myHunt in (:p)) )',
-        //    [u:userInstance, c:loggedInUser?.myCreatedHunts?.asList(), a:loggedInUser?.myAdministratedHunts?.asList(), p:loggedInUser?.myHunts?.asList()],[max:8, offset:offset])
-        //and (p.myPrompt.myHunt in (:c) or p.myPrompt.myHunt in (:a) or p.myPrompt.myHunt in (:p))
         Photo.withCriteria{
             order('dateCreated', 'desc')
             maxResults(8)
@@ -160,9 +158,9 @@ class UserController {
             }
             myPrompt {
                 or{
-                    if (loggedInUser?.myCreatedHunts) inList('myHunt', loggedInUser?.myCreatedHunts)
-                    if (loggedInUser?.myAdministratedHunts) inList('myHunt', loggedInUser?.myAdministratedHunts)
-                    if (loggedInUser?.myHunts) inList('myHunt', loggedInUser?.myHunts)
+                    if (loggedInUser?.myCreatedHunts){ inList(myHuntString, loggedInUser?.myCreatedHunts) }
+                    if (loggedInUser?.myAdministratedHunts){ inList(myHuntString, loggedInUser?.myAdministratedHunts) }
+                    if (loggedInUser?.myHunts){ inList(myHuntString, loggedInUser?.myHunts) }
                     myHunt {
                         eq('isPrivate', false)
                     }
@@ -178,9 +176,9 @@ class UserController {
             }
             myPrompt {
                 or {
-                    if (loggedInUser?.myCreatedHunts) inList('myHunt', loggedInUser?.myCreatedHunts)
-                    if (loggedInUser?.myAdministratedHunts) inList('myHunt', loggedInUser?.myAdministratedHunts)
-                    if (loggedInUser?.myHunts) inList('myHunt', loggedInUser?.myHunts)
+                    if (loggedInUser?.myCreatedHunts){ inList(myHuntString, loggedInUser?.myCreatedHunts) }
+                    if (loggedInUser?.myAdministratedHunts){ inList(myHuntString, loggedInUser?.myAdministratedHunts) }
+                    if (loggedInUser?.myHunts){ inList(myHuntString, loggedInUser?.myHunts) }
                     myHunt {
                         eq('isPrivate', false)
                     }
