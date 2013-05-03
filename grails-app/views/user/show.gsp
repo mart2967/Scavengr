@@ -98,7 +98,7 @@
 								Create Hunt
 							</g:link>
 							<g:link id="changePassword" fragment="changeModal" data-toggle="modal">
-								<i class="icon-key"></i>
+								<i  class="icon-key"></i>
 								Change Password
 							</g:link>
 							<g:link id="changeEmail" fragment="emailModal" data-toggle="modal">

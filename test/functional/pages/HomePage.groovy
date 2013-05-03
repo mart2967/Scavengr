@@ -1,6 +1,7 @@
 package pages
 
-import geb.Page
+import geb.Page  
+
 
 class HomePage extends Page {
         def input = 'input'
@@ -19,6 +20,7 @@ class HomePage extends Page {
             
             
             createAHuntButton() {$('div', id: 'create')}
+			userCreateAHuntButton(){$(a, text:'Create Hunt')}
             
             
             //Fields for Log in
@@ -35,6 +37,8 @@ class HomePage extends Page {
             
             createButton() {$('button', id:'submitSignup')}
             closeButton() {$('button', text:'×')}
+			
+		
             
             //Buttons that appear in user session
             //this is the button at the top of the page when you are logged in

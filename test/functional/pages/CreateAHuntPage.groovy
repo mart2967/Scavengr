@@ -1,6 +1,6 @@
 package pages
 
-import geb.Page
+import geb.Page 
 class CreateAHuntPage extends Page{
         def input = 'input'
         def button = 'button'

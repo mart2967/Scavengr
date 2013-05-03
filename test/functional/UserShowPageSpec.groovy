@@ -1,4 +1,4 @@
-import geb.spock.GebReportingSpec 
+import geb.spock.GebReportingSpec  
 import spock.lang.*
 import pages.*
 
@@ -39,15 +39,15 @@ class UserShowPageSpec extends GebReportingSpec {
 	}
 	
 
-//    def 'redirects to create a hunt page when create hunt is clicked'() {
-//        when:
-//        loginAs('Walter','password')
-//        createAHuntButton.click()
-//        
-//        then:
-//        at CreateAHuntPage  
-//    }
-//	
+    def 'redirects to create a hunt page when create hunt is clicked'() {
+        when:
+        loginAs('Walter','password')
+        userCreateAHuntButton.click()
+        
+        then:
+        at CreateAHuntPage
+    }
+	
 //	def 'after changing password you are on the user show page'() {
 //		when:
 //		loginAs('Walter','password')
