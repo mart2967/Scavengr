@@ -40,7 +40,7 @@ bi.Photo = [
         'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]] ],
     constraints:[
         nullable:true,
-        maxSize:5000000, // ~5MB
+        //maxSize:5000000, // ~5MB
         contentType:['image/gif', 'image/png', 'image/jpeg']
     ]
 ]

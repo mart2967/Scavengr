@@ -9,29 +9,30 @@ class PromptController {
     Map actionList = [action: 'list']
     Map flushTrue = [flush: true]
     def showAction = 'show'
+    def huntCon = 'hunt'
     static List getPost = ['GET', 'POST']
 
     def authenticationService
-    static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
+    static allowedMethods = [create: getPost, edit: getPost, delete: getPost[1]]
 
 
     def create() {
         switch (request.method) {
-            case 'GET':
+            case getPost[0]:
                 [promptInstance: new Prompt(params)]
                 break
-            case 'POST':
+            case getPost[1]:
                 def promptInstance = new Prompt(params)
 
                 if (!promptInstance.save(flushTrue)) {
                     flash.message = 'Prompt title / description too long!'
-                    redirect controller:'hunt', action: showAction, params: [key: promptInstance.myHunt.key]
+                    redirect controller:huntCon, action: showAction, params: [key: promptInstance.myHunt.key]
                     return
                 }
 
                 flash.message = message(code: 'default.created.message',
                         args: [message(codeDefaultPrompt), promptInstance.id])
-                redirect controller: 'hunt', action: showAction, params: [key: promptInstance.myHunt.key]
+                redirect controller: huntCon, action: showAction, params: [key: promptInstance.myHunt.key]
                 break
         }
     }
@@ -83,7 +84,7 @@ class PromptController {
     
     def edit() {
         switch (request.method) {
-            case 'GET':
+            case getPost[0]:
                 def promptInstance = Prompt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 
@@ -104,7 +105,7 @@ class PromptController {
                 [promptInstance: promptInstance, photoInstanceList: photoInstanceList,
                     photoInstanceTotal: Photo.findAllByMyPrompt(promptInstance).size()]
                 break
-            case 'POST':
+            case getPost[1]:
                 def promptInstance = Prompt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 if (!isAdminOrCreator(userInstance, promptInstance.myHunt)) {
@@ -163,7 +164,7 @@ class PromptController {
             promptInstance.delete(flushTrue)
             flash.message = message(code: 'default.deleted.message',
                     args: [message(codeDefaultPrompt), params.id])
-            redirect controller: 'hunt', action: showAction, params:[key:key]
+            redirect controller: huntCon, action: showAction, params:[key:key]
         }
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message',

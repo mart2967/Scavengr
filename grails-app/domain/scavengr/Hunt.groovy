@@ -64,4 +64,13 @@ class Hunt {
     public String genTest(){
         generateKey()
     }
+    boolean equals(hunt){
+        if(hunt.getClass() != Hunt){
+            return false
+        }
+        if(hunt.id != this.id){
+            return false
+        }
+        return true
+    }
 }

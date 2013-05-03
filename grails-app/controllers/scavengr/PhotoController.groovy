@@ -62,15 +62,20 @@ class PhotoController {
                     redirect controller: promptController, action: showAction, id: photoInstance.myPrompt.id
                     return
                 }
+                if(image.bytes.size() > 5000000){
+                    flash.message = 'Photo too large!'
+                    redirect controller: promptController, action: showAction, id: photoInstance.myPrompt.id
+                    return
+                }
                 photoInstance.original = image.bytes
                 photoInstance.fileType = image.contentType
-                if (!photoInstance.save(flushTrue)) {
-                    render controller: promptController, view: 'show',
+                if (!photoInstance.save()) {
+                    render controller: promptController, view: 'show', 
                             model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
                     return
                 }
                 imageUploadService.save(photoInstance)
-                photoInstance.save()
+                photoInstance.save(flushTrue)
                 if (!huntInstance.myUsers.find {user -> user == userInstance}){
                     userInstance.addToMyHunts(huntInstance)
                     huntInstance.removeFromEmails(userInstance.login)

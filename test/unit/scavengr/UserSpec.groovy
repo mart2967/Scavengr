@@ -28,6 +28,7 @@ class UserSpec extends Specification {
 		def user6 = new User(login: 'testUser6', email: blank, password: 'testUserPassword6')
 		def user7 = new User(login: blank, email: 'testUserEmail7', password: 'testUserPassword7')
 		def user8 = new User(login: blank, email: blank, password: 'testUserPassword8')
+                def user1copy = new User(login: 'testUser1', email: 'testUser1@email.com', password: 'testUserPassword1')
 		mockForConstraintsTests(User, [user1, user2, user3, user4, user5, user6, user7, user8])
 		
 		then:
@@ -39,6 +40,9 @@ class UserSpec extends Specification {
 		!user6.validate()
 		!user7.validate()
 		!user8.validate()
+                user1 != user2
+                user1 != user1copy
+                user1 == user1
 	}
 	
 	def "testToString"() {

@@ -9,9 +9,13 @@ import org.apache.commons.validator.GenericValidator
 class HuntController {
     def createAction = 'create'
     def showAction = 'show'
+    def editAction = 'edit'
     def indexString = 'index'
     def dateCreatedField = 'dateCreated'
     def invited = 'You have been invited to participate in the hunt '
+    def isInHunt = ' is already in the hunt!'
+    def descending = 'desc'
+    def notFound = 'default.not.found.message'
     def quotation = '"'
     def blank = ''
     def goToHunt = 'Go to Hunt'
@@ -24,10 +28,10 @@ class HuntController {
     static List getPost = ['GET', 'POST']
     def NotifierService
     def authenticationService
-    static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
+    static allowedMethods = [create: getPost, edit: getPost, delete: getPost[1]]
 
     def index() {
-        redirect action: 'list', params: params
+        redirect actionList, params: params
     }
 
     def list() {
@@ -72,13 +76,13 @@ class HuntController {
 
     def create() {
         switch (request.method) {
-            case 'GET':
+            case getPost[0]:
                 if (!authenticationService.isLoggedIn(request)) {
                     redirect controller: indexString, action: indexString, params:[login:true]
                 }
                 [huntInstance: new Hunt(params), emails: [], prompts:[] ]
                 break
-            case 'POST':
+            case getPost[1]:
                 def dateParser = new java.text.SimpleDateFormat('MM/dd/yyyy hh:mm a')
 
                 def huntInstance = new Hunt(params)
@@ -171,7 +175,7 @@ class HuntController {
             def userInstance = User.findByEmail(user)
             if(userInstance != null){
                 if (isInHunt(huntInstance, userInstance)){
-                    flash.message = userInstance.login + ' is already in the hunt!'
+                    flash.message = userInstance.login + isInHunt
                     redirect action: showAction, params: [key: huntInstance.key]
                     return
                 }
@@ -184,7 +188,7 @@ class HuntController {
             def userInstance = User.findByLogin(user)
             if(userInstance != null){
                 if (isInHunt(huntInstance, userInstance)){
-                    flash.message = userInstance.login + ' is already in the hunt!'
+                    flash.message = userInstance.login + isInHunt
                     redirect action: showAction, params: [key: huntInstance.key]
                     return
                 }
@@ -286,7 +290,7 @@ class HuntController {
         def huntInstance = Hunt.findByKey(params.key)
         def userInstance = User.findByLogin(auth.user())
         if (!huntInstance) {
-            flash.message = message(code: 'default.not.found.message',
+            flash.message = message(code: notFound,
                     args: [message(codeDefaultHunt), params.key])
             redirect actionList
             return
@@ -309,9 +313,9 @@ class HuntController {
         def promptPhotoList = []
         for (promptInstance in promptInstanceList) {
             def userPhotoList = Photo.findAllByMyUserAndMyPrompt(
-                    loggedInUser, promptInstance,[sort:dateCreatedField, order:'desc', max:6])
+                    loggedInUser, promptInstance,[sort:dateCreatedField, order:descending, max:6])
             def photoInstanceList = Photo.findAllByMyUserNotEqualAndMyPrompt(
-                    loggedInUser, promptInstance,[sort:dateCreatedField, order:'desc', max:6-userPhotoList.size()])
+                    loggedInUser, promptInstance,[sort:dateCreatedField, order:descending, max:6-userPhotoList.size()])
             def promptFilled = userPhotoList.size() > 0
             def promptPhotoContainer = []
             promptPhotoContainer.add(promptInstance)
@@ -362,11 +366,11 @@ class HuntController {
     def edit() {
         def dateParser = new java.text.SimpleDateFormat('MM/dd/yyyy hh:mm a')
         switch (request.method) {
-            case 'GET':
+            case getPost[0]:
                 def huntInstance = Hunt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 if (!huntInstance) {
-                    flash.message = message(code: 'default.not.found.message',
+                    flash.message = message(code: notFound,
                             args: [message(codeDefaultHunt), params.id])
                     redirect actionList
                     return
@@ -389,7 +393,7 @@ class HuntController {
 
 
                 break
-            case 'POST':
+            case getPost[1]:
                 def huntInstance = Hunt.get(params.id)
                 def userInstance = User.findByLogin(auth.user())
                 if (userInstance != huntInstance.myCreator && !huntInstance.myAdmins.contains(userInstance)) {
@@ -397,7 +401,7 @@ class HuntController {
                     return
                 }
                 if (!huntInstance) {
-                    flash.message = message(code: 'default.not.found.message',
+                    flash.message = message(code: notFound,
                             args: [message(codeDefaultHunt), params.key])
                     redirect actionList
                     return
@@ -409,7 +413,7 @@ class HuntController {
                         huntInstance.errors.rejectValue('version', 'default.optimistic.locking.failure',
                                 [message(codeDefaultHunt)] as Object[],
                                 'Another user has updated this Hunt while you were editing')
-                        render view: 'edit', model: [huntInstance: huntInstance]
+                        render view: editAction, model: [huntInstance: huntInstance]
                         return
                     }
                 }
@@ -420,12 +424,12 @@ class HuntController {
                     huntInstance.endDate = dateParser.parse(params.end)
                 } catch(java.text.ParseException e){
                     flash.message = invalidDates
-                    redirect action: 'edit', params:params
+                    redirect action: editAction, params:params
                     return
                 }
 
                 if (!huntInstance.save(flushTrue)) {
-                    redirect action: 'edit', params:params
+                    redirect action: editAction, params:params
                     return
                 }
 
@@ -442,7 +446,7 @@ class HuntController {
             return
         }
         if (!huntInstance) {
-            flash.message = message(code: 'default.not.found.message',
+            flash.message = message(code: notFound,
                     args: [message(codeDefaultHunt), params.id])
             redirect actionList
             return

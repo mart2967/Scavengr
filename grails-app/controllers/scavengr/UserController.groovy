@@ -3,7 +3,6 @@ package scavengr
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import org.apache.commons.validator.GenericValidator
-import scavengr.Photo
 
 class UserController {
 
@@ -16,7 +15,7 @@ class UserController {
     static List getPost = ['GET', 'POST']
     def NotifierService
     def authenticationService
-    static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
+    static allowedMethods = [create: getPost, edit: getPost, delete: getPost[1]]
 
     def randomPassword(length){
         String pass = ''

@@ -30,4 +30,14 @@ class Photo {
         return "$title"
     }
     
+    boolean equals(p){
+        if(p.getClass() != Photo){
+            return false
+        }
+        if(p.id != this.id){
+            return false
+        }
+        return true
+    }
+    
 }
