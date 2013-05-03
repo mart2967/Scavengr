@@ -1,8 +1,7 @@
 body {
 	-webkit-text-size-adjust: none;
 }
-#mail{
-}
+
 .notification-window {
 	min-width:320px;
 	position:fixed;

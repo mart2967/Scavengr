@@ -149,6 +149,9 @@ class UserController {
 
     def getAuthorizedPhotos(userInstance, loggedInUser, offset){
         Photo.withCriteria{
+            order('dateCreated', 'desc')
+            maxResults 8
+            firstResult offset
             myUser {
                 eq('login', userInstance?.login)
             }
@@ -162,9 +165,6 @@ class UserController {
                     }
                 }
             }
-            order('dateCreated', 'desc')
-            maxResults 8
-            firstResult offset
         }
     }
 
