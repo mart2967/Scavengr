@@ -148,23 +148,24 @@ class PhotoController {
     }
 
     def authorizedIds(loggedInUser, photoOwner){
-        def photoIds = Photo.createCriteria()
-        photoIds.list{
+        Photo.createCriteria().list{
             projections {
                 property("id")
             }
             order("dateCreated", "desc")
-            myUser {
-                eq("login", photoOwner?.login)
-            }
-            myPrompt {
-                or {
-                    myHunt {
-                        eq("isPrivate", false)
+            and{
+                myUser {
+                    eq("login", photoOwner?.login)
+                }
+                myPrompt {
+                    or {
+                        inList("myHunt", loggedInUser?.myCreatedHunts)
+                        inList("myHunt", loggedInUser?.myAdministratedHunts)
+                        inList("myHunt", loggedInUser?.myHunts)
+                        myHunt {
+                            eq("isPrivate", false)
+                        }
                     }
-                    inList("myHunt", loggedInUser?.myCreatedHunts)
-                    inList("myHunt", loggedInUser?.myAdministratedHunts)
-                    inList("myHunt", loggedInUser?.myHunts)
                 }
             }
         }
