@@ -130,25 +130,7 @@ class PhotoController {
             return
         }
 
-        def photoIdList = authorizedIds(loggedInUser, photoInstance.myUser)
-        def index = photoIdList.indexOf(params.long('id'))
-        def prevId
-        def nextId
-        if (index > 0){
-            prevId = photoIdList.get(index - 1)
-        }
-        if (index < photoIdList.size()-1){
-            nextId = photoIdList.get(index + 1)
-        }
-        def isFavorite = loggedInUser?.favorites?.contains(photoInstance)
-        photoInstance.views++
-
-        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto,
-                    showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
-    }
-
-    def authorizedIds(loggedInUser, photoOwner){
-        Photo.withCriteria{
+        def photoIdList = Photo.withCriteria{
             projections {
                 property('id')
             }
@@ -166,8 +148,44 @@ class PhotoController {
                     }
                 }
             }
+        }//authorizedIds(loggedInUser, photoInstance.myUser)
+        def index = photoIdList.indexOf(params.long('id'))
+        def prevId
+        def nextId
+        if (index > 0){
+            prevId = photoIdList.get(index - 1)
         }
+        if (index < photoIdList.size()-1){
+            nextId = photoIdList.get(index + 1)
+        }
+        def isFavorite = loggedInUser?.favorites?.contains(photoInstance)
+        photoInstance.views++
+
+        [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto,
+                    showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
     }
+
+//    def authorizedIds(loggedInUser, photoOwner){
+//        Photo.withCriteria{
+//            projections {
+//                property('id')
+//            }
+//            order('dateCreated', 'desc')
+//            myUser {
+//                eq('login', photoOwner?.login)
+//            }
+//            myPrompt {
+//                or {
+//                    inList('myHunt', loggedInUser?.myCreatedHunts)
+//                    inList('myHunt', loggedInUser?.myAdministratedHunts)
+//                    inList('myHunt', loggedInUser?.myHunts)
+//                    myHunt {
+//                        eq('isPrivate', false)
+//                    }
+//                }
+//            }
+//        }
+//    }
     def viewImage() {
         def photoInstance = Photo.get( params.id )
         response.outputStream << photoInstance.original
