@@ -15,17 +15,17 @@ if (!configDefaultBundle && !configDefaultBundle.equals(false)) {
 def dirLessSource
 def dirTarget
 
-log.debug "dirLessSource: ${dirLessSource}"
-log.debug "dirTarget: ${dirTarget}"
+log.debug 'dirLessSource: ${dirLessSource}'
+log.debug 'dirTarget: ${dirTarget}'
 
-def cssFile = "bootstrap.css"
-def cssminFile = "bootstrap.min.css"
+def cssFile = 'bootstrap.css'
+def cssminFile = 'bootstrap.min.css'
 
-log.debug "config: grails.plugins.twitterbootstrap.fixtaglib = ${configTagLib}"
-log.debug "config: grails.plugins.twitterbootstrap.defaultBundle = ${configDefaultBundle}"
+log.debug 'config: grails.plugins.twitterbootstrap.fixtaglib = ${configTagLib}'
+log.debug 'config: grails.plugins.twitterbootstrap.defaultBundle = ${configDefaultBundle}'
 
-log.debug "is lesscss-resources plugin loaded? ${!!lesscssPlugin}"
-log.debug "is jquery plugin loaded? ${!!jqueryPlugin}"
+log.debug 'is lesscss-resources plugin loaded? ${!!lesscssPlugin}'
+log.debug 'is jquery plugin loaded? ${!!jqueryPlugin}'
 
 def css = 'css'
 def head = 'head'
