@@ -148,6 +148,9 @@ class UserController {
     }
 
     def getAuthorizedPhotos(userInstance, loggedInUser, offset){
+        //println Photo.findAll('from Photo as p where p.myUser=:u and ((p.myPrompt.myHunt in (:c)) or (p.myPrompt.myHunt in (:a)) or (p.myPrompt.myHunt in (:p)) )',
+        //    [u:userInstance, c:loggedInUser?.myCreatedHunts?.asList(), a:loggedInUser?.myAdministratedHunts?.asList(), p:loggedInUser?.myHunts?.asList()],[max:8, offset:offset])
+        //and (p.myPrompt.myHunt in (:c) or p.myPrompt.myHunt in (:a) or p.myPrompt.myHunt in (:p))
         Photo.withCriteria{
             order('dateCreated', 'desc')
             maxResults(8)
@@ -157,9 +160,9 @@ class UserController {
             }
             myPrompt {
                 or{
-                    inList('myHunt', loggedInUser?.myCreatedHunts)
-                    inList('myHunt', loggedInUser?.myAdministratedHunts)
-                    inList('myHunt', loggedInUser?.myHunts)
+                    if (loggedInUser?.myCreatedHunts) inList('myHunt', loggedInUser?.myCreatedHunts)
+                    if (loggedInUser?.myAdministratedHunts) inList('myHunt', loggedInUser?.myAdministratedHunts)
+                    if (loggedInUser?.myHunts) inList('myHunt', loggedInUser?.myHunts)
                     myHunt {
                         eq('isPrivate', false)
                     }
@@ -168,26 +171,26 @@ class UserController {
         }
     }
 
-//    def getAuthorizedFavorites(userInstance, loggedInUser, offset){
-//        Photo.withCriteria{
-//            likedBy {
-//                eq('login', userInstance?.login)
-//            }
-//            myPrompt {
-//                or {
-//                    inList('myHunt', loggedInUser?.myCreatedHunts)
-//                    inList('myHunt', loggedInUser?.myAdministratedHunts)
-//                    inList('myHunt', loggedInUser?.myHunts)
-//                    myHunt {
-//                        eq('isPrivate', false)
-//                    }
-//                }
-//            }
-//            order('dateCreated', 'desc')
-//            maxResults(8)
-//            firstResult(offset)
-//        }
-//    }
+    def getAuthorizedFavorites(userInstance, loggedInUser, offset){
+        Photo.withCriteria{
+            likedBy {
+                eq('login', userInstance?.login)
+            }
+            myPrompt {
+                or {
+                    if (loggedInUser?.myCreatedHunts) inList('myHunt', loggedInUser?.myCreatedHunts)
+                    if (loggedInUser?.myAdministratedHunts) inList('myHunt', loggedInUser?.myAdministratedHunts)
+                    if (loggedInUser?.myHunts) inList('myHunt', loggedInUser?.myHunts)
+                    myHunt {
+                        eq('isPrivate', false)
+                    }
+                }
+            }
+            order('dateCreated', 'desc')
+            maxResults(8)
+            firstResult(offset)
+        }
+    }
 
     def show() {
 
@@ -201,42 +204,8 @@ class UserController {
             return
         }
         params.max = Math.min(params.max ? params.int('max') : 8, 100)
-        def photoInstanceList = Photo.withCriteria{
-            order('dateCreated', 'desc')
-            maxResults(8)
-            firstResult(params.int('offset') ?: 0)
-            myUser {
-                eq('login', userInstance?.login)
-            }
-            myPrompt {
-                or{
-                    inList('myHunt', loggedInUser?.myCreatedHunts)
-                    inList('myHunt', loggedInUser?.myAdministratedHunts)
-                    inList('myHunt', loggedInUser?.myHunts)
-                    myHunt {
-                        eq('isPrivate', false)
-                    }
-                }
-            }
-        }//getAuthorizedPhotos(userInstance, loggedInUser, params.int('offset') ?: 0)
-        def favoriteInstanceList = Photo.withCriteria{
-            likedBy {
-                eq('login', userInstance?.login)
-            }
-            myPrompt {
-                or {
-                    inList('myHunt', loggedInUser?.myCreatedHunts)
-                    inList('myHunt', loggedInUser?.myAdministratedHunts)
-                    inList('myHunt', loggedInUser?.myHunts)
-                    myHunt {
-                        eq('isPrivate', false)
-                    }
-                }
-            }
-            order('dateCreated', 'desc')
-            maxResults(8)
-            firstResult(params.int('offset') ?: 0)
-        }//getAuthorizedFavorites(userInstance, loggedInUser, params.int('offset') ?: 0)
+        def photoInstanceList = getAuthorizedPhotos(userInstance, loggedInUser, params.int('offset') ?: 0)
+        def favoriteInstanceList = getAuthorizedFavorites(userInstance, loggedInUser, params.int('offset') ?: 0)
         def photoInstanceTotal = userInstance.myPhotos.findAll {photo ->
             def hunt = photo?.myPrompt?.myHunt
             hunt?.isPrivate == false || isLoggedInUser || (loggedInUser?.myCreatedHunts?.contains(hunt) ||

@@ -287,7 +287,6 @@ class HuntController {
             return
         }
 
-        def promptInstanceList = Prompt.findAllByMyHunt(huntInstance,[sort:'dateCreated', order:'asc'])
         def promptPhotoList = buildPromptList(huntInstance, userInstance)
 
         def userLoginList = User.executeQuery('select u.login from User u')
