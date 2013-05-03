@@ -304,9 +304,9 @@
 								<li class="divider"></li>
 								<li class="nav-header">Admin Options</li>
 
-								<dt>Hunter Mode</dt>
-								<p>Enter a guest's name so that all photos uploaded are
-									associated with them.</p>
+								<dt>Child Lock</dt>
+								<p>Enter a child's name so that all photos uploaded are
+									associated with them, and they cannot leave this hunt.</p>
 								<g:form name="hunterMode" controller="hunt" action="hunterMode">
 									<g:textField name="hunter" placeholder="Name" />
 									<g:hiddenField name="key" value="${huntInstance?.key }" />
