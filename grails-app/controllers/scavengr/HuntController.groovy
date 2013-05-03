@@ -9,9 +9,14 @@ import org.apache.commons.validator.GenericValidator
 class HuntController {
     def createAction = 'create'
     def showAction = 'show'
+    def indexString = 'index'
+    def dateCreatedField = 'dateCreated'
     def invited = 'You have been invited to participate in the hunt '
     def quotation = '"'
+    def blank = ''
     def goToHunt = 'Go to Hunt'
+    def invalidDates = 'Invalid date(s)'
+    def huntInvitiation = 'Hunt Invitation'
     Map codeDefaultHunt = [code: 'hunt.label', default: 'Hunt']
     Map actionList = [action: 'list']
     Map flushTrue = [flush: true]
@@ -69,7 +74,7 @@ class HuntController {
         switch (request.method) {
             case 'GET':
                 if (!authenticationService.isLoggedIn(request)) {
-                    redirect controller: 'index', action: 'index', params:[login:true]
+                    redirect controller: indexString, action: indexString, params:[login:true]
                 }
                 [huntInstance: new Hunt(params), emails: [], prompts:[] ]
                 break
@@ -82,7 +87,7 @@ class HuntController {
 
                 def emailsToBeDeleted = []
                 for (e in huntInstance.emails){
-                    if (e == ''){
+                    if (e == blank){
                         emailsToBeDeleted.add(e)
                     }
                 }
@@ -104,7 +109,7 @@ class HuntController {
                     huntInstance.startDate = dateParser.parse(params.start)
                     huntInstance.endDate = dateParser.parse(params.end)
                 } catch(java.text.ParseException e){
-                    flash.message = 'Invalid date(s)'
+                    flash.message = invalidDates
                     render view: createAction, model: [huntInstance: huntInstance, emails: emails, prompts:prompts]
                     return
                 }
@@ -170,7 +175,7 @@ class HuntController {
                     redirect action: showAction, params: [key: huntInstance.key]
                     return
                 }
-                NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
+                NotifierService.sendNotification(huntInstance.myCreator, userInstance, huntInvitiation,
                         invited + quotation + huntInstance.title + quotation, link, goToHunt)
             }
             NotifierService.contactHunters(huntInstance.myCreator.login, user,
@@ -183,7 +188,7 @@ class HuntController {
                     redirect action: showAction, params: [key: huntInstance.key]
                     return
                 }
-                NotifierService.sendNotification(huntInstance.myCreator, userInstance, 'Hunt Invitation',
+                NotifierService.sendNotification(huntInstance.myCreator, userInstance, huntInvitiation,
                         invited + quotation + huntInstance.title + quotation, link, goToHunt)
 
                 NotifierService.contactHunters(huntInstance.myCreator.login, userInstance.email,
@@ -300,13 +305,13 @@ class HuntController {
     }
 
     def buildPromptList(hunt, loggedInUser){
-        def promptInstanceList = Prompt.findAllByMyHunt(hunt,[sort:'dateCreated', order:'asc'])
+        def promptInstanceList = Prompt.findAllByMyHunt(hunt,[sort:dateCreatedField, order:'asc'])
         def promptPhotoList = []
         for (promptInstance in promptInstanceList) {
             def userPhotoList = Photo.findAllByMyUserAndMyPrompt(
-                    loggedInUser, promptInstance,[sort:'dateCreated', order:'desc', max:6])
+                    loggedInUser, promptInstance,[sort:dateCreatedField, order:'desc', max:6])
             def photoInstanceList = Photo.findAllByMyUserNotEqualAndMyPrompt(
-                    loggedInUser, promptInstance,[sort:'dateCreated', order:'desc', max:6-userPhotoList.size()])
+                    loggedInUser, promptInstance,[sort:dateCreatedField, order:'desc', max:6-userPhotoList.size()])
             def promptFilled = userPhotoList.size() > 0
             def promptPhotoContainer = []
             promptPhotoContainer.add(promptInstance)
@@ -321,11 +326,11 @@ class HuntController {
     }
 
     def hunterMode() {
-        if (params.hunter != '') {
+        if (params.hunter != blank) {
             session.hunter = params.hunter
             session.key = params.key
         }
-        redirect action: 'show', params: [key:params.key]
+        redirect action: showAction, params: [key:params.key]
     }
 
     def normalMode() {
@@ -334,7 +339,7 @@ class HuntController {
             session.hunter = null
             session.key = null
         }
-        redirect action: 'show', params: [key:params.key]
+        redirect action: showAction, params: [key:params.key]
     }
 
     def closeHunt() {
@@ -414,7 +419,7 @@ class HuntController {
                     huntInstance.startDate = dateParser.parse(params.start)
                     huntInstance.endDate = dateParser.parse(params.end)
                 } catch(java.text.ParseException e){
-                    flash.message = 'Invalid date(s)'
+                    flash.message = invalidDates
                     redirect action: 'edit', params:params
                     return
                 }

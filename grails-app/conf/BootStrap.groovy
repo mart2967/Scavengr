@@ -36,15 +36,14 @@ class BootStrap {
 			myCreator: walter, isPrivate: false, startDate: new Date(), endDate: lateDate).save(failOnError)
 
         /*Prompts*/
-        def prompts = []
-        prompts.add( new Prompt(title: 'Oak', description: 'Majestic Trees', myHunt: trees).save(failOnError) )
-        prompts.add( new Prompt(title: 'Maple', description: 'Bringers of Syrup', myHunt: trees).save(failOnError) )
-        prompts.add( new Prompt(title: 'Green', description: '', myHunt: colors).save(failOnError) )
-        prompts.add( new Prompt(title: 'Any Tree', description: 'Anything Will Do', myHunt: trees).save(failOnError) )
-        prompts.add( new Prompt(title: 'Cells Under Microscope', description: '', myHunt: cells).save(failOnError) )
-        prompts.add( new Prompt(title: 'Cats', description: '', myHunt: animals).save(failOnError) )
-        prompts.add( new Prompt(title: 'Guinea Pigs', description: '', myHunt: animals).save(failOnError) )
-        prompts.add( new Prompt(title: 'Dogs', description: 'Mans Best Friend', myHunt: animals).save(failOnError) )
+        assert new Prompt(title: 'Oak', description: 'Majestic Trees', myHunt: trees).save(failOnError) 
+        assert new Prompt(title: 'Maple', description: 'Bringers of Syrup', myHunt: trees).save(failOnError) 
+        assert new Prompt(title: 'Green', description: '', myHunt: colors).save(failOnError) 
+        assert new Prompt(title: 'Any Tree', description: 'Anything Will Do', myHunt: trees).save(failOnError) 
+        assert new Prompt(title: 'Cells Under Microscope', description: '', myHunt: cells).save(failOnError) 
+        assert new Prompt(title: 'Cats', description: '', myHunt: animals).save(failOnError) 
+        assert new Prompt(title: 'Guinea Pigs', description: '', myHunt: animals).save(failOnError) 
+        assert new Prompt(title: 'Dogs', description: 'Mans Best Friend', myHunt: animals).save(failOnError) 
         
         }
     }

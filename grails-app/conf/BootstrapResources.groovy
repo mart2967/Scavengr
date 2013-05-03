@@ -1,3 +1,4 @@
+import org.codehaus.groovy.grails.commons.ApplicationHolder
 String twitterBootstrap = 'twitter-bootstrap'
 String jquery = 'jquery'
 String js = 'js'
@@ -5,15 +6,13 @@ String css = 'css'
 String head = 'head'
 def log = org.apache.log4j.Logger.getLogger('grails.plugins.twitterbootstrap.BootstrapResources')
 def dev = grails.util.GrailsUtil.isDevelopmentEnv()
-def applicationContext = org.codehaus.groovy.grails.commons.ApplicationHolder.application.mainContext
+def applicationContext = ApplicationHolder.application.mainContext
 def lesscssPlugin =
         applicationContext.pluginManager.getGrailsPlugin('lesscss-resources') ||
         applicationContext.pluginManager.getGrailsPlugin('less-resources')
 def jqueryPlugin = applicationContext.pluginManager.getGrailsPlugin(jquery)
-def configTagLib =
-        org.codehaus.groovy.grails.commons.ApplicationHolder.application.config.grails.plugins.twitterbootstrap.fixtaglib
-def configDefaultBundle =
-        org.codehaus.groovy.grails.commons.ApplicationHolder.application.config.grails.plugins.twitterbootstrap.defaultBundle
+def configTagLib = ApplicationHolder.application.config.grails.plugins.twitterbootstrap.fixtaglib
+def configDefaultBundle = ApplicationHolder.application.config.grails.plugins.twitterbootstrap.defaultBundle
 if (!configDefaultBundle && !configDefaultBundle.equals(false)) {
     configDefaultBundle = 'bundle_bootstrap'
 }
@@ -142,7 +141,9 @@ modules = {
         if (jqueryPlugin) {
             dependsOn jquery
         }
-        dependsOn 'bootstrap-transition,bootstrap-alert,bootstrap-dropdown,bootstrap-modal,bootstrap-scrollspy,bootstrap-tab,bootstrap-tooltip,bootstrap-popover,bootstrap-button,bootstrap-carousel,bootstrap-typeahead,bootstrap-collapse,bootstrap-affix'
+        dependsOn 'bootstrap-transition,bootstrap-alert,bootstrap-dropdown,bootstrap-modal,bootstrap-scrollspy,\
+            bootstrap-tab,bootstrap-tooltip,bootstrap-popover,bootstrap-button,bootstrap-carousel,bootstrap-typeahead,\
+            bootstrap-collapse,bootstrap-affix'
     }
     'bootstrap-less' {
         defaultBundle configDefaultBundle

@@ -19,15 +19,15 @@ class PhotoController {
     def promptController = 'prompt'
     def showAction = 'show'
     def authenticationService
-    static allowedMethods = [create: getPost, edit: getPost, delete: 'POST']
+    static allowedMethods = [create: getPost, edit: getPost, delete: getPost[1]]
 
 
     def create() {
         switch (request.method) {
-            case 'GET':
+            case getPost[0]:
                 [photoInstance: new Photo(params)]
                 break
-            case 'POST':
+            case getPost[1]:
                 def photoInstance = new Photo(params)
                 def huntInstance = photoInstance.myPrompt.myHunt
                 def userInstance = User.findByLogin(auth.user())
@@ -148,6 +148,7 @@ class PhotoController {
     }
 
     def authorizedIds(loggedInUser, photoOwner){
+        def myHuntString = 'myHunt'
         Photo.withCriteria{
             projections {
                 property('id')
@@ -158,9 +159,9 @@ class PhotoController {
             }
             myPrompt {
                 or {
-                    if (loggedInUser?.myCreatedHunts){ inList('myHunt', loggedInUser?.myCreatedHunts) }
-                    if (loggedInUser?.myAdministratedHunts){ inList('myHunt', loggedInUser?.myAdministratedHunts) }
-                    if (loggedInUser?.myHunts){ inList('myHunt', loggedInUser?.myHunts) }
+                    if (loggedInUser?.myCreatedHunts){ inList(myHuntString, loggedInUser?.myCreatedHunts) }
+                    if (loggedInUser?.myAdministratedHunts){ inList(myHuntString, loggedInUser?.myAdministratedHunts) }
+                    if (loggedInUser?.myHunts){ inList(myHuntString, loggedInUser?.myHunts) }
                     myHunt {
                         eq('isPrivate', false)
                     }
@@ -181,7 +182,7 @@ class PhotoController {
 
     def edit() {
         switch (request.method) {
-            case 'GET':
+            case getPost[0]:
                 def photoInstance = Photo.get(params.id)
                 if (User.findByLogin(auth.user()) != photoInstance.myUser) {
                     redirect action: showAction, id: photoInstance.id
@@ -196,7 +197,7 @@ class PhotoController {
 
                 [photoInstance: photoInstance]
                 break
-            case 'POST':
+            case getPost[1]:
                 def photoInstance = Photo.get(params.id)
                 if (User.findByLogin(auth.user()) != photoInstance.myUser) {
                     redirect action: showAction, id: photoInstance.id
