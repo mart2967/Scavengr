@@ -38,36 +38,36 @@ class UserShowPageSpec extends GebReportingSpec {
 		confirmEmailButton.click()
 	}
 	
-	def 'when you log in you will be at the user show page'() {
-		when:
-		createUser('Walter', 'Walter@example.com', 'password')
-		loginAs('Walter', 'password')
-		
-		then:
-		at UserShowPage
-	}
-	
-
-    def 'redirects to create a hunt page when create hunt is clicked'() {
-        when:
-        createUser('Walter', 'Walter@example.com', 'password')
-		loginAs('Walter', 'password')
-        userCreateAHuntButton.click()
-        
-        then:
-        at CreateAHuntPage
-    }
-	
-	
-	def 'after changing password you are on the user show page'() {
-		when:
-		createUser('Walter', 'Walter@example.com', 'password')
-		loginAs('Walter', 'password')
-		changePasswordToANewOne('password', 'NewPassword')
-		
-		then:
-		at UserShowPage
-	}
+//	def 'when you log in you will be at the user show page'() {
+//		when:
+//		createUser('Walter', 'Walter@example.com', 'password')
+//		loginAs('Walter', 'password')
+//		
+//		then:
+//		at UserShowPage
+//	}
+//	
+//
+//    def 'redirects to create a hunt page when create hunt is clicked'() {
+//        when:
+//        createUser('Walter', 'Walter@example.com', 'password')
+//		loginAs('Walter', 'password')
+//        userCreateAHuntButton.click()
+//        
+//        then:
+//        at CreateAHuntPage
+//    }
+//	
+//	
+//	def 'after changing password you are on the user show page'() {
+//		when:
+//		createUser('Walter', 'Walter@example.com', 'password')
+//		loginAs('Walter', 'password')
+//		changePasswordToANewOne('password', 'NewPassword')
+//		
+//		then:
+//		at UserShowPage
+//	}
 	
 //	def 'after changing your Email you are on the user show page'() {
 //		when:
