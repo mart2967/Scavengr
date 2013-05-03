@@ -253,6 +253,11 @@ class PhotoController {
         }
 
         try {
+            photoInstance.likedBy.each{ user ->
+                user.removeFromFavorites(photoInstance)
+            }
+            photoInstance.likedBy.clear()
+            //photoInstance.myUser.removeFromFavorites()
             photoInstance.delete(flushTrue)
             flash.message = message(code: 'default.deleted.message',
                     args: [message(codeDefaultPhoto), params.id])
