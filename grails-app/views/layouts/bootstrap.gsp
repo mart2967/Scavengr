@@ -102,11 +102,6 @@
 							</auth:ifNotLoggedIn>
 						</ul>
 					</g:if>
-					<g:else>
-						<ul class="nav pull-right">
-						<li><g:link controller="hunt" action="show" params="[key:"${session.key }"]">Return to the Hunt</g:link></li>
-						</ul>
-					</g:else>
 
 				</div>
 			</div>

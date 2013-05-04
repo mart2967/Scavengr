@@ -70,8 +70,8 @@ class PhotoController {
                 photoInstance.original = image.bytes
                 photoInstance.fileType = image.contentType
                 if (!photoInstance.save()) {
-                    render controller: promptController, view: 'show', 
-                            model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
+                    render controller: promptController, view: 'show',
+                    model: [photoInstance: photoInstance, promptInstance: photoInstance.myPrompt]
                     return
                 }
                 imageUploadService.save(photoInstance)
@@ -84,26 +84,29 @@ class PhotoController {
                 }
 
                 flash.message = message(code: 'scavengr.Photo.created.message',
-                        args: [message(codeDefaultPhoto), photoInstance.id])
+                args: [message(codeDefaultPhoto), photoInstance.id])
                 redirect action: showAction, controller: promptController, id: params.myPrompt.id
                 break
         }
     }
 
     def toggleFavorite(){
-        def photoInstance = Photo.get(params.id)
-        def userInstance = User.findByLogin(auth.user())
-        if(!userInstance){
-            return
+        if (session.hunter != null) {
+            redirect action: 'show', controller: 'hunt', params: [key: session.key]
+        } else {
+            def photoInstance = Photo.get(params.id)
+            def userInstance = User.findByLogin(auth.user())
+            if(!userInstance){
+                return
+            }
+            if(userInstance.favorites.contains(photoInstance)){
+                userInstance.removeFromFavorites(photoInstance)
+                render '<i class="icon icon-star"></i> Favorite'
+            }else{
+                userInstance.addToFavorites(photoInstance)
+                render '<i class="icon icon-star-empty"></i> Unfavorite'
+            }
         }
-        if(userInstance.favorites.contains(photoInstance)){
-            userInstance.removeFromFavorites(photoInstance)
-            render '<i class="icon icon-star"></i> Favorite'
-        }else{
-            userInstance.addToFavorites(photoInstance)
-            render '<i class="icon icon-star-empty"></i> Unfavorite'
-        }
-
     }
 
     def isInHunt(hunt, user){
@@ -130,7 +133,7 @@ class PhotoController {
         }
         if (!photoInstance) {
             flash.message = message(code: 'default.not.found.message',
-                    args: [message(codeDefaultPhoto), params.id])
+            args: [message(codeDefaultPhoto), params.id])
             redirect actionList
             return
         }
@@ -149,7 +152,7 @@ class PhotoController {
         photoInstance.views++
 
         [isFavorite:isFavorite, photoInstance: photoInstance, isMyPhoto: isMyPhoto,
-                    showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
+            showHunt: showHunt, key: key, prevId: prevId, nextId: nextId]
     }
 
     def authorizedIds(loggedInUser, photoOwner){
@@ -195,7 +198,7 @@ class PhotoController {
                 }
                 if (!photoInstance) {
                     flash.message = message(code: 'default.not.found.message',
-                            args: [message(codeDefaultPhoto), params.id])
+                    args: [message(codeDefaultPhoto), params.id])
                     redirect actionList
                     return
                 }
@@ -210,7 +213,7 @@ class PhotoController {
                 }
                 if (!photoInstance) {
                     flash.message = message(code: 'default.not.found.message',
-                            args: [message(codeDefaultPhoto), params.id])
+                    args: [message(codeDefaultPhoto), params.id])
                     redirect actionList
                     return
                 }
@@ -233,40 +236,45 @@ class PhotoController {
                 }
 
                 flash.message = message(code: 'scavengr.Photo.updated.message',
-                        args: [message(codeDefaultPhoto), photoInstance.id])
+                args: [message(codeDefaultPhoto), photoInstance.id])
                 redirect action: showAction, id: photoInstance.id
                 break
         }
     }
 
     def delete() {
-        def photoInstance = Photo.get(params.id)
-        if (User.findByLogin(auth.user()) != photoInstance.myUser) {
-            redirect action: showAction, id: photoInstance.id
-            return
-        }
-        if (!photoInstance) {
-            flash.message = message(code: 'default.not.found.message',
-                    args: [message(codeDefaultPhoto), params.id])
-            redirect actionList
-            return
-        }
-
-        try {
-            photoInstance.likedBy.each{ user ->
-                user.removeFromFavorites(photoInstance)
+        if (session.hunter != null) {
+            redirect action: 'show', controller: 'hunt', params: [key: session.key]
+        } else {
+            def photoInstance = Photo.get(params.id)
+            if (User.findByLogin(auth.user()) != photoInstance.myUser) {
+                redirect action: showAction, id: photoInstance.id
+                return
             }
-            photoInstance.likedBy.clear()
-            //photoInstance.myUser.removeFromFavorites()
-            photoInstance.delete(flushTrue)
-            flash.message = message(code: 'default.deleted.message',
-                    args: [message(codeDefaultPhoto), params.id])
-            redirect controller: 'User', action: 'myProfile'
-        }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message',
-                    args: [message(codeDefaultPhoto), params.id])
-            redirect action: showAction, id: params.id
+            if (!photoInstance) {
+                flash.message = message(code: 'default.not.found.message',
+                args: [message(codeDefaultPhoto), params.id])
+                redirect actionList
+                return
+            }
+
+
+            try {
+                photoInstance.likedBy.each{ user ->
+                    user.removeFromFavorites(photoInstance)
+                }
+                photoInstance.likedBy.clear()
+                //photoInstance.myUser.removeFromFavorites()
+                photoInstance.delete(flushTrue)
+                flash.message = message(code: 'default.deleted.message',
+                args: [message(codeDefaultPhoto), params.id])
+                redirect controller: 'User', action: 'myProfile'
+            }
+            catch (DataIntegrityViolationException e) {
+                flash.message = message(code: 'default.not.deleted.message',
+                args: [message(codeDefaultPhoto), params.id])
+                redirect action: showAction, id: params.id
+            }
         }
     }
 }
