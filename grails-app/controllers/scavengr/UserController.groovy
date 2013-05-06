@@ -140,11 +140,12 @@ class UserController {
             }
 
             zipFile.finish()
-            response.setHeader('Content-disposition', 'filename=\'${userInstance.login}-Scavengr.zip\'')
-            response.contentType = "application/zip"
+            response.setHeader('Content-disposition', "filename=\"${userInstance.login}-Scavengr.zip\"")
+            response.contentType = 'application/zip'
             response.outputStream << baos.toByteArray()
             response.outputStream.flush()
         }
+
     }
 
     def index() {

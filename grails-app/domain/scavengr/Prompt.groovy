@@ -19,7 +19,6 @@ class Prompt {
     }
 
     static mapping = {
-        myPhotos cascade:'save-update'
     }
 
     String toString() {
