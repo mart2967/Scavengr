@@ -33,8 +33,7 @@ class NotifierService {
 	    to email
 	    from 'Scavengr@scavengr.org'
 	    subject "You have created the hunt ${title}"
-	    body "Hello ${name}, you have created a scavenger hunt! \
-            You can share this link with others to invite them to your hunt: ${link}"
+	    body "Hello ${name}, you have created a scavenger hunt! You can share this link with others to invite them to your hunt: ${link}"
 	}
     }
 
@@ -45,8 +44,7 @@ class NotifierService {
 	    to emails
 	    from 'Scavengr@scavengr.org'
 	    subject "${myCreator} has invited you to their hunt, ${title}"
-	    body "Hello, you have been selcted by ${myCreator} \
-            to participate in a photography scavenger hunt at ${link}"
+	    body "Hello, you have been selcted by ${myCreator} to participate in a photography scavenger hunt at ${link}"
 	}
     }
 
