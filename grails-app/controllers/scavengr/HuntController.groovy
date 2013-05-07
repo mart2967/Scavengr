@@ -149,7 +149,7 @@ class HuntController {
 
 
                     flash.message = message(code: 'scavengr.Hunt.created.label',
-                            args: [message(codeDefaultHunt), huntInstance.id])
+                    args: [message(codeDefaultHunt), huntInstance.id])
                     if(emailArray.size() > 0){
                         NotifierService.contactHunters(creator, emailArray, huntInstance.key, huntInstance.title)
                     }
@@ -318,21 +318,25 @@ class HuntController {
         def userInstance = User.findByLogin(auth.user())
         if (!huntInstance) {
             flash.message = message(code: notFound,
-                    args: [message(codeDefaultHunt), params.key])
+            args: [message(codeDefaultHunt), params.key])
             redirect actionList
             return
         }
+        if (session.key != null && huntInstance.key != session.key) {
+            redirect action: showAction, params: [key: session.key]
+        } else {
 
-        def promptPhotoList = buildPromptList(huntInstance, userInstance)
+            def promptPhotoList = buildPromptList(huntInstance, userInstance)
 
-        def userLoginList = User.executeQuery('select u.login from User u')
-        def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
-                || huntInstance.myAdmins.contains(userInstance))
-        def isParticipating = huntInstance.myUsers.contains(userInstance)
-        [huntInstance: huntInstance,promptPhotoList: promptPhotoList,
-                    userInstance:userInstance, isCreatorOrAdmin:isCreatorOrAdmin,
-                    userLoginList:userLoginList as grails.converters.JSON,
-                    now: new Date(), isParticipating:isParticipating ]
+            def userLoginList = User.executeQuery('select u.login from User u')
+            def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
+                    || huntInstance.myAdmins.contains(userInstance))
+            def isParticipating = huntInstance.myUsers.contains(userInstance)
+            [huntInstance: huntInstance,promptPhotoList: promptPhotoList,
+                userInstance:userInstance, isCreatorOrAdmin:isCreatorOrAdmin,
+                userLoginList:userLoginList as grails.converters.JSON,
+                now: new Date(), isParticipating:isParticipating ]
+        }
     }
 
     def buildPromptList(hunt, loggedInUser){
@@ -405,7 +409,7 @@ class HuntController {
                     def userInstance = User.findByLogin(auth.user())
                     if (!huntInstance) {
                         flash.message = message(code: notFound,
-                                args: [message(codeDefaultHunt), params.id])
+                        args: [message(codeDefaultHunt), params.id])
                         redirect actionList
                         return
                     }
@@ -422,8 +426,8 @@ class HuntController {
                     def isCreatorOrAdmin = (userInstance == huntInstance.myCreator
                             || huntInstance.myAdmins.contains(userInstance))
                     [huntInstance: huntInstance, userInstance:userInstance,
-                                promptPhotoList: promptPhotoList,
-                                isCreatorOrAdmin:isCreatorOrAdmin ]
+                        promptPhotoList: promptPhotoList,
+                        isCreatorOrAdmin:isCreatorOrAdmin ]
 
 
                     break
@@ -436,7 +440,7 @@ class HuntController {
                     }
                     if (!huntInstance) {
                         flash.message = message(code: notFound,
-                                args: [message(codeDefaultHunt), params.key])
+                        args: [message(codeDefaultHunt), params.key])
                         redirect actionList
                         return
                     }
@@ -485,7 +489,7 @@ class HuntController {
             }
             if (!huntInstance) {
                 flash.message = message(code: notFound,
-                        args: [message(codeDefaultHunt), params.id])
+                args: [message(codeDefaultHunt), params.id])
                 redirect actionList
                 return
             }
@@ -501,12 +505,12 @@ class HuntController {
                 huntInstance.myUsers.clear()
                 huntInstance.delete(flushTrue)
                 flash.message = message(code: 'default.deleted.message',
-                        args: [message(codeDefaultHunt), params.id])
+                args: [message(codeDefaultHunt), params.id])
                 redirect actionList
 
             }catch (DataIntegrityViolationException e) {
                 flash.message = message(code: 'default.not.deleted.message',
-                        args: [message(codeDefaultHunt), params.id])
+                args: [message(codeDefaultHunt), params.id])
                 redirect action: showAction, params: [key: huntInstance.key]
             }
         }
