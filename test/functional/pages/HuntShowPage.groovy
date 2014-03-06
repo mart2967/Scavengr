@@ -8,9 +8,9 @@ class HuntShowPage extends Page {
     }
     
     static content = {
-        editHunt(){$('a', name:'editHunt')}
+        editHuntButton(to: HuntEditPage){$('a', name:'editHunt')}
 		deleteButton(){$('button', name:'_action_delete')}
-		creatorLink(){$('a', name: 'creatorLink')}
+		creatorLink(to: UserShowPage){$('a', name: 'creatorLink')}
 		
 		newPromptTitleField(){$('input', id:'title')}
 		newPromptDescriptionField(){$('textarea', id:'description')}

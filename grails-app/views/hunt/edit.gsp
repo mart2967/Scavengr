@@ -224,7 +224,7 @@
 					</ul>
 	
 							<div class="form-actions">
-								<button type="submit" class="btn btn-primary">
+								<button type="submit" class="btn btn-primary" id="update-hunt">
 									<i class="icon-ok icon-white"></i>
 									<g:message code="default.button.update.label" default="Update" />
 								</button>
