@@ -127,15 +127,15 @@ class HomePageSpec extends GebReportingSpec{
         then:
         at HomePage
     }
-// THis test fails, but it should pass because logging out should take you to the homepage.
-//    def 'log out redirects to home page'() {
-//        when:
-//        loginAs(stuff123, pass)
-//        logoutButton.click()
-//
-//        then:
-//        at HomePage
-//    }
+ //THis test fails, but it should pass because logging out should take you to the homepage.
+    def 'log out redirects to home page'() {
+        when:
+        loginAs(stuff123, pass)
+        logoutButton.click()
+
+        then:
+        at HomePage
+    }
 
     def 'create an account with an identical name to another account'() {
         when:

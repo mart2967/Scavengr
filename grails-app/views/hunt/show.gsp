@@ -55,9 +55,6 @@
 <body>
 	<div class="container">
 		<div class="row-fluid">
-
-
-
 			<div class="span9">
 				<g:if test="${session.hunter == null}">
 					<g:if test="${isCreatorOrAdmin}">
@@ -65,7 +62,7 @@
 							<g:hiddenField name="id" value="${huntInstance?.id}" />
 							<div class="pull-right">
 
-								<g:link class="btn" action="edit" id="${huntInstance?.id}">
+								<g:link name="editHunt" class="btn" action="edit" id="${huntInstance?.id}">
 									<i class="icon-pencil"></i>
 								Edit Hunt
 							</g:link>
@@ -237,7 +234,7 @@
 								<dt>Hunt Creator</dt>
 
 								<dd>
-									<g:link controller="user" action="show"
+									<g:link controller="user" action="show" name="creatorLink"
 										params="[login:huntInstance.myCreator.login]">
 										<i class="icon-user"></i>
 										${huntInstance?.myCreator?.encodeAsHTML()}

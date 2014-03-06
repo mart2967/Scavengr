@@ -79,7 +79,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
         at HuntShowPage
     }
      //This test doesn't pass, it comes up with a grails runtime exception
-    /*def 'creating a hunt with an end date before the start date'() {
+    def 'creating a hunt with an end date before the start date'() {
         when:
         goToCreateHuntPage()
         huntTitleBox.value('The Batman')
@@ -90,7 +90,7 @@ class CreateAHuntPageSpec extends GebReportingSpec {
         
         then:
         at CreateAHuntPage
-    }*/
+    }
     
     def 'attempting to create a hunt without a title remains on the create a hunt page'() {
         when:

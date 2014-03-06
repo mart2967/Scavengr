@@ -23,13 +23,17 @@ class PromptSpec extends Specification {
         def prompt2 = new Prompt(title: 'testPrompt2', description: blank, myHunt: new Hunt())
         def prompt3 = new Prompt(title: blank, description: 'testPromptDescription3', myHunt: new Hunt())
         def prompt4 = new Prompt(title: blank, description: blank, myHunt: new Hunt())
-        mockForConstraintsTests(Prompt, [prompt1, prompt2, prompt3, prompt4])
+		def prompt5 = new Prompt(title: 'testPrompt5:PART TWO, ELECTRIC BooGaLoo', description: 'testPromptDescription1', myHunt: new Hunt())
+		def prompt6 = new Prompt(title: 'testPrompt1', description: 'testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1testPromptDescription1', myHunt: new Hunt())
+		mockForConstraintsTests(Prompt, [prompt1, prompt2, prompt3, prompt4, prompt5, prompt6])
 
         then:
         prompt1.validate()
         prompt2.validate()
         !prompt3.validate()
         !prompt4.validate()
+		!prompt5.validate()
+		!prompt6.validate()
     }
 
     def "testToString"() {
