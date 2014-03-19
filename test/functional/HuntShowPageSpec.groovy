@@ -13,5 +13,6 @@ class HuntShowPageSpec extends GebReportingSpec {
 	private goToHuntShowPage() {
 		loginAs('Walter', 'password')
 		viewPublicHunts.click()
+		
 	}
 }

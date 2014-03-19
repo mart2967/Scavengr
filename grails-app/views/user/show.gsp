@@ -124,7 +124,7 @@
 						
 						<g:each in="${publicCreatedHuntInstanceList}" var="huntInstance" >
 							<li>
-								<g:link class="list" action="show" controller="hunt" params="[key:huntInstance.key]">
+								<g:link class="list created-hunt" action="show" controller="hunt" params="[key:huntInstance.key]">
 									<i class="icon-search"></i>
 									<g:fieldValue bean="${huntInstance}" field="title" />
 								</g:link>

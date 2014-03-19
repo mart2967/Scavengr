@@ -7,7 +7,7 @@ import pages.*
 class UserShowPage extends Page {
     
         static at = {
-            title.endsWith('Show User')
+            title.endsWith("Show User")
         }
         
         def a = 'a'
@@ -24,11 +24,13 @@ class UserShowPage extends Page {
             navbarCreateButton(to: CreateAHuntPage){$(a, text: 'Create A Hunt')}
             userCreateAHuntButton(){$(a, text:'Create Hunt')}
 			
+			createdHunts(){$(a, 'class':'created-hunt')}
+			//firstHuntLink(to: HuntShowPage){$(a, '')}
 			
-//			changeEmail{$()(a, id:'changeEmail')}
-//			newEmail(){$(a, id:'newEmail')}
-//			confirmEmail(){$(a, id:'confirmEmail')}
-//			confirmEmailButton(){$('button', id:'submitEmail')}
+			changeEmail{$()(a, id:'changeEmail')}
+			newEmail(){$('input', id:'newEmail')}
+			confirmEmail(){$('input', id:'confirmEmail')}
+			confirmEmailButton(){$('button', id:'submitEmail')}
 			
 			downloadPhotos(){$(a, text:'Download My Photos')}
 			
