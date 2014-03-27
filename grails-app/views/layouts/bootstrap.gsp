@@ -60,11 +60,6 @@
 						<ul class="nav">
 
 
-							<%--							<g:if env="development">--%>
-							<%--							<li<%= request.forwardURI == "${createLink(uri: '/photo/list')}" ? ' class="active"' : '' %>><g:link controller="photo">List of Photos</g:link></li>--%>
-							<%--							<li<%= request.forwardURI == "${createLink(uri: '/prompt/list')}" ? ' class="active"' : '' %>><g:link controller="prompt">List of Prompts</g:link></li>--%>
-							<%--							<li<%= request.forwardURI == "${createLink(uri: '/user/list')}" ? ' class="active"' : '' %>><g:link controller="user">List of Users</g:link></li>--%>
-							<%--							</g:if>--%>
 							<auth:ifLoggedIn>
 								<li
 									<%= request.forwardURI == "${createLink(uri: '/hunt/list')}" ? ' class="active"' : '' %>><g:link
@@ -94,7 +89,8 @@
 									</g:link></li>
 								<li><auth:logoutLink
 										success="[controller:'index', action:'index']"
-										error="[controller:'index', action:'index']">Log out</auth:logoutLink></li>
+										error="[controller:'index', action:'index']"
+										elementId="logout-link">Log out</auth:logoutLink></li>
 							</auth:ifLoggedIn>
 							<auth:ifNotLoggedIn>
 								<li><g:link fragment="loginModal" data-toggle="modal">Log In</g:link></li>

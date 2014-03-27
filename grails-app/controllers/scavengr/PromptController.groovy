@@ -124,7 +124,6 @@ class PromptController {
                         return
                     }
 
-
                     if (params.version) {
                         def version = params.version.toLong()
                         if (promptInstance.version > version) {
@@ -136,6 +135,8 @@ class PromptController {
                         }
                     }
 
+					promptInstance.properties = params
+					
                     flash.message = message(code: 'default.updated.message',
                     args: [message(codeDefaultPrompt), promptInstance.id])
                     redirect action: showAction, id: promptInstance.id

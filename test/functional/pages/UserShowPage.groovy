@@ -27,14 +27,15 @@ class UserShowPage extends Page {
 			createdHunts(){$(a, 'class':'created-hunt')}
 			//firstHuntLink(to: HuntShowPage){$(a, '')}
 			
-			changeEmail{$()(a, id:'changeEmail')}
+			
 			newEmail(){$('input', id:'newEmail')}
 			confirmEmail(){$('input', id:'confirmEmail')}
 			confirmEmailButton(){$('button', id:'submitEmail')}
+			changeEmail(){$(a, id:'changeEmail')}
 			
 			downloadPhotos(){$(a, text:'Download My Photos')}
 			
-			changePassword(){$(a, text:'Change Password')}
+			changePassword(){$(a, id:'changePassword')}
 			currentPasswordBox(){$('input', id:'changePassword')}
 			newPasswordBox(){$('input', id:'newPassword')}
 			confirmNewPasswordBox(){$('input', id:'confirmPassword')}
